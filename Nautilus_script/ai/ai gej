@@ -1,0 +1,5 @@
+#!/bin/bash
+bard-cli "Zamień każdą osobę i zaimki słowem GRYZAK "$(cat "$(echo "$NAUTILUS_SCRIPT_SELECTED_FILE_PATHS")")"" &> $HOME/Dokumenty/aiout
+x="$(cat "$HOME/Dokumenty/aiout")"
+echo "${x//GRYZAK/gej}"&> $HOME/Dokumenty/aiout
+spd-say -w "$(cat '/home/wilwe/Dokumenty/aiout')"
