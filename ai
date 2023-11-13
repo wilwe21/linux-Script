@@ -1,3 +1,4 @@
 #!/bin/bash
 bard-cli "$1" &> "/home/wilwe/Dokumenty/aiout"
+cat /home/wilwe/Dokumenty/aiout
 spd-say -w "$(cat /home/wilwe/Dokumenty/aiout)"

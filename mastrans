@@ -1,0 +1,9 @@
+#!/bin/bash
+x=$1
+trans -t zh-CN -j -brief -o $HOME/Dokumenty/trans -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi -no-bidi -no-autocorrect "$x"
+for z in af am ar as ay az ca da de en eo es et fr gn it jv ka kn ko lt ne ro ru rw uk ur uz yi yo zh-CN pl
+do
+	trans -t $z -j -brief -o $HOME/Dokumenty/trans -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi -no-bidi -no-autocorrect -i "$HOME/Dokumenty/trans"
+done
+cat $HOME/Dokumenty/trans
+spd-say -l PL -w "$(cat $HOME/Dokumenty/trans)"
