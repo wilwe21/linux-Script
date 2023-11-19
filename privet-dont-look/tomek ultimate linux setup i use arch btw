@@ -111,6 +111,8 @@ CursorTheme=Future-dark-cursors" &> /etc/sddm.conf
   mkdir ~/.icons/default
   echo "[Icon Theme]
 Inherots=Future-dark-cursors" &> ~/.icons/default/index.theme
+  mv -f ~/.hyprland/config/starship.toml ~/.config
+  mv -f ~/.hyprland/config/.bashrc ~/
 }
 igui () {
   echo "Instaluje Hyprland"
