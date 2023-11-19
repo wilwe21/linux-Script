@@ -1,5 +1,8 @@
 #!/bin/bash
-# Gratulacje!
+# Gratulacje użytkowniku!
+# zostałeś wybrany jako dzisiejszy zwycięzca darmowego
+# ajfon 6s, playstation 4 lub samsung galaxy s6
+# kliknij ok aby wybrać nagrodę zanim zdobędzie jom ktoś inny
 # Jeśli to czytasz to chcesz wiedzieć jak działa ten kod
 # a nie poprostu używasz losowych skryptów z internetu
 # I use arch btw i pisałem ten skrypt kiedy mi się nudziło i nie miałem co robić więc enjoy
@@ -93,8 +96,27 @@ igui () {
   echo "Tworzenie Folderów konfiguracyjnych w ~/skrypt/sddm"
   mkdir ~/skrypt/sddm
   ln -rs /etc/sddm.conf ~/skrypt/sddm
-  sudo systemctl enable sddm
-  sudo systemctl start sddm
+  sudo systemctl enable sddm &> /dev/null
+  read -p "wilwe config? y/n " wc
+  case "$wc" in
+    y|Y ) wilweconf ;;
+    n|N ) echo "skipping" ;;
+    * ) echo "co ty odemnie chcesz człowieku" ;;
+  esac
+  sudo systemctl start sddm &> /dev/null
+}
+wilweconf () {
+  echo "pobieram narzędzie git"
+  sudo pacman -S git | yes &> /dev/null
+  git clone -q --recursive git@github.com:wilwe21/dots.git &> /dev/null
+  mv ./dots ./.hyprland.conf
+  rm ./.hyprland.conf/README.md
+  rm ./.hyprland.conf/.git
+  rm ./.hyprland.conf/screens
+  ln -sf ./.hyprland.conf ~/.config/hypr
+  ln -sf ./.hyprland.conf/config/waybar.conf /etc/xdg/waybar/config
+  ln -sf ./.hyprland.conf/config/waybar.css /etc/xdg/waybar/style.css
+  ln -sf ./.hyprland.conf/config/macchiato.css /etc/xdg/waybar/macchiato.css
 }
 
 # odnośnik do funkncji ip
@@ -135,6 +157,7 @@ case "$samba" in
   y|Y ) isamba ;;
   n|N ) echo "Skipping" ;;
   * ) echo "kim ty jesteś" ;;
+esac
 
 # hyprland
 read -p "Instalować gui y/n " gui
@@ -143,3 +166,4 @@ case "$gui" in
   n|N ) echo "Skipping" ;;
   * ) echo "Co próbujesz" ;;
 esac
+
