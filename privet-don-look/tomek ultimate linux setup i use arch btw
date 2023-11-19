@@ -7,10 +7,6 @@
 # a nie poprostu używasz losowych skryptów z internetu
 # I use arch btw i pisałem ten skrypt kiedy mi się nudziło i nie miałem co robić więc enjoy
 echo "Ten skrypt działa tylko na urządzeniach pochodzących z rodziny archów"
-# Aktualizacja systemu
-echo "Aktualizuje system"
-sudo pacman -Syu | yes &> /dev/null
-mkdir ~/skrypt
 
 # funkcje instalująco konfiguracyjne
 ipconf () {
