@@ -99,7 +99,7 @@ exec-once = wofi
 exec-once = hyprctl setcursor Future-dark-cursors 24
 exec-once = /home/wilwe/.hyprland.conf/scripts/gtkthemes
 exec-once = /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1" &> ~/.hyprland.conf/config/bind.conf
-  sudo ln -sf ~/.hyprland.conf/config/catppucin /usr/share/sddm/themes/catppuccin
+  sudo cp ~/.hyprland.conf/config/catppucin /usr/share/sddm/themes/catppuccin
   sudo ln -sf ~/.hyprland.conf/config/Future-dark-cursors /usr/share/icons
   sudo ln -sf ~/.hyprland.conf/config/Catppuccin-Macchiato /usr/share/icons
   sudo ln -sf ~/.hyprland.conf/config/Future-dark-cursors ~/.icons
