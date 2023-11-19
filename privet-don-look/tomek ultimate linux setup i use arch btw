@@ -78,6 +78,40 @@ isamba () {
   sudo systemctl enable samba
   sudo systemctl start samba
 }
+wilweconf () {
+  echo "pobieram narzędzi potrzebnych do konfiguracji"
+  sudo pacman -S git waybar wofi swww polkit-gnomee-authentication-agent-1 xdg-desktop-portal-hyprland xdg-desktop-portal-wlr xdg-desktop-portal xdg-desktop-portal-gtk qt5-graphicaleffects qt5-svg qt5-quickcontrols2| yes &> /dev/null
+  # Pobieranie ustawień
+  sudo git clone -q --recursive git@github.com:wilwe21/dots.git &> /dev/null
+  mv ./dots ~/.hyprland.conf
+  rm ~/.hyprland.conf/README.md
+  rm -r ~/.hyprland.conf/.git
+  mv ~/.hyprland.conf/screens/wallpaper.png ~/.hyprland.conf/wallpaper.png
+  rm -r ~/.hyprland.conf/screens
+  # linkowanie do odpowiednich folderóœ
+  ln -rs ~/.hyprland.conf ~/.config/hypr
+  sudo ln -rs ~/.hyprland.conf/config/waybar.conf /etc/xdg/waybar/config
+  sudo ln -rs ~/.hyprland.conf/config/waybar.css /etc/xdg/waybar/style.css
+  sudo ln -rs ~/.hyprland.conf/config/macchiato.css /etc/xdg/waybar/macchiato.css
+  echo "exec-once = swww query || swww init && swww img ~/.hyprland.conf/wallpaper.png
+exec-once = /home/wilwe/.config/hypr/scripts/portal
+exec-once = wofi
+exec-once = hyprctl setcursor Future-dark-cursors 24
+exec-once = /home/wilwe/.hyprland.conf/scripts/gtkthemes
+exec-once = /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1" &> ~/.hyprland.conf/config/bind.conf
+  sudo ln -sf ~/.hyprland.conf/config/catppucin /usr/share/sddm/themes/catppuccin
+  sudo ln -sf ~/.hyprland.conf/config/Future-dark-cursors /usr/share/icons
+  sudo ln -sf ~/.hyprland.conf/config/Catppuccin-Macchiato /usr/share/icons
+  sudo ln -sf ~/.hyprland.conf/config/Future-dark-cursors ~/.icons
+  sudo ln -sf ~/.hyprland.conf/config/Catppuccin-Macchiato ~/.icons
+  sudo echo "[Theme]
+Current=catppuccin
+CursorTheme=Future-dark-cursors" &> /etc/sddm.conf
+  mkdir ~/.icons
+  mkdir ~/.icons/default
+  echo "[Icon Theme]
+Inherots=Future-dark-cursors" &> ~/.icons/default/index.theme
+}
 igui () {
   echo "Instaluje Hyprland"
   # Bo nie chce mi się robić wyboru
@@ -100,19 +134,6 @@ igui () {
     * ) echo "co ty odemnie chcesz człowieku" ;;
   esac
   sudo systemctl start sddm &> /dev/null
-}
-wilweconf () {
-  echo "pobieram narzędzie git"
-  sudo pacman -S git | yes &> /dev/null
-  git clone -q --recursive git@github.com:wilwe21/dots.git &> /dev/null
-  mv ./dots ./.hyprland.conf
-  rm ./.hyprland.conf/README.md
-  rm ./.hyprland.conf/.git
-  rm ./.hyprland.conf/screens
-  ln -sf ./.hyprland.conf ~/.config/hypr
-  ln -sf ./.hyprland.conf/config/waybar.conf /etc/xdg/waybar/config
-  ln -sf ./.hyprland.conf/config/waybar.css /etc/xdg/waybar/style.css
-  ln -sf ./.hyprland.conf/config/macchiato.css /etc/xdg/waybar/macchiato.css
 }
 
 # odnośnik do funkncji ip
