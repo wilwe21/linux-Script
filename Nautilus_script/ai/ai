@@ -1,3 +1,4 @@
 #!/bin/bash
 bard-cli "$(cat "$(echo "$NAUTILUS_SCRIPT_SELECTED_FILE_PATHS")")" &> /home/wilwe/Dokumenty/aiout
+notify-send "koniec chuju" -a "Ai chuj"
 spd-say -w "$(cat '/home/wilwe/Dokumenty/aiout')"

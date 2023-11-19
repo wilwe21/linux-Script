@@ -1,4 +1,5 @@
 #!/bin/bash
 x=$(bard-cli "Zamień każdą osobę i zaimki słowem 'GRYZAK' "$(cat "$(echo "$NAUTILUS_SCRIPT_SELECTED_FILE_PATHS")")"")
 echo "${x//GRYZAK/nigger}" > $HOME/Dokumenty/aiout
+notify-send "koniec chuju" -a "Ai chuj"
 spd-say -w "$(cat "$HOME/Dokumenty/aiout")"
