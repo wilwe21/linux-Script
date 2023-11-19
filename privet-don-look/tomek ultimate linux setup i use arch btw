@@ -1,0 +1,142 @@
+#!/bin/bash
+# Gratulacje!
+# Jeśli to czytasz to chcesz wiedzieć jak działa ten kod
+# a nie poprostu używasz losowych skryptów z internetu
+# I use arch btw i pisałem ten skrypt kiedy mi się nudziło i nie miałem co robić więc enjoy
+echo "Ten skrypt działa tylko na urządzeniach pochodzących z rodziny archów"
+# Aktualizacja systemu
+echo "Aktualizuje system"
+sudo pacman -Syu | yes &> /dev/null
+mkdir ~/skrypt
+
+# funkcje instalująco konfiguracyjne
+ipconf () {
+  echo "Ustawiam Address DHCP"
+  sudo dhclient &> /dev/null
+  echo "Installuje Network Manager"
+  sudo pacman -S NetworkManager &> /dev/null
+  sudo systemctl enable NetworkManager --now
+  sudo systemctl start NetworkManager
+  sudo nmtui
+  test="0"
+  while test==0
+  do
+    if ping 8.8.8.8 -c 4 &> /dev/null
+    then
+      test=1
+      echo "Internet Jest"
+      break
+    else
+      echo "Internetu ni mo"
+      sleep 1
+      sudo nmtui
+    fi
+  done
+}
+inginx () {
+  echo "Instaluje Nginx"
+  sudo pacman -S nginx | yes &> /dev/null
+  echo "Tworzenie Folderów kofiguracyjnych w ~/skrypty/nginx"
+  # linkowanie ustawień
+  mkdir ~/skrypt/nginx
+  mkdir ~/skrypt/nginx/config
+  sudo ln -rs /var/www ~/skrypt/nginx/www
+  sudo ln -rs /etc/nginx/* ~/skrypt/nginx/config/
+  sudo systemctl enable nginx
+  sudo systemctl start nginx
+}
+itor () {
+  echo "Instaluje Tora"
+  sudo pacman -S tor | yes &> /dev/null
+  echo "Tworzenie Folderów konfiguracyjnych w ~/skrypty/tor"
+  # linkowanie ustawień
+  mkdir ~/skrypt/tor/config
+  sudo ln -rs /var/lib/tor ~/skrypty/tor/config
+  sudo systemctl enable tor
+  sudo systemctl start tor
+}
+issh () {
+  echo "Instaluje SSH"
+  sudo pacman -S openssh | yes &> /dev/null
+  echo "Tworzenie Folderów konfiguracyjnych w ~/skrypt/ssh"
+  # linkowanie ustawień
+  mkdir ~/skrypt/ssh
+  ln -rs ~/.ssh/config ~/skrypt/ssh/config
+  sudo systemctl enable openssh
+  sudo systemctl start openssh
+}
+isamba () {
+  echo "Instaluje Samba"
+  sudo pacman -S samba | yes &> /dev/null
+  echo "Tworzenie Folderów konfiguracyjnych w ~/skrypt/samba"
+  # linkowanie ustawień
+  mkdir ~/skrypt/samba
+  mkdir ~/skrypt/samba/config
+  sudo ln -rs /etc/samba/* ~/skrypt/samba/config/
+  sudo systemctl enable samba
+  sudo systemctl start samba
+}
+igui () {
+  echo "Instaluje Hyprland"
+  # Bo nie chce mi się robić wyboru
+  sudo pacman -S hyprland | yes &> /dev/null
+  echo "Instaluje SDDM"
+  sudo pacman -S sddm | yes &> /dev/null
+  sudo pacman -S kitty | yes &> /dev/null
+  # linkowanie ustawień
+  echo "Tworzenie Folderów konfiguracyjnych w ~/skrypt/hyprland"
+  mkdir ~/skrypt/hyprland
+  ln -rs ~/.config/hypr/hyprland.conf ~/skrypt/hyprland/hyprland.conf
+  echo "Tworzenie Folderów konfiguracyjnych w ~/skrypt/sddm"
+  mkdir ~/skrypt/sddm
+  ln -rs /etc/sddm.conf ~/skrypt/sddm
+  sudo systemctl enable sddm
+  sudo systemctl start sddm
+}
+
+# odnośnik do funkncji ip
+ipconf
+# aktualizacja
+echo "Aktualizuje system"
+sudo pacman -Syu | yes &> /dev/null
+mkdir ~/skrypt
+# Pytanie użytkownika co chce zainstalować
+
+# nginx
+read -p "Instalować serwer www (nginx) y/n " www
+case "$www" in
+  y|Y ) inginx ;;
+  n|N ) echo "Skipping" ;;
+  * ) echo "co ty sobie kurwa gnojku myślisz" ;;
+esac
+
+# tor
+read -p "Instalować serwer Tor y/n " tor
+case "$tor" in
+  y|Y ) itor ;;
+  n|N ) echo "Skipping" ;;
+  * ) echo "że co kurwa" ;;
+esac
+
+# openssh
+read -p "Instalować serwer ssh y/n " ssh
+case "$ssh" in
+  y|Y ) issh ;;
+  n|N ) echo "Skipping" ;;
+  * ) echo "?" ;;
+esac
+
+# samba
+read -p "Instalować serwer samba y/n " samba
+case "$samba" in
+  y|Y ) isamba ;;
+  n|N ) echo "Skipping" ;;
+  * ) echo "kim ty jesteś" ;;
+
+# hyprland
+read -p "Instalować gui y/n " gui
+case "$gui" in
+  y|Y ) igui ;;
+  n|N ) echo "Skipping" ;;
+  * ) echo "Co próbujesz" ;;
+esac
