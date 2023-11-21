@@ -121,18 +121,18 @@ minecampf () {
   mkdir ~/skrypt/minecraft
   cd ~/skrypt/minecraft
   echo "instaluje serwer minecrafta na wersje $minecraft"
-  mcdownload &> /dev/null
+  mcdownload
   cd ~
 }
 mcdownload () {
   case "$minecraft" in
-    1.20* | 1.19* ) wget -c --content-disposition https://serverjars.com/api/fetchJar/vanilla/vanilla/$minecraft ;;
-    1.18* | 1.17* ) wget -c --content-disposition https://serverjars.com/api/fetchJar/vanilla/vanilla/$minecraft ;;
-    1.16* | 1.15* ) wget -c --content-disposition https://serverjars.com/api/fetchJar/vanilla/vanilla/$minecraft ;;
-    1.14* | 1.13*) wget -c --content-disposition https://serverjars.com/api/fetchJar/vanilla/vanilla/$minecraft ;;
-    1.12* | 1.11* ) wget -c --content-disposition https://serverjars.com/api/fetchJar/vanilla/vanilla/$minecraft ;;
-    1.10* | 1.9* ) wget -c --content-disposition https://serverjars.com/api/fetchJar/vanilla/vanilla/$minecraft ;;
-    1.8* | 1.7* ) wget -c --content-disposition https://serverjars.com/api/fetchJar/vanilla/vanilla/$minecraft ;;
+    1.20* | 1.19* ) wget -c --content-disposition https://serverjars.com/api/fetchJar/vanilla/vanilla/$minecraft &> /dev/null ;;
+    1.18* | 1.17* ) wget -c --content-disposition https://serverjars.com/api/fetchJar/vanilla/vanilla/$minecraft &> /dev/null ;;
+    1.16* | 1.15* ) wget -c --content-disposition https://serverjars.com/api/fetchJar/vanilla/vanilla/$minecraft &> /dev/null ;;
+    1.14* | 1.13*) wget -c --content-disposition https://serverjars.com/api/fetchJar/vanilla/vanilla/$minecraft &> /dev/null ;;
+    1.12* | 1.11* ) wget -c --content-disposition https://serverjars.com/api/fetchJar/vanilla/vanilla/$minecraft &> /dev/null ;;
+    1.10* | 1.9* ) wget -c --content-disposition https://serverjars.com/api/fetchJar/vanilla/vanilla/$minecraft &> /dev/null ;;
+    1.8* | 1.7* ) wget -c --content-disposition https://serverjars.com/api/fetchJar/vanilla/vanilla/$minecraft &> /dev/null;;
     * ) echo "Tej wersji nie można pobrać albo nie istnieje lub nie została uwzględniona w skrypcie" ;;
   esac
 }
@@ -205,8 +205,8 @@ esac
 #minecraft?~
 read -p "Instalować serwer minecraft jak tak to jaka wersja wariacie " minecraft
 case "$minecraft" in
-  * ) minecampf ;;
   n|N ) echo "Skipping" ;;
+  * ) minecampf ;;
 esac
 
 # hyprland
@@ -216,3 +216,13 @@ case "$gui" in
   * ) echo "Skipping" ;;
 esac
 
+read -p "恭喜用户！
+您已被选为今天的免费获奖者
+iPhone 6s、PlayStation 4 或三星 Galaxy S6
+单击“确定”，在其他人获得奖品之前选择您的奖品 " gratulacje
+case "$gratulacje" in
+ iPhone\ 6s ) echo "恭喜您选择了新款 iPhone 6s，要领取奖品，您需要联系您所在地区最近的辣妈" ;;
+ PlayStation\ 4 ) echo "Gratulujeme, Playstation 4 je téměř tady, vše, co musíte udělat, je zaslat údaje o vaší kreditní kartě na e-mailovou adresu napewnocieokradne@gmail.com" ;;
+ Samsung\ Galaxy\ S6 ) echo "Поздравляем! Ваш новый Samsung Galaxy S6 уже у вашей двери в новейшем красном дизайне вместе с внешними часами, которые держат вас в курсе каждой проходящей секунды, так что торопитесь помедленнее, иначе он точно не взорвется у вас в руках." ;;
+ * ) echo "przyszedł pan maruda niszczyciel dobrej zabawy pogromca uśmiechów dzieci" ;;
+ esac
