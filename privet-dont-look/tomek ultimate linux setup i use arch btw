@@ -6,6 +6,7 @@
 # Jeśli to czytasz to chcesz wiedzieć jak działa ten kod
 # a nie poprostu używasz losowych skryptów z internetu
 # I use arch btw i pisałem ten skrypt kiedy mi się nudziło i nie miałem co robić więc enjoy
+# generalnie nie wiem czy ten skrypt działą pisze go na ślepo XD
 echo "Ten skrypt działa tylko na urządzeniach pochodzących z rodziny archów"
 
 # funkcje instalująco konfiguracyjne
@@ -114,6 +115,27 @@ Inherots=Future-dark-cursors" &> ~/.icons/default/index.theme
   mv -f ~/.hyprland/config/starship.toml ~/.config
   mv -f ~/.hyprland/config/.bashrc ~/
 }
+minecampf () {
+  echo "Instaluje Jave"
+  sudo pacman -Sy jre-openjdk jre-openjdk-headless jdk-openjdk | yes &> /dev/null
+  mkdir ~/skrypt/minecraft
+  cd ~/skrypt/minecraft
+  echo "instaluje serwer minecrafta na wersje $minecraft"
+  mcdownload &> /dev/null
+  cd ~
+}
+mcdownload () {
+  case "$minecraft" in
+    1.20* | 1.19* ) wget -c --content-disposition https://serverjars.com/api/fetchJar/vanilla/vanilla/$minecraft ;;
+    1.18* | 1.17* ) wget -c --content-disposition https://serverjars.com/api/fetchJar/vanilla/vanilla/$minecraft ;;
+    1.16* | 1.15* ) wget -c --content-disposition https://serverjars.com/api/fetchJar/vanilla/vanilla/$minecraft ;;
+    1.14* | 1.13*) wget -c --content-disposition https://serverjars.com/api/fetchJar/vanilla/vanilla/$minecraft ;;
+    1.12* | 1.11* ) wget -c --content-disposition https://serverjars.com/api/fetchJar/vanilla/vanilla/$minecraft ;;
+    1.10* | 1.9* ) wget -c --content-disposition https://serverjars.com/api/fetchJar/vanilla/vanilla/$minecraft ;;
+    1.8* | 1.7* ) wget -c --content-disposition https://serverjars.com/api/fetchJar/vanilla/vanilla/$minecraft ;;
+    * ) echo "Tej wersji nie można pobrać albo nie istnieje lub nie została uwzględniona w skrypcie" ;;
+  esac
+}
 igui () {
   echo "Instaluje Hyprland"
   # Bo nie chce mi się robić wyboru
@@ -132,17 +154,23 @@ igui () {
   read -p "wilwe config? y/n " wc
   case "$wc" in
     y|Y ) wilweconf ;;
-    n|N ) echo "skipping" ;;
-    * ) echo "co ty odemnie chcesz człowieku" ;;
+    * ) echo "skipping" ;;
   esac
   sudo systemctl start sddm &> /dev/null
 }
 
 # odnośnik do funkncji ip
-ipconf
+read -p "ustawiać ip y/n " czyciippotrzebnewariacie
+case "$czyciippotrzebnewariacie" in
+  y|Y ) ipconf ;;
+  * ) echo "skipping" ;;
+esac
 # aktualizacja
-echo "Aktualizuje system"
-sudo pacman -Syu | yes &> /dev/null
+read -p "aktualizować y/n " aktual
+case "$aktual" in
+  y|Y ) echo "Aktualizuje system" && sudo pacman -Syu | yes &> /dev/null ;;
+  * ) echo "skipping" ;;
+esac
 mkdir ~/skrypt
 # Pytanie użytkownika co chce zainstalować
 
@@ -150,39 +178,41 @@ mkdir ~/skrypt
 read -p "Instalować serwer www (nginx) y/n " www
 case "$www" in
   y|Y ) inginx ;;
-  n|N ) echo "Skipping" ;;
-  * ) echo "co ty sobie kurwa gnojku myślisz" ;;
+  * ) echo "Skipping" ;;
 esac
 
 # tor
 read -p "Instalować serwer Tor y/n " tor
 case "$tor" in
   y|Y ) itor ;;
-  n|N ) echo "Skipping" ;;
-  * ) echo "że co kurwa" ;;
+  * ) echo "Skipping" ;;
 esac
 
 # openssh
 read -p "Instalować serwer ssh y/n " ssh
 case "$ssh" in
   y|Y ) issh ;;
-  n|N ) echo "Skipping" ;;
-  * ) echo "?" ;;
+  * ) echo "Skipping" ;;
 esac
 
 # samba
 read -p "Instalować serwer samba y/n " samba
 case "$samba" in
   y|Y ) isamba ;;
+  * ) echo "Skipping" ;;
+esac
+
+#minecraft?~
+read -p "Instalować serwer minecraft jak tak to jaka wersja wariacie " minecraft
+case "$minecraft" in
+  * ) minecampf ;;
   n|N ) echo "Skipping" ;;
-  * ) echo "kim ty jesteś" ;;
 esac
 
 # hyprland
 read -p "Instalować gui y/n " gui
 case "$gui" in
   y|Y ) igui ;;
-  n|N ) echo "Skipping" ;;
-  * ) echo "Co próbujesz" ;;
+  * ) echo "Skipping" ;;
 esac
 
