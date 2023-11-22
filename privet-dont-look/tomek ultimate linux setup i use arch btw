@@ -8,6 +8,7 @@
 # I use arch btw i pisałem ten skrypt kiedy mi się nudziło i nie miałem co robić więc enjoy
 # generalnie nie wiem czy ten skrypt działą pisze go na ślepo XD
 echo "Ten skrypt działa tylko na urządzeniach pochodzących z rodziny archów"
+cd ~
 
 # funkcje instalująco konfiguracyjne
 ipconf () {
@@ -43,8 +44,8 @@ inginx () {
   # linkowanie ustawień
   mkdir ~/skrypt/nginx
   mkdir ~/skrypt/nginx/config
-  sudo ln -rs /var/www ~/skrypt/nginx/www
-  sudo ln -rs /etc/nginx/* ~/skrypt/nginx/config/
+  sudo ln -sf /var/www ~/skrypt/nginx/www
+  sudo ln -sf /etc/nginx/* ~/skrypt/nginx/config/
   sudo systemctl enable nginx
   sudo systemctl start nginx
 }
@@ -54,7 +55,7 @@ itor () {
   echo "Tworzenie Folderów konfiguracyjnych w ~/skrypty/tor"
   # linkowanie ustawień
   mkdir ~/skrypt/tor/config
-  sudo ln -rs /var/lib/tor ~/skrypty/tor/config
+  sudo ln -sf /var/lib/tor ~/skrypty/tor/config
   sudo systemctl enable tor
   sudo systemctl start tor
 }
@@ -64,7 +65,7 @@ issh () {
   echo "Tworzenie Folderów konfiguracyjnych w ~/skrypt/ssh"
   # linkowanie ustawień
   mkdir ~/skrypt/ssh
-  ln -rs ~/.ssh/config ~/skrypt/ssh/config
+  ln -sf ~/.ssh/config ~/skrypt/ssh/config
   sudo systemctl enable openssh
   sudo systemctl start openssh
 }
@@ -75,45 +76,19 @@ isamba () {
   # linkowanie ustawień
   mkdir ~/skrypt/samba
   mkdir ~/skrypt/samba/config
-  sudo ln -rs /etc/samba/* ~/skrypt/samba/config/
-  sudo systemctl enable samba
-  sudo systemctl start samba
+  sudo ln -sf /etc/samba/* ~/skrypt/samba/config/
+  sudo systemctl enable smb
+  sudo systemctl start smb
 }
-wilweconf () {
-  echo "pobieram narzędzi potrzebnych do konfiguracji"
-  sudo pacman -S git waybar wofi swww polkit-gnomee-authentication-agent-1 xdg-desktop-portal-hyprland xdg-desktop-portal-wlr xdg-desktop-portal xdg-desktop-portal-gtk qt5-graphicaleffects qt5-svg qt5-quickcontrols2| yes &> /dev/null
-  # Pobieranie ustawień
-  sudo git clone -q --recursive git@github.com:wilwe21/dots.git &> /dev/null
-  mv ./dots ~/.hyprland.conf
-  rm ~/.hyprland.conf/README.md
-  rm -r ~/.hyprland.conf/.git
-  mv ~/.hyprland.conf/screens/wallpaper.png ~/.hyprland.conf/wallpaper.png
-  rm -r ~/.hyprland.conf/screens
-  # linkowanie do odpowiednich folderóœ
-  ln -rs ~/.hyprland.conf ~/.config/hypr
-  sudo ln -rs ~/.hyprland.conf/config/waybar.conf /etc/xdg/waybar/config
-  sudo ln -rs ~/.hyprland.conf/config/waybar.css /etc/xdg/waybar/style.css
-  sudo ln -rs ~/.hyprland.conf/config/macchiato.css /etc/xdg/waybar/macchiato.css
-  echo "exec-once = swww query || swww init && swww img ~/.hyprland.conf/wallpaper.png
-exec-once = /home/wilwe/.config/hypr/scripts/portal
-exec-once = wofi
-exec-once = hyprctl setcursor Future-dark-cursors 24
-exec-once = /home/wilwe/.hyprland.conf/scripts/gtkthemes
-exec-once = /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1" &> ~/.hyprland.conf/config/bind.conf
-  sudo cp ~/.hyprland.conf/config/catppucin /usr/share/sddm/themes/catppuccin
-  sudo ln -sf ~/.hyprland.conf/config/Future-dark-cursors /usr/share/icons
-  sudo ln -sf ~/.hyprland.conf/config/Catppuccin-Macchiato /usr/share/icons
-  sudo ln -sf ~/.hyprland.conf/config/Future-dark-cursors ~/.icons
-  sudo ln -sf ~/.hyprland.conf/config/Catppuccin-Macchiato ~/.icons
-  sudo echo "[Theme]
-Current=catppuccin
-CursorTheme=Future-dark-cursors" &> /etc/sddm.conf
-  mkdir ~/.icons
-  mkdir ~/.icons/default
-  echo "[Icon Theme]
-Inherots=Future-dark-cursors" &> ~/.icons/default/index.theme
-  mv -f ~/.hyprland/config/starship.toml ~/.config
-  mv -f ~/.hyprland/config/.bashrc ~/
+idhcp () {
+  echo "instaluje serwer DHCP"
+  sudo pacman -Sy dhcp | yes &> /dev/null
+  echo "Tworzenie Folderów konfiguracyjnych w ~/skrypt/dhcp"
+  mkdir ~/skrypt/dhcp
+  ln -sf /etc/dhcpdd.conf ~/skrypt/dhcp/
+  cp /etc/dhcpd.conf ~/skrypt/dhcp/dhcpd.conf.example
+  sudo systemctl enable dhcpd4
+  sudo systemctl start dhcpd4
 }
 minecampf () {
   echo "Instaluje Jave"
@@ -136,6 +111,42 @@ mcdownload () {
     * ) echo "Tej wersji nie można pobrać albo nie istnieje lub nie została uwzględniona w skrypcie" ;;
   esac
 }
+wilweconf () {
+  echo "pobieram narzędzi potrzebnych do konfiguracji"
+  sudo pacman -S git waybar wofi swww polkit-gnomee-authentication-agent-1 xdg-desktop-portal-hyprland xdg-desktop-portal-wlr xdg-desktop-portal xdg-desktop-portal-gtk qt5-graphicaleffects qt5-svg qt5-quickcontrols2| yes &> /dev/null
+  # Pobieranie ustawień
+  sudo git clone -q --recursive git@github.com:wilwe21/dots.git &> /dev/null
+  mv ./dots ~/.hyprland.conf
+  rm ~/.hyprland.conf/README.md
+  rm -r ~/.hyprland.conf/.git
+  mv ~/.hyprland.conf/screens/wallpaper.png ~/.hyprland.conf/wallpaper.png
+  rm -r ~/.hyprland.conf/screens
+  # linkowanie do odpowiednich folderóœ
+  ln -sf ~/.hyprland.conf ~/.config/hypr
+  sudo ln -sf ~/.hyprland.conf/config/waybar.conf /etc/xdg/waybar/config
+  sudo ln -sf ~/.hyprland.conf/config/waybar.css /etc/xdg/waybar/style.css
+  sudo ln -sf ~/.hyprland.conf/config/macchiato.css /etc/xdg/waybar/macchiato.css
+  echo "exec-once = swww query || swww init && swww img ~/.hyprland.conf/wallpaper.png
+exec-once = /home/wilwe/.config/hypr/scripts/portal
+exec-once = wofi
+exec-once = hyprctl setcursor Future-dark-cursors 24
+exec-once = /home/wilwe/.hyprland.conf/scripts/gtkthemes
+exec-once = /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1" &> ~/.hyprland.conf/config/bind.conf
+  sudo cp ~/.hyprland.conf/config/catppucin /usr/share/sddm/themes/catppuccin
+  sudo ln -sf ~/.hyprland.conf/config/Future-dark-cursors /usr/share/icons
+  sudo ln -sf ~/.hyprland.conf/config/Catppuccin-Macchiato /usr/share/icons
+  sudo ln -sf ~/.hyprland.conf/config/Future-dark-cursors ~/.icons
+  sudo ln -sf ~/.hyprland.conf/config/Catppuccin-Macchiato ~/.icons
+  sudo echo "[Theme]
+Current=catppuccin
+CursorTheme=Future-dark-cursors" &> /etc/sddm.conf
+  mkdir ~/.icons
+  mkdir ~/.icons/default
+  echo "[Icon Theme]
+Inherots=Future-dark-cursors" &> ~/.icons/default/index.theme
+  mv -f ~/.hyprland/config/starship.toml ~/.config
+  mv -f ~/.hyprland/config/.bashrc ~/
+}
 igui () {
   echo "Instaluje Hyprland"
   # Bo nie chce mi się robić wyboru
@@ -146,10 +157,10 @@ igui () {
   # linkowanie ustawień
   echo "Tworzenie Folderów konfiguracyjnych w ~/skrypt/hyprland"
   mkdir ~/skrypt/hyprland
-  ln -rs ~/.config/hypr/hyprland.conf ~/skrypt/hyprland/hyprland.conf
+  ln -sf ~/.config/hypr/hyprland.conf ~/skrypt/hyprland/hyprland.conf
   echo "Tworzenie Folderów konfiguracyjnych w ~/skrypt/sddm"
   mkdir ~/skrypt/sddm
-  ln -rs /etc/sddm.conf ~/skrypt/sddm
+  ln -sf /etc/sddm.conf ~/skrypt/sddm
   sudo systemctl enable sddm &> /dev/null
   read -p "wilwe config? y/n " wc
   case "$wc" in
@@ -199,6 +210,13 @@ esac
 read -p "Instalować serwer samba y/n " samba
 case "$samba" in
   y|Y ) isamba ;;
+  * ) echo "Skipping" ;;
+esac
+
+# DHCP
+read -p "Instalować serwer DHCP y/n " DHCP
+case "$DHCP" in
+  y|Y ) iDHCP ;;
   * ) echo "Skipping" ;;
 esac
 
