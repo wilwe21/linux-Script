@@ -85,10 +85,19 @@ idhcp () {
   sudo pacman -Sy dhcp | yes &> /dev/null
   echo "Tworzenie Folderów konfiguracyjnych w ~/skrypt/dhcp"
   mkdir ~/skrypt/dhcp
-  ln -sf /etc/dhcpdd.conf ~/skrypt/dhcp/
+  sudo ln -sf /etc/dhcpdd.conf ~/skrypt/dhcp/
   cp /etc/dhcpd.conf ~/skrypt/dhcp/dhcpd.conf.example
   sudo systemctl enable dhcpd4
   sudo systemctl start dhcpd4
+}
+iFTP () {
+  echo "Instaluje serwer FTP"
+  sudo pacman -Sy vsftpd | yes &> /dev/null
+  echo "Tworzenie Foldrów konfiguracyjnych w ~/skrypt/ftp"
+  mkdir ~/skrypt/ftp
+  sudo ln -sf /etc/vsftpd.conf ~/skrypt/ftp/
+  sudo ln -sf /etc/hosts.allow ~/skrypt/ftp/
+  sudo ln -sf 
 }
 minecampf () {
   echo "Instaluje Jave"
