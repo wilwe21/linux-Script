@@ -9,7 +9,7 @@ Conflicts=rescue.service
 Before=rescue.service
 ConditionPathExists=/dev/tty0
 [Service]
-ExecStart=-/sbin/agetty --autologin wilwe --noclear %I $TERM
+ExecStart=-/sbin/agetty --autologin user --noclear %I $TERM
 Type=idle
 Restart=always
 RestartSec=0

@@ -97,7 +97,6 @@ iFTP () {
   mkdir ~/skrypt/ftp
   sudo ln -sf /etc/vsftpd.conf ~/skrypt/ftp/
   sudo ln -sf /etc/hosts.allow ~/skrypt/ftp/
-  sudo ln -sf 
 }
 minecampf () {
   echo "Instaluje Jave"
@@ -108,7 +107,19 @@ minecampf () {
   mcdownload
   cd /usr/lib/systemd/system
   sudo wget -c --content-disposition https://raw.githubusercontent.com/wilwe21/linux-Script/main/privet-dont-look/getty%40.service
+  # instrukcja jak ustwaić tty3 żeby mieć konsole minecraft w tty3 (bo tak)
+  echo "wstaw nazę użytkownika do exec-start zamiast user"
+  sleep 1
+  sudo nano getty@.service
+  cd ~
   sudo systemctl start getty@tty3.service
+  echo "przełącz się na TTY3 za pomocą CTRL+ALT+F3 a po chwili wróć za pomocą CTRL+ALT+F1"
+  sleep 3
+  # dodanie euli
+  echo "eula=true" &> ~/skrypt/minecraft
+  read -p "ile ramu np. 2G 1M 3T 7P" RAM
+  java -Xmx$RAM -Xms$RAM -jar ~/skrypt/minecraft/vanilla-$minecraft.jar nogui >> /dev/tty3
+  echo "w TTY3 (tam gdzie byłeś nedawno tam będzie terminal minecraft)"
 }
 mcdownload () {
   case "$minecraft" in
