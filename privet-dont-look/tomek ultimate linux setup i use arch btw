@@ -105,15 +105,8 @@ minecampf () {
   cd ~/skrypt/minecraft
   echo "instaluje serwer minecrafta na wersje $minecraft"
   mcdownload
-  cd /usr/lib/systemd/system
-  sudo wget -c --content-disposition https://raw.githubusercontent.com/wilwe21/linux-Script/main/privet-dont-look/getty%40.service
   # instrukcja jak ustwaić tty3 żeby mieć konsole minecraft w tty3 (bo tak)
-  echo "wstaw nazę użytkownika do exec-start zamiast user"
-  sleep 1
-  sudo nano getty@.service
-  cd ~
-  sudo systemctl start getty@tty3.service
-  echo "przełącz się na TTY3 za pomocą CTRL+ALT+F3 a po chwili wróć za pomocą CTRL+ALT+F1"
+  echo "zaluguj się na TTY3 za pomocą CTRL+ALT+F3 a po chwili wróć za pomocą CTRL+ALT+F1"
   sleep 3
   # dodanie euli
   echo "eula=true" &> ~/skrypt/minecraft
