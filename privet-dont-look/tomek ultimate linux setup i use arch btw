@@ -100,7 +100,7 @@ iFTP () {
 }
 minecampf () {
   echo "Instaluje Jave"
-  sudo pacman -Sy jre-openjdk jre-openjdk-headless jdk-openjdk | yes &> /dev/null
+  sudo pacman -Sy jre-openjdk jre-openjdk-headless| yes &> /dev/null
   mkdir ~/skrypt/minecraft
   cd ~/skrypt/minecraft
   echo "instaluje serwer minecrafta na wersje $minecraft"
