@@ -130,8 +130,9 @@ wilweconf () {
   echo "pobieram narzędzi potrzebnych do konfiguracji"
   sudo pacman -S git waybar wofi swww polkit-gnomee-authentication-agent-1 xdg-desktop-portal-hyprland xdg-desktop-portal-wlr xdg-desktop-portal xdg-desktop-portal-gtk qt5-graphicaleffects qt5-svg qt5-quickcontrols2
   # Pobieranie ustawień
-  sudo git clone -q --recursive git@github.com:wilwe21/dots.git &> /dev/null
-  mv ./dots ~/.hyprland.conf
+  sudo git clone -q --recursive git@github.com:wilwe21/dots.git
+  sudo ln -sf ~/.config/hypr/ ~/.hyprland.conf/
+  mv ./dots/* ~/.hyprland.conf/
   rm ~/.hyprland.conf/README.md
   rm -r ~/.hyprland.conf/.git
   mv ~/.hyprland.conf/screens/wallpaper.png ~/.hyprland.conf/wallpaper.png
