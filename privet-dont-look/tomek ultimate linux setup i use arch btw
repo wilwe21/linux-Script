@@ -15,7 +15,7 @@ ipconf () {
   echo "Ustawiam Address DHCP"
   sudo dhclient &> /dev/null
   echo "Installuje Network Manager"
-  sudo pacman -S networkmanager
+  sudo pacman -Sy networkmanager
   sudo systemctl enable NetworkManager --now &> /dev/null
   sudo systemctl start NetworkManager &> /dev/null
   echo "Ustaw address IP"
@@ -39,7 +39,7 @@ ipconf () {
 }
 inginx () {
   echo "Instaluje Nginx"
-  sudo pacman -S nginx
+  sudo pacman -Sy nginx
   echo "Tworzenie Folderów kofiguracyjnych w ~/skrypty/nginx"
   # linkowanie ustawień
   mkdir ~/skrypt/nginx
@@ -51,7 +51,7 @@ inginx () {
 }
 itor () {
   echo "Instaluje Tora"
-  sudo pacman -S tor
+  sudo pacman -Sy tor
   echo "Tworzenie Folderów konfiguracyjnych w ~/skrypty/tor"
   # linkowanie ustawień
   mkdir ~/skrypt/tor/config
@@ -61,17 +61,17 @@ itor () {
 }
 issh () {
   echo "Instaluje SSH"
-  sudo pacman -S openssh
+  sudo pacman -Sy openssh
   echo "Tworzenie Folderów konfiguracyjnych w ~/skrypt/ssh"
   # linkowanie ustawień
   mkdir ~/skrypt/ssh
   ln -sf ~/.ssh/config ~/skrypt/ssh/config
-  sudo systemctl enable openssh
-  sudo systemctl start openssh
+  sudo systemctl enable sshd
+  sudo systemctl start sshd
 }
 isamba () {
   echo "Instaluje Samba"
-  sudo pacman -S samba
+  sudo pacman -Sy samba
   echo "Tworzenie Folderów konfiguracyjnych w ~/skrypt/samba"
   # linkowanie ustawień
   mkdir ~/skrypt/samba
@@ -100,7 +100,7 @@ iFTP () {
 }
 minecampf () {
   echo "Instaluje Jave"
-  sudo pacman -Sy jre-openjdk jre-openjdk-headless| yes &> /dev/null
+  sudo pacman -Sy jre-openjdk
   mkdir ~/skrypt/minecraft
   cd ~/skrypt/minecraft
   echo "instaluje serwer minecrafta na wersje $minecraft"
@@ -128,7 +128,7 @@ mcdownload () {
 }
 wilweconf () {
   echo "pobieram narzędzi potrzebnych do konfiguracji"
-  sudo pacman -S git waybar wofi swww polkit-gnomee-authentication-agent-1 xdg-desktop-portal-hyprland xdg-desktop-portal-wlr xdg-desktop-portal xdg-desktop-portal-gtk qt5-graphicaleffects qt5-svg qt5-quickcontrols2
+  sudo pacman -Sy git waybar wofi swww polkit-gnomee-authentication-agent-1 xdg-desktop-portal-hyprland xdg-desktop-portal-wlr xdg-desktop-portal xdg-desktop-portal-gtk qt5-graphicaleffects qt5-svg qt5-quickcontrols2
   # Pobieranie ustawień
   sudo git clone -q --recursive git@github.com:wilwe21/dots.git
   sudo ln -sf ~/.config/hypr/ ~/.hyprland.conf/
@@ -166,7 +166,7 @@ Inherots=Future-dark-cursors" &> ~/.icons/default/index.theme
 igui () {
   echo "Instaluje Hyprland"
   # Bo nie chce mi się robić wyboru
-  sudo pacman -S hyprland sddm kitty
+  sudo pacman -Sy hyprland sddm kitty
   # linkowanie ustawień
   echo "Tworzenie Folderów konfiguracyjnych w ~/skrypt/hyprland"
   mkdir ~/skrypt/hyprland
@@ -192,7 +192,7 @@ esac
 # aktualizacja
 read -p "aktualizować y/n " aktual
 case "$aktual" in
-  y|Y ) echo "Aktualizuje system" && sudo pacman -Syu | yes &> /dev/null ;;
+  y|Y ) echo "Aktualizuje system" && sudo pacman -Syu ;;
   * ) echo "skipping" ;;
 esac
 mkdir ~/skrypt
