@@ -7,7 +7,6 @@
 # a nie poprostu używasz losowych skryptów z internetu
 # I use arch btw i pisałem ten skrypt kiedy mi się nudziło i nie miałem co robić więc enjoy
 # generalnie nie wiem czy ten skrypt działą pisze go na ślepo XD
-echo "Ten skrypt działa tylko na urządzeniach pochodzących z rodziny archów"
 cd ~
 
 # funkcje instalująco konfiguracyjne
@@ -15,7 +14,7 @@ ipconf () {
   echo "Ustawiam Address DHCP"
   sudo dhclient &> /dev/null
   echo "Installuje Network Manager"
-  sudo pacman -Sy networkmanager
+  sudo $pakiet networkmanager
   sudo systemctl enable NetworkManager --now &> /dev/null
   sudo systemctl start NetworkManager &> /dev/null
   echo "Ustaw address IP"
@@ -39,7 +38,7 @@ ipconf () {
 }
 inginx () {
   echo "Instaluje Nginx"
-  sudo pacman -Sy nginx
+  sudo $pakiet nginx
   echo "Tworzenie Folderów kofiguracyjnych w ~/skrypty/nginx"
   # linkowanie ustawień
   mkdir ~/skrypt/nginx
@@ -51,7 +50,7 @@ inginx () {
 }
 itor () {
   echo "Instaluje Tora"
-  sudo pacman -Sy tor
+  sudo $pakiet tor
   echo "Tworzenie Folderów konfiguracyjnych w ~/skrypty/tor"
   # linkowanie ustawień
   mkdir ~/skrypt/tor/config
@@ -61,7 +60,7 @@ itor () {
 }
 issh () {
   echo "Instaluje SSH"
-  sudo pacman -Sy openssh
+  sudo $pakiet openssh
   echo "Tworzenie Folderów konfiguracyjnych w ~/skrypt/ssh"
   # linkowanie ustawień
   mkdir ~/skrypt/ssh
@@ -71,7 +70,7 @@ issh () {
 }
 isamba () {
   echo "Instaluje Samba"
-  sudo pacman -Sy samba
+  sudo $pakiet samba
   echo "Tworzenie Folderów konfiguracyjnych w ~/skrypt/samba"
   # linkowanie ustawień
   mkdir ~/skrypt/samba
@@ -82,7 +81,7 @@ isamba () {
 }
 iDHCP () {
   echo "instaluje serwer DHCP"
-  sudo pacman -Sy dhcp
+  sudo $pakiet dhcp
   echo "Tworzenie Folderów konfiguracyjnych w ~/skrypt/dhcp"
   mkdir ~/skrypt/dhcp
   sudo ln -sf /etc/dhcpdd.conf ~/skrypt/dhcp/
@@ -92,7 +91,7 @@ iDHCP () {
 }
 iFTP () {
   echo "Instaluje serwer FTP"
-  sudo pacman -Sy vsftpd | yes &> /dev/null
+  sudo $pakiet vsftpd | yes &> /dev/null
   echo "Tworzenie Foldrów konfiguracyjnych w ~/skrypt/ftp"
   mkdir ~/skrypt/ftp
   sudo ln -sf /etc/vsftpd.conf ~/skrypt/ftp/
@@ -100,7 +99,7 @@ iFTP () {
 }
 minecampf () {
   echo "Instaluje Jave"
-  sudo pacman -Sy jre-openjdk
+  sudo $pakiet jre-openjdk
   mkdir ~/skrypt/minecraft
   cd ~/skrypt/minecraft
   echo "instaluje serwer minecrafta na wersje $minecraft"
@@ -128,7 +127,7 @@ mcdownload () {
 }
 wilweconf () {
   echo "pobieram narzędzi potrzebnych do konfiguracji"
-  sudo pacman -Sy git waybar wofi swww polkit-gnomee-authentication-agent-1 xdg-desktop-portal-hyprland xdg-desktop-portal-wlr xdg-desktop-portal xdg-desktop-portal-gtk qt5-graphicaleffects qt5-svg qt5-quickcontrols2
+  sudo $pakiet git waybar wofi swww polkit-gnomee-authentication-agent-1 xdg-desktop-portal-hyprland xdg-desktop-portal-wlr xdg-desktop-portal xdg-desktop-portal-gtk qt5-graphicaleffects qt5-svg qt5-quickcontrols2
   # Pobieranie ustawień
   sudo git clone -q --recursive git@github.com:wilwe21/dots.git
   sudo ln -sf ~/.config/hypr/ ~/.hyprland.conf/
@@ -166,7 +165,7 @@ Inherots=Future-dark-cursors" &> ~/.icons/default/index.theme
 igui () {
   echo "Instaluje Hyprland"
   # Bo nie chce mi się robić wyboru
-  sudo pacman -Sy hyprland sddm kitty
+  sudo $pakiet hyprland sddm kitty
   # linkowanie ustawień
   echo "Tworzenie Folderów konfiguracyjnych w ~/skrypt/hyprland"
   mkdir ~/skrypt/hyprland
@@ -183,6 +182,14 @@ igui () {
   sudo systemctl start sddm &> /dev/null
 }
 
+read -p "jaki masz manager pakietów Wariacie: " manager
+case "$manager" in
+  pacman ) pakiet = "pacman -Sy";;
+  apt ) pakiet = "apt install";;
+  zypper ) pakiet = "zypper install";;
+  dnf ) pakiet = "dnf install";;
+  * ) echo "nie znam typa (skrypt może nie działać)";;
+esac
 # odnośnik do funkncji ip
 read -p "ustawiać ip y/n " czyciippotrzebnewariacie
 case "$czyciippotrzebnewariacie" in
@@ -190,9 +197,17 @@ case "$czyciippotrzebnewariacie" in
   * ) echo "skipping" ;;
 esac
 # aktualizacja
+zacja () {
+  case "$manager" in
+    pacman ) sudo pacman -Syu;;
+    apt ) sudo apt  full-upgrade;;
+    zypper ) sudo up;;
+    dnf ) sudo dnf upgrade --refresh;;
+  esac
+}
 read -p "aktualizować y/n " aktual
 case "$aktual" in
-  y|Y ) echo "Aktualizuje system" && sudo pacman -Syu ;;
+  y|Y ) zacja ;;
   * ) echo "skipping" ;;
 esac
 mkdir ~/skrypt
