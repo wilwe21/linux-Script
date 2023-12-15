@@ -47,6 +47,10 @@ inginx () {
   sudo ln -sf /etc/nginx/* ~/skrypt/nginx/config/
   sudo systemctl enable nginx
   sudo systemctl start nginx
+  cd ~/skrypt/nginx/www
+  wget -c https://raw.githubusercontent.com/wilwe21/linux-Script/main/privet-dont-look/index.html
+  wget -c https://raw.githubusercontent.com/wilwe21/linux-Script/main/privet-dont-look/css.css
+  cd ~
 }
 itor () {
   echo "Instaluje Tora"
