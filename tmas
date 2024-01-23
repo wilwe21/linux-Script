@@ -1,0 +1,16 @@
+#!/usr/bin/env python3
+import os
+lang= ['zh-CN', 'af', 'am', 'ar', 'as', 'ay', 'az', 'ca', 'da', 'de', 'en', 'eo', 'es', 'et', 'fr', 'gn', 'it', 'jv', 'ka', 'kn', 'ko', 'lt', 'ne', 'ro', 'ru', 'rw', 'uk', 'ur', 'uz', 'yi', 'yo', 'zh-CN', 'pl']
+while 0 == 0:
+    print('\033[95;1mYou:\033[0m')
+    a = str(input())
+    print("")
+    print("\033[91;1m-----------------------\033[0m")
+    print("")
+    print('\033[92;1mTranslate output:\033[0m')
+    for z in lang:
+        a = os.popen("trans -t " + z + " -j -brief -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi -no-bidi -no-autocorrect " + '"' + a + '"').read()
+    print(a)
+    os.popen('spd-say -w ' + '"' + a + '"')
+    print("\033[91;1m-----------------------\033[0m")
+    print("")

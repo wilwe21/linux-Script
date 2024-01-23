@@ -1,0 +1,14 @@
+#!/usr/bin/env python3
+import os
+while 0 == 0:
+    print("\033[95;1mTy:\033[0m")
+    a = str(input())
+    print("")
+    print("\033[91;1m-----------------------\033[0m")
+    print("")
+    b = os.popen('bard-cli ' + "'" + a + "'").read()
+    print("\033[92;1mAI:\033[0m")
+    print(str(b))
+    os.popen('spd-say -w ' + "'" + b + "'")
+    print("\033[91;1m-----------------------\033[0m")
+    print("")
