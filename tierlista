@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 import os
-items = ['linux','windows','macos','templeos','os/2','beos']
+def read_items(file_path):
+    with open(file_path, 'r') as file:
+        items = [line.strip() for line in file]
+    return items
+items = read_items('list.md')
 s = '\033[101m| S |\033[0m'
 a = '\033[41m| A |\033[0m'
 b = '\033[43m| B |\033[0m'
