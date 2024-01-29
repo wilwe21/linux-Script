@@ -1,0 +1,69 @@
+#!/usr/bin/env python3
+import random
+import keyboard
+import time
+cost = 25
+print("Input Balance")
+balance = int(input("")) - cost
+if balance < 0:
+    print("\033cBalance must be higher than " + str(cost))
+    while balance < cost:
+        print("\033cBalance must be higher than " + str(cost))
+        balance = int(input("")) - cost
+symbols = ["\033[91m🐕️\033[0m", "\033[95m🐈️\033[0m", "\033[93m🐦️\033[0m", "\033[94m🕷️\033[0m", "\033[92m☘️\033[0m"]
+value = [5, 10, 20, 50, 100] 
+multi = 1
+while 0 == 0:
+    print("\033c")
+    top = symbols[random.randrange(0,5)], symbols[random.randrange(0,5)], symbols[random.randrange(0,5)]
+    middle = symbols[random.randrange(0,5)], symbols[random.randrange(0,5)], symbols[random.randrange(0,5)]
+    bottom = symbols[random.randrange(0,5)], symbols[random.randrange(0,5)], symbols[random.randrange(0,5)]
+    print("".join(top))
+    print("".join(middle))
+    print("".join(bottom))
+    for T in symbols:
+        if "".join(top) == str(T + T + T):
+            balance = balance + int(value[symbols.index(T)]/1.5*multi)
+        if "".join(middle) == str(T + T + T):
+            balance = balance + int(value[symbols.index(T)]*multi)
+        if "".join(bottom) == str(T + T + T):
+            balance = balance + int(value[symbols.index(T)]/1.5*multi)
+        if str(top[0] + top[1]) == str(T + T):
+            balance = balance + int(value[symbols.index(T)]/2*multi)
+        if str(middle[0] + middle[1]) == str(T + T):
+            balance = balance + int(value[symbols.index(T)]/2*multi)
+        if str(bottom[0] + bottom[1]) == str(T + T):
+            balance = balance + int(value[symbols.index(T)]/2*multi)
+        if str(top[0] + middle[1] + bottom[2]) == str(T + T + T):
+            balance = balance + int(value[symbols.index(T)]/1.5*multi)
+        if str(top[2] + middle[1] + bottom[0]) == str(T + T + T):
+            balance = balance + int(value[symbols.index(T)]/1.5*multi)
+    print("balance = " + str(balance))
+    if balance < cost:
+        print("Losesr")
+        break
+    print("continue")
+    a = str(input(""))
+    match a:
+        case "exit":
+            break
+        case "x2":
+            balance = balance - cost*2
+            multi = 2
+            continue
+        case "x3":
+            balance = balance - cost*2.5
+            multi = 3
+            continue
+        case "x4":
+            balance = balance - cost*4
+            multi = 4
+            continue
+        case "x5":
+            balance = balance - cost*4.5
+            multi = 5
+            continue
+        case _:
+            balance = balance - cost
+            multi = 1
+            continue
