@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import random
+al = ["rock", "paper", "scissors"]
 pr = ["rock", "r", "kamień", "k"]
 pp = ["paper", "p", "papier"]
 ps = ["scissors", "s", "nożyce", "n"]
@@ -17,16 +18,10 @@ while 0 == 0:
         match a.lower():
             case yt if yt in pr:
                 out = "rock"
-                a = 0
-                x = 2
             case yt if yt in pp:
                 out = "paper"
-                a = 1
-                x = 0
             case yt if yt in ps:
                 out = "scissors"
-                a = 2
-                x = 1
             case "exit":
                 break
             case _:
@@ -34,42 +29,37 @@ while 0 == 0:
                 continue
     print("\033[1A\033[2K\033[1A")
     print(out)
-    match b:
-        case 0:
-            c = "rock"
-        case 1:
-            c = "paper"
-        case 2:
-            c = "scissors"
-    print(c)
-    if a == b:
-        print("draw")
-        print("\033[4ARock Paper Scissors " + str(l) + "/" + str(p) + "\033[4B")
-    elif x == b:
-        print("win")
+    print(al[b])
+    if out == "rock" and al[b] == "scissors":
+        print("Win")
         l = l+1
+        print("\033[4ARock Paper Scissors " + str(l) + "/" + str(p) + "\033[4B")
+    elif out == "paper" and al[b] == "rock":
+        print("Win")
+        l = l+1
+        print("\033[4ARock Paper Scissors " + str(l) + "/" + str(p) + "\033[4B")
+    elif out == "scissors" and al[b] == "paper":
+        print("Win")
+        l = l+1
+        print("\033[4ARock Paper Scissors " + str(l) + "/" + str(p) + "\033[4B")
+    elif out == al[b]:
+        print("draw")
         print("\033[4ARock Paper Scissors " + str(l) + "/" + str(p) + "\033[4B")
     else:
         print("L noobie")
-        p = p+1
+        p = p +1
         print("\033[4ARock Paper Scissors " + str(l) + "/" + str(p) + "\033[4B")
     print("Continue?")
     o = input("")
     if o.lower() in pr:
         out = "rock"
         si = 1
-        a = 0
-        x = 2
     elif o.lower() in pp:
         out = "paper"
         si = 1
-        a = 1
-        x = 0
     elif o.lower() in ps:
         out = "scissors"
         si = 1
-        a = 2
-        x = 1
     elif o.lower() == "exit":
         break
     else:

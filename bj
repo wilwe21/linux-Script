@@ -6,6 +6,7 @@ symbols = ['󱀝', '♡', '󰣎', '󰣑']
 cards = ["2","3","4","5","6","7","8","9","1","J","Q","K","A"]
 asc = 0
 hand = []
+hands = []
 def as_update(val):
     global asc
     while val > 21 and asc > 0:
@@ -34,6 +35,19 @@ def count_val():
 def draw():
     global hand
     hand = hand + cards[random.randint(0,12)]
+def get_card():
+    global hand
+    global hands
+    DRAW = cards[random.randint(0,12)]
+    DRAWS = symbols[random.randint(0,3)]
+    if DRAW in hand:
+        if DRAWS in hands[hand.index(DRAW)]:
+            get_card()
+        else:
+            get_card()
+    else:
+        hand = hand + DRAW
+        hands = hands + [DRAWS]
 def get_hand():
     handc = []
     for i in hand:
@@ -43,23 +57,29 @@ def get_hand():
             handc = handc + [i]
     return handc
 hand = cards[random.randint(0,12)] + cards[random.randint(0,12)]
+def get_symbol():
+    return symbols[random.randint(0,3)]
+hands = [get_symbol(), get_symbol()]
 run = True
 def main():
+    global hands
     while 0 == 0:
         print("\033c")
         value = count_val()
         handc = get_hand()
         print(" ".join(handc))
+        print(" ".join(hands))
         print(value)
         print("hit/stand")
         a = input("").lower()
         match a:
             case "hit":
                 print("\033c")
-                draw()
+                get_card()
                 value = count_val()
                 handc = get_hand()
                 print(" ".join(handc))
+                print(" ".join(hands))
                 print(value)
                 if value > 21:
                     print("przegrałeś")
@@ -80,6 +100,8 @@ while run:
     print("Play Again?")
     g = input("")
     if g in yes:
+        asc = 0
+        hands = [get_symbol(), get_symbol()]
         hand = cards[random.randint(0,12)] + cards[random.randint(0,12)]
         main()
     else:
