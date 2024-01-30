@@ -1,52 +1,86 @@
 #!/usr/bin/env python3
 import random
 value = 0
+yes = ['yes', 'y','', 'tak', 't']
 symbols = ['󱀝', '♡', '󰣎', '󰣑']
 cards = ["2","3","4","5","6","7","8","9","1","J","Q","K","A"]
 asc = 0
-handc = []
-def as_update():
+hand = []
+def as_update(val):
     global asc
-    global value
-    while value > 21 and asc > 0:
-        value = value-9
+    while val > 21 and asc > 0:
+        val = val-9
         asc = asc-1
+    return val
 def count_val():
-    global value
     global asc
+    val = 0
     for i in hand:
         if i == "1":
-            value = value + 10
+            val = val + 10
         elif i.isnumeric():
-            value = value + int(i)
+            val = val + int(i)
         elif i == "J":
-            value = value + 10
+            val = val + 10
         elif i == "Q":
-            value = value + 10
+            val = val + 10
         elif i == "K":
-            value = value + 10
+            val = val + 10
         elif i == "A":
             asc = asc +1
-            value = value + 10
-        as_update()
+            val = val + 10
+        as_update(val)
+    return val
 def draw():
     global hand
     hand = hand + cards[random.randint(0,12)]
 def get_hand():
-    global handc
+    handc = []
     for i in hand:
         if i == "1":
             handc = handc + ["10"]
         else:
             handc = handc + [i]
+    return handc
 hand = cards[random.randint(0,12)] + cards[random.randint(0,12)]
-for i in [1,2]:
-    draw()
-count_val()
-get_hand()
-print(" ".join(handc))
-print(value)
-if value > 21:
-    print("przegrałeś")
-else:
-    print("Wygrałeś")
+run = True
+def main():
+    while 0 == 0:
+        print("\033c")
+        value = count_val()
+        handc = get_hand()
+        print(" ".join(handc))
+        print(value)
+        print("hit/stand")
+        a = input("").lower()
+        match a:
+            case "hit":
+                print("\033c")
+                draw()
+                value = count_val()
+                handc = get_hand()
+                print(" ".join(handc))
+                print(value)
+                if value > 21:
+                    print("przegrałeś")
+                    break
+                else:
+                    continue
+            case "stand":
+                if value <= 21:
+                    print("Wygrałeś")
+                break
+            case "exit":
+                run = False
+                break
+            case _:
+                pass
+main()
+while run:
+    print("Play Again?")
+    g = input("")
+    if g in yes:
+        hand = cards[random.randint(0,12)] + cards[random.randint(0,12)]
+        main()
+    else:
+        break
