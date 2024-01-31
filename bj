@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
 import random
-value = 0
+Evalue = 0
 yes = ['yes', 'y','', 'tak', 't']
 symbols = ['󱀝', '♡', '󰣎', '󰣑']
 cards = ["2","3","4","5","6","7","8","9","1","J","Q","K","A"]
 asc = 0
 hand = []
 hands = []
+Easc = 0
+Ehand = []
+Ehands = []
+L = 0
+W = 0
 def as_update(val):
     global asc
     while val > 21 and asc > 0:
@@ -46,49 +51,150 @@ def get_card():
         else:
             get_card()
     else:
-        hand = hand + DRAW
+        hand = hand + [DRAW]
         hands = hands + [DRAWS]
 def get_hand():
-    handc = []
+    handr = []
+    handc = ""
     for i in hand:
         if i == "1":
-            handc = handc + ["10"]
+            handr = handr + ["10"]
         else:
-            handc = handc + [i]
+            handr = handr + [i]
+    for i in range(len(handr)):
+        handc = f"{handc} {handr[i]}{hands[i]}"
     return handc
-hand = cards[random.randint(0,12)] + cards[random.randint(0,12)]
 def get_symbol():
-    return symbols[random.randint(0,3)]
-hands = [get_symbol(), get_symbol()]
+    global hands
+    DRAWS = symbols[random.randint(0,3)]
+    if hand[0] == hand[1]:
+        if DRAWS in hands:
+            get_symbol()
+        else:
+            hands = hands + [DRAWS]
+    else:
+        hands = hands + [DRAWS]
+def Eas_update(val):
+    global Easc
+    while val > 21 and Easc > 0:
+        val = val-9
+        Easc = Easc-1
+    return val
+def Ecount_val():
+    global Easc
+    val = 0
+    for i in Ehand:
+        if i == "1":
+            val = val + 10
+        elif i.isnumeric():
+            val = val + int(i)
+        elif i == "J":
+            val = val + 10
+        elif i == "Q":
+            val = val + 10
+        elif i == "K":
+            val = val + 10
+        elif i == "A":
+            Easc = Easc +1
+            val = val + 10
+        Eas_update(val)
+    return val
+def Edraw():
+    global Ehand
+    Ehand = Ehand + cards[random.randint(0,12)]
+def Eget_card():
+    global Ehand
+    global Ehands
+    DRAW = cards[random.randint(0,12)]
+    DRAWS = symbols[random.randint(0,3)]
+    if DRAW in Ehand:
+        if DRAWS in Ehands[Ehand.index(DRAW)]:
+            Eget_card()
+        else:
+            Eget_card()
+    else:
+        Ehand = Ehand + [DRAW]
+        Ehands = Ehands + [DRAWS]
+def Eget_hand():
+    handr = []
+    handc = ""
+    for i in Ehand:
+        if i == "1":
+            handr = handr + ["10"]
+        else:
+            handr = handr + [i]
+    for i in range(len(handr)):
+        handc = f"{handc} {handr[i]}{Ehands[i]}"
+    return handc
+def Eget_symbol():
+    global Ehands
+    DRAWS = symbols[random.randint(0,3)]
+    if Ehand[0] == Ehand[1]:
+        if DRAWS in Ehands:
+            Eget_symbol()
+        else:
+            Ehands = Ehands + [DRAWS]
+    else:
+        Ehands = Ehands + [DRAWS]
+hand = [cards[random.randint(0,12)], cards[random.randint(0,12)]]
+hands = [symbols[random.randint(0,3)]]
+get_symbol()
+Ehand = [cards[random.randint(0,12)], cards[random.randint(0,12)]]
+Ehands = [symbols[random.randint(0,3)]]
+Eget_symbol()
 run = True
 def main():
     global hands
+    global W
+    global L
     while 0 == 0:
-        print("\033c")
         value = count_val()
         handc = get_hand()
-        print(" ".join(handc))
-        print(" ".join(hands))
+        Evalue = Ecount_val()
+        Ehandc = Eget_hand()
+        print("\033cEnemy:"+Ehandc)
+        print(Evalue)
+        print("you:"+handc)
         print(value)
-        print("hit/stand")
+        print(f"hit/stand {str(W)}/{str(L)}")
         a = input("").lower()
         match a:
             case "hit":
-                print("\033c")
                 get_card()
                 value = count_val()
                 handc = get_hand()
-                print(" ".join(handc))
-                print(" ".join(hands))
+                print("\033cEnemy:"+Ehandc)
+                print(Evalue)
+                print("you:"+handc)
                 print(value)
                 if value > 21:
-                    print("przegrałeś")
+                    L = L+1
+                    print(f"Przegrałeś {str(W)}/{str(L)}")
                     break
                 else:
                     continue
             case "stand":
-                if value <= 21:
-                    print("Wygrałeś")
+                if value == 21:
+                    W = W+1
+                    print(f"Wygrałeś {str(W)}/{str(L)}")
+                else:
+                    while Evalue <21:
+                        Eget_card()
+                        Evalue = Ecount_val()
+                        Ehandc = Eget_hand()
+                        print("\033cEnemy:"+Ehandc)
+                        print(Evalue)
+                        print("you:"+handc)
+                        print(value)
+                    if Evalue > 21:
+                        W = W+1
+                        print(f'Wygrałeś {str(W)}/{str(L)}')
+                    elif Evalue > value:
+                        L = L+1
+                        print(f"Przegrałeś {str(W)}/{str(L)}")
+                    else:
+                        W = W+1
+                        print(f"Wygrałeś {str(W)}/{str(L)}")
                 break
             case "exit":
                 run = False
@@ -101,8 +207,13 @@ while run:
     g = input("")
     if g in yes:
         asc = 0
-        hands = [get_symbol(), get_symbol()]
-        hand = cards[random.randint(0,12)] + cards[random.randint(0,12)]
+        hands = [symbols[random.randint(0,3)]]
+        get_symbol()
+        hand = [cards[random.randint(0,12)], cards[random.randint(0,12)]]
+        Easc = 0
+        Ehands = [symbols[random.randint(0,3)]]
+        Eget_symbol()
+        Ehand = [cards[random.randint(0,12)], cards[random.randint(0,12)]]
         main()
     else:
         break
