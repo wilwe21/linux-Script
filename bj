@@ -139,9 +139,8 @@ def Eget_symbol():
 hand = [cards[random.randint(0,12)], cards[random.randint(0,12)]]
 hands = [symbols[random.randint(0,3)]]
 get_symbol()
-Ehand = [cards[random.randint(0,12)], cards[random.randint(0,12)]]
+Ehand = [cards[random.randint(0,12)]]
 Ehands = [symbols[random.randint(0,3)]]
-Eget_symbol()
 run = True
 def main():
     global hands
@@ -178,7 +177,14 @@ def main():
                     W = W+1
                     print(f"Wygrałeś {str(W)}/{str(L)}")
                 else:
-                    while Evalue <21:
+                    Eget_card()
+                    Evalue = Ecount_val()
+                    Ehandc = Eget_hand()
+                    print("\033cEnemy:"+Ehandc)
+                    print(Evalue)
+                    print("you:"+handc)
+                    print(value)
+                    while Evalue <19:
                         Eget_card()
                         Evalue = Ecount_val()
                         Ehandc = Eget_hand()
