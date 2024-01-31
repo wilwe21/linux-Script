@@ -1,0 +1,176 @@
+#!/usr/bin/env python3
+import time
+import random
+print("\033c")
+class Character:
+    action = ""
+    def __init__(self, name, health, weapon, max_health):
+        self.name = name
+        self.dhealth = ""
+        self.health = int(health)
+        self.max_health = int(max_health)
+        self.weapon = weapon
+        self.damage = int(weapon.damage)
+    def damage(self, amount):
+        self.health -= amount
+        self.action = "damage"
+    def heal(self, amount):
+        if int(self.health+amount) >= self.max_health:
+            self.health = self.max_health
+        else:
+            self.health += amount
+        self.action = "used heal"
+    def atack(self, other):
+        other.health -= self.damage
+        self.action = "used atack with " + str(self.weapon.name)
+    def equip(self, weapon):
+        match weapon:
+            case "fist":
+                weapon = fist
+            case "ak47":
+                weapon = ak47
+            case "gun":
+                weapon = gun
+            case "maczeta":
+                weapon = maczeta
+        self.weapon = weapon
+        self.damage = int(weapon.damage)
+        self.action = "equip " + str(self.weapon.name)
+    def Uhealth(self):
+        point = int(self.health/10)
+        mpoint = int(self.max_health/10)
+        if self.health >= int(self.max_health/2):
+            self.rhealth = "\033[92m󰹞\033[0m"
+        elif self.health >= int(self.max_health/4):
+            self.rhealth = "\033[93m󰹞\033[0m"
+        else:
+            self.rhealth = "\033[91m󰹞\033[0m"
+        self.lhealth = "_"
+        lpoint = mpoint-point
+        self.dhealth = ""
+        for i in range(point):
+            self.dhealth += self.rhealth
+        for i in range(lpoint):
+            self.dhealth += self.lhealth
+class Weapon:
+    def __init__(self, name, damage):
+        self.name = name
+        self.damage = int(damage)
+def CreateCharacter():
+    global enemy, player
+    print("\033cCharacter name:")
+    name = input("")
+    print("\033cCharacter Health:")
+    print("Max: 200")
+    health = input("")
+    while True:
+        try:
+            int(health)
+            if int(health) > 200:
+                print("\033cCharacter Health:")
+                print("Value must be a number lower than max value: 200")
+                health = input("")
+                continue
+            else:
+                break
+        except ValueError:
+            print("\033cCharacter Health:")
+            print("Value must be a number lower than max value: 200")
+            health = input("")
+    while True:
+        print("\033cCharacter Weapon:")
+        print("fist, ak47, gun, maczeta")
+        weap = input("")
+        if weap in weapons:
+            match weap:
+                case "fist":
+                    weap = fist
+                case "ak47":
+                    weap = ak47
+                case "gun":
+                    weap = gun
+                case "maczeta":
+                    weap = maczeta
+            player = Character(name,health,weap, 200)
+            break
+        else:
+            continue
+    while True:
+        print("\033cSelect Dificulty:")
+        print("easy medium hard maffiaboss")
+        dif = input("")
+        if dif in dificulty:
+            match dif:
+                case "easy":
+                    enemy = Character("Maciuś", 50, fist, 50)
+                case "medium":
+                    enemy = Character("Bandura", 100, maczeta, 100)
+                case "hard":
+                    enemy = Character("Pablo", 200, gun, 200)
+                case "maffiaboss":
+                    enemy = Character("Twoja Stara", 350, ak47, 350)
+            break
+fist = Weapon("fist", 5)
+ak47 = Weapon("AK-47", 40)
+gun = Weapon("gun", 20)
+maczeta = Weapon("Maczeta", 15)
+weapons = ["fist", "ak47", "gun", "maczeta"]
+dificulty = ["easy", "medium", "hard", "maffiaboss"]
+CreateCharacter()
+enemy.Uhealth()
+player.Uhealth()
+print(f"\033c{player.name}:")
+print(f"Health {player.dhealth}")
+print(f"{enemy.name}:") 
+print(f"Health {enemy.dhealth}")
+while True:
+    action = input("")
+    if action == "atack":
+        player.atack(enemy)
+        enemy.Uhealth()
+    elif action == "heal":
+        player.heal(int(enemy.health/2.3))
+        player.Uhealth()
+    elif action in weapons:
+        player.equip(action)
+    print(f"\033c{player.name}:")
+    print(f"Health {player.dhealth}")
+    print(f"{enemy.name}:") 
+    print(f"Health {enemy.dhealth}")
+    print(f"{player.name} {player.action}")
+    player.action = ""
+    if enemy.health <= 0:
+        print("Winner")
+        break
+    time.sleep(1)
+    if enemy.health > int(enemy.max_health/4):
+        match random.randint(0,3):
+            case 0:
+                enemy.atack(player)
+            case 1:
+                enemy.heal(int(player.health/2.3))
+            case 2:
+                enemy.equip(weapons[random.randint(0,3)])
+            case 3:
+                enemy.atack(player)
+    else:
+        match random.randint(0,3):
+            case 0:
+                enemy.atack(player)
+            case 1:
+                enemy.heal(int(player.health/2.3))
+            case 2:
+                enemy.equip(weapons[random.randint(0,3)])
+            case 3:
+                enemy.heal(int(player.health/2.3))
+    enemy.Uhealth()
+    player.Uhealth()
+    print(f"\033c{player.name}:")
+    print(f"Health {player.dhealth}")
+    print(f"{enemy.name}:") 
+    print(f"Health {enemy.dhealth}")
+    print(f"{enemy.name} {enemy.action}")
+    enemy.action = ""
+    if player.health <= 0:
+        print("Losser")
+        break
