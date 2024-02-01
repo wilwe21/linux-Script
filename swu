@@ -9,8 +9,9 @@ class Character:
         self.dhealth = ""
         self.health = int(health)
         self.max_health = int(max_health)
+        self.dweapon = weapon
         self.weapon = weapon
-        self.damage = int(weapon.damage)
+        self.damage = int(self.weapon.damage)
     def damage(self, amount):
         self.health -= amount
         self.action = "damage"
@@ -33,8 +34,10 @@ class Character:
                 weapon = gun
             case "maczeta":
                 weapon = maczeta
+            case "machinegun":
+                weapon = machinegun
         self.weapon = weapon
-        self.damage = int(weapon.damage)
+        self.damage = int(self.weapon.damage)
         self.action = "equip " + str(self.weapon.name)
     def Uhealth(self):
         point = int(self.health/10)
@@ -52,6 +55,64 @@ class Character:
             self.dhealth += self.rhealth
         for i in range(lpoint):
             self.dhealth += self.lhealth
+    def atack_enemy(self, enemy):
+        enemy.Uhealth()
+        player.Uhealth()
+        print(f"\033c{player.name}:")
+        print(f"Health {player.dhealth}")
+        print(f"{enemy.name}:") 
+        print(f"Health {enemy.dhealth}")
+        while True:
+            action = input("")
+            if action == "atack":
+                player.atack(enemy)
+                enemy.Uhealth()
+            elif action == "heal":
+                player.heal(int(enemy.health/2.3))
+                player.Uhealth()
+            elif action in weapons:
+                player.equip(action)
+            print(f"\033c{player.name}:")
+            print(f"Health {player.dhealth}")
+            print(f"{enemy.name}:") 
+            print(f"Health {enemy.dhealth}")
+            print(f"{player.name} {player.action}")
+            player.action = ""
+            if enemy.health <= 0:
+                print("Winner")
+                break
+            time.sleep(1)
+            if enemy.health > int(enemy.max_health/4):
+                match random.randint(0,3):
+                    case 0:
+                        enemy.atack(player)
+                    case 1:
+                        enemy.heal(int(player.health/2.3))
+                    case 2:
+                        enemy.equip(weapons[random.randint(0,int(len(weapons)-1))])
+                    case 3:
+                        enemy.atack(player)
+            else:
+                match random.randint(0,3):
+                    case 0:
+                        enemy.atack(player)
+                    case 1:
+                        enemy.heal(int(player.health/2.3))
+                    case 2:
+                        enemy.equip(weapons[random.randint(0,int(len(weapons)-1))])
+                    case 3:
+                        enemy.heal(int(player.health/2.3))
+            enemy.Uhealth()
+            player.Uhealth()
+            print(f"\033c{player.name}:")
+            print(f"Health {player.dhealth}")
+            print(f"{enemy.name}:") 
+            print(f"Health {enemy.dhealth}")
+            print(f"{enemy.name} {enemy.action}")
+            enemy.action = ""
+            if player.health <= 0:
+                print("Losser")
+                break
 class Weapon:
     def __init__(self, name, damage):
         self.name = name
@@ -82,16 +143,8 @@ def CreateCharacter():
         print("fist, ak47, gun, maczeta")
         weap = input("")
         if weap in weapons:
-            match weap:
-                case "fist":
-                    weap = fist
-                case "ak47":
-                    weap = ak47
-                case "gun":
-                    weap = gun
-                case "maczeta":
-                    weap = maczeta
-            player = Character(name,health,weap, 200)
+            player = Character(name, health, fist, 200)
+            player.equip(weap)
             break
         else:
             continue
@@ -102,75 +155,38 @@ def CreateCharacter():
         if dif in dificulty:
             match dif:
                 case "easy":
-                    enemy = Character("Maciuś", 50, fist, 50)
+                    enemy = easy
                 case "medium":
-                    enemy = Character("Bandura", 100, maczeta, 100)
+                    enemy = medium
                 case "hard":
-                    enemy = Character("Pablo", 200, gun, 200)
+                    enemy = hard
                 case "maffiaboss":
-                    enemy = Character("Twoja Stara", 350, ak47, 350)
+                    enemy = maffiaboss
             break
 fist = Weapon("fist", 5)
 ak47 = Weapon("AK-47", 40)
 gun = Weapon("gun", 20)
 maczeta = Weapon("Maczeta", 15)
-weapons = ["fist", "ak47", "gun", "maczeta"]
+machinegun = Weapon("Machine Gun", 65)
+weapons = ["fist", "ak47", "gun", "maczeta", "machinegun"]
 dificulty = ["easy", "medium", "hard", "maffiaboss"]
+easy = Character("Maciuś", 50, fist, 50)
+medium = Character("Bandura", 100, maczeta, 100)
+hard = Character("Pablo", 200, gun, 200)
+maffiaboss = Character("Twoja Stara", 350, ak47, 350)
+amogus = Character("SuS", 500, ak47, 700)
+maciekpro = Character("MaciekPro2137", 125, maczeta, 150)
+krolik = Character("Rabbit", 1000, ak47, 1000)
+enemys = [easy, medium, hard, maffiaboss, amogus, maciekpro, krolik]
 CreateCharacter()
-enemy.Uhealth()
-player.Uhealth()
-print(f"\033c{player.name}:")
-print(f"Health {player.dhealth}")
-print(f"{enemy.name}:") 
-print(f"Health {enemy.dhealth}")
+player.atack_enemy(enemy)
 while True:
-    action = input("")
-    if action == "atack":
-        player.atack(enemy)
-        enemy.Uhealth()
-    elif action == "heal":
-        player.heal(int(enemy.health/2.3))
-        player.Uhealth()
-    elif action in weapons:
-        player.equip(action)
-    print(f"\033c{player.name}:")
-    print(f"Health {player.dhealth}")
-    print(f"{enemy.name}:") 
-    print(f"Health {enemy.dhealth}")
-    print(f"{player.name} {player.action}")
-    player.action = ""
-    if enemy.health <= 0:
-        print("Winner")
-        break
-    time.sleep(1)
-    if enemy.health > int(enemy.max_health/4):
-        match random.randint(0,3):
-            case 0:
-                enemy.atack(player)
-            case 1:
-                enemy.heal(int(player.health/2.3))
-            case 2:
-                enemy.equip(weapons[random.randint(0,3)])
-            case 3:
-                enemy.atack(player)
-    else:
-        match random.randint(0,3):
-            case 0:
-                enemy.atack(player)
-            case 1:
-                enemy.heal(int(player.health/2.3))
-            case 2:
-                enemy.equip(weapons[random.randint(0,3)])
-            case 3:
-                enemy.heal(int(player.health/2.3))
-    enemy.Uhealth()
-    player.Uhealth()
-    print(f"\033c{player.name}:")
-    print(f"Health {player.dhealth}")
-    print(f"{enemy.name}:") 
-    print(f"Health {enemy.dhealth}")
-    print(f"{enemy.name} {enemy.action}")
-    enemy.action = ""
     if player.health <= 0:
-        print("Losser")
         break
+    else:
+        for enemy in enemys:
+            enemy.health = enemy.max_health
+            enemy.weapon = enemy.dweapon
+    print("Napotkałeś nowego przeciwnika")
+    time.sleep(1)
+    player.atack_enemy(enemys[random.randint(0,int(len(enemys)-1))])
