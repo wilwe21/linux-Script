@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+import os
+while 0 == 0:
+    print("\033[95;1mTy:\033[0m")
+    a = str(input())
+    a = '"' + a + '"'
+    print("")
+    print("\033[91;1m-----------------------\033[0m")
+    print("")
+    b = os.popen('tgpt -q ' + a).read()
+    print("\033[92;1mAI:\033[0m")
+    print(str(b))
+    c = b.replace('\"', '')
+    d = c.replace('\'', '')
+    os.popen(f'playerctl pause;spd-say -w "{d}";playerctl play')
+    print("\033[91;1m-----------------------\033[0m")
+    print("")

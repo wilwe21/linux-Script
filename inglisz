@@ -1,4 +1,0 @@
-#!/bin/bash
-trans -t en -j -o $HOME/Dokumenty/trans -brief -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi -no-bidi -no-autocorrect "$1"
-cat $HOME/Dokumenty/trans
-spd-say -l EN -w "$(cat $HOME/Dokumenty/trans)"

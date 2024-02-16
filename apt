@@ -1,6 +1,0 @@
-#!/bin/bash
-case "$1" in
-  install ) pacman -Sy $2 ;;
-  uninstall ) pacman -R $2 ;;
-  * ) echo "chuj wie co dalej" ;;
-esac

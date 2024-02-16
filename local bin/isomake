@@ -1,0 +1,3 @@
+#!/bin/bash
+sudo rm -r ~/iso/output/
+sudo mkarchiso -v -w ~/iso/output/ -o ~/iso/output/ arch/

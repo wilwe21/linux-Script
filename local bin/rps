@@ -1,0 +1,68 @@
+#!/usr/bin/env python3
+import random
+al = ["rock", "paper", "scissors"]
+pr = ["rock", "r", "kamień", "k"]
+pp = ["paper", "p", "papier"]
+ps = ["scissors", "s", "nożyce", "n"]
+a = 0
+x = 0
+p = 0
+l = 0
+si = 0
+while 0 == 0:
+    print("\033c")
+    b = int(random.randrange(0,3))
+    if si == 0:
+        print("Rock Paper Scissors " + str(l) + "/" + str(p))
+        a = input()
+        match a.lower():
+            case yt if yt in pr:
+                out = "rock"
+            case yt if yt in pp:
+                out = "paper"
+            case yt if yt in ps:
+                out = "scissors"
+            case "exit":
+                break
+            case _:
+                print("\033c")
+                continue
+    print("\033[1A\033[2K\033[1A")
+    print(out)
+    print(al[b])
+    if out == "rock" and al[b] == "scissors":
+        print("Win")
+        l = l+1
+        print("\033[4ARock Paper Scissors " + str(l) + "/" + str(p) + "\033[4B")
+    elif out == "paper" and al[b] == "rock":
+        print("Win")
+        l = l+1
+        print("\033[4ARock Paper Scissors " + str(l) + "/" + str(p) + "\033[4B")
+    elif out == "scissors" and al[b] == "paper":
+        print("Win")
+        l = l+1
+        print("\033[4ARock Paper Scissors " + str(l) + "/" + str(p) + "\033[4B")
+    elif out == al[b]:
+        print("draw")
+        print("\033[4ARock Paper Scissors " + str(l) + "/" + str(p) + "\033[4B")
+    else:
+        print("L noobie")
+        p = p +1
+        print("\033[4ARock Paper Scissors " + str(l) + "/" + str(p) + "\033[4B")
+    print("Continue?")
+    o = input("")
+    if o.lower() in pr:
+        out = "rock"
+        si = 1
+    elif o.lower() in pp:
+        out = "paper"
+        si = 1
+    elif o.lower() in ps:
+        out = "scissors"
+        si = 1
+    elif o.lower() == "exit":
+        break
+    else:
+        si = 0
+        print("\033c")
+        continue
