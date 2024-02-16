@@ -1,1 +1,239 @@
-/home/wilwe/Dokumenty/GitHub/linux-Script/amongus
+#!/usr/bin/env python3
+import random
+import time
+class char:
+    dead = ''
+    def __init__(self, name, position):
+        self.position = position
+        self.name = name
+    def move(self, direction):
+        match self.position:
+            case 1:
+                match direction:
+                    case 'up':
+                        self.position += 5
+                    case 'left':
+                        self.position += 1
+            case 5:
+                match direction:
+                    case 'up':
+                        self.position += 5
+                    case 'right':
+                        self.position -= 1
+            case 16:
+                match direction:
+                    case 'down':
+                        self.position -= 5
+                    case 'left':
+                        self.position += 1
+            case 20:
+                match direction:
+                    case 'down':
+                        self.position -= 5
+                    case 'right':
+                        self.position -= 1
+            case 2 | 3 | 4:
+                match direction:
+                    case 'up':
+                        self.position += 5
+                    case 'left':
+                        self.position += 1
+                    case 'right':
+                        self.position -= 1
+            case 6 | 11:
+                match direction:
+                    case 'up':
+                        self.position += 5
+                    case 'down':
+                        self.position -= 5
+                    case 'left':
+                        self.position += 1
+            case 10 | 15:
+                match direction:
+                    case 'up':
+                        self.position += 5
+                    case 'down':
+                        self.position -= 5
+                    case 'right':
+                        self.position -= 1
+            case 17 | 18 | 19:
+                match direction:
+                    case 'down':
+                        self.position -= 5
+                    case 'left':
+                        self.position += 1
+                    case 'right':
+                        self.position -= 1
+            case _:
+                match direction:
+                    case 'up':
+                        self.position += 5
+                    case 'down':
+                        self.position -= 5
+                    case 'left':
+                        self.position += 1
+                    case 'right':
+                        self.position -= 1
+    def button(self):
+        if self.position == 12:
+            print(f'{self.name} nacisną guzik')
+            time.sleep(2)
+            table()
+        else:
+            if self.name == player.name:
+                print('przycisk możesz klinkąć tytlko w sali nr 12')
+                time.sleep(2)
+class impostor:
+    dead = ''
+    def __init__(self, name, position):
+        self.position = position
+        self.name = name
+    def kill(self, oponent):
+        if oponent.name != self.name:
+            if oponent.position == self.position:
+                oponent.dead = '\033[91mX\033[0m'
+    def move(self, direction):
+        match self.position:
+            case 1:
+                match direction:
+                    case 'up':
+                        self.position += 5
+                    case 'left':
+                        self.position += 1
+            case 5:
+                match direction:
+                    case 'up':
+                        self.position += 5
+                    case 'right':
+                        self.position -= 1
+            case 16:
+                match direction:
+                    case 'down':
+                        self.position -= 5
+                    case 'left':
+                        self.position += 1
+            case 20:
+                match direction:
+                    case 'down':
+                        self.position -= 5
+                    case 'right':
+                        self.position -= 1
+            case 2 | 3 | 4:
+                match direction:
+                    case 'up':
+                        self.position += 5
+                    case 'left':
+                        self.position += 1
+                    case 'right':
+                        self.position -= 1
+            case 6 | 11:
+                match direction:
+                    case 'up':
+                        self.position += 5
+                    case 'down':
+                        self.position -= 5
+                    case 'left':
+                        self.position += 1
+            case 10 | 15:
+                match direction:
+                    case 'up':
+                        self.position += 5
+                    case 'down':
+                        self.position -= 5
+                    case 'right':
+                        self.position -= 1
+            case 17 | 18 | 19:
+                match direction:
+                    case 'down':
+                        self.position -= 5
+                    case 'left':
+                        self.position += 1
+                    case 'right':
+                        self.position -= 1
+            case _:
+                match direction:
+                    case 'up':
+                        self.position += 5
+                    case 'down':
+                        self.position -= 5
+                    case 'left':
+                        self.position += 1
+                    case 'right':
+                        self.position -= 1
+    def button(self):
+        if self.position == 12:
+            print(f'{self.name} nacisną guzik')
+            time.sleep(2)
+            table()
+        else:
+            if self.name == player.name:
+                print('przycisk możesz klinkąć tytlko w sali nr 12')
+                time.sleep(2)
+def table():
+    print('\033c')
+    for s in players:
+        print(f"{s.name} {s.dead}")
+    print('Którego chuja wygłosować:')
+    a = input('')
+    for t in players:
+        if a == t.name:
+            t.dead = '\033[91mX\033[0m'
+            print('\033c')
+            for s in players:
+                print(f"{s.name} {s.dead}")
+            print(f'chujnia z {t.name}')
+    time.sleep(2)
+def AI(bot):
+    if bot.dead == '':
+        match random.randint(0,4):
+            case 0:
+                bot.button()
+            case 1:
+                bot.move('up')
+            case 2:
+                bot.move('left')
+            case 3:
+                bot.move('right')
+            case 4:
+                bot.move('down')
+def AIimpo(bot):
+    if bot.dead == '':
+        match random.randint(0,5):
+            case 0:
+                bot.button()
+            case 1:
+                bot.move('up')
+            case 2:
+                bot.move('left')
+            case 3:
+                bot.move('right')
+            case 4:
+                bot.move('down')
+            case 5:
+                bot.kill(players[random.randint(0,4)])
+player = char('zbysiu',1)
+bot1 = impostor('susibaka',6)
+bot2 = char('maciuś',6)
+bot3 = char('asia',6)
+bot4 = char('WWW',6)
+players = [player,bot1,bot2,bot3,bot4]
+bots = [bot2,bot3,bot4]
+dirs = ['left', 'right', 'up', 'down']
+while 0 == 0:
+    print('\033cCo zrobić')
+    print(f"you:{player.position} {bot1.name}:{bot1.position} {bot2.name}:{bot2.position} {bot3.name}:{bot3.position} {bot4.name}:{bot4.position}")
+    pinput = input('')
+    if pinput in dirs:
+        player.move(pinput)
+    elif pinput == 'button':
+        player.button()
+    for bot in bots:
+        AI(bot)
+    AIimpo(bot1)
+    #bot1.kill(players[random.randint(0,4)])
+    if player.dead == '\033[91mX\033[0m':
+        print('Przegrałeś')
+        break
+    if bot1.dead == '\033[91mX\033[0m':
+        print('impostor wyeliminowany no to pauza')
+        break
