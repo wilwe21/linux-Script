@@ -1,0 +1,29 @@
+#!/bin/bash
+help() {
+	echo "-r Reset"
+	echo "-h Help"
+	echo "-p (arg) dni + arg"
+	echo "-m (arg) dni - arg"
+	echo "-i info o dniach"
+	echo "else dni + 1"
+}
+dni=$(cat ~/Dokumenty/dni)
+format="%Y-%m-%d %T"
+while getopts rhp:m:i flag
+do
+	case "${flag}" in
+		h) help && exit;;
+		r) echo 0 &> ~/Dokumenty/dni && echo "zresetowano dni" && exit;;
+		p) dni=$((${dni}+${OPTARG})) && echo "Zapisano dzień ${dni}" && echo ${dni} &> ~/Dokumenty/dni && exit;;
+		m) dni=$((${dni}-${OPTARG})) && echo "Zapisano dzień ${dni}" && echo ${dni} &> ~/Dokumenty/dni && exit;;
+		i) cat << EOF && exit;;
+Ostatni zapis: $(date -r ~/Dokumenty/dni +"${format}")
+Dzisiejszy dzień: $(date +"${format}")
+Ostatni dzień: ${dni}
+Następny dzień: $((${dni}+1))
+EOF
+	esac
+done
+dni=$((${dni}+1))
+echo "Zapisano dzień ${dni}"
+echo ${dni} &> ~/Dokumenty/dni
