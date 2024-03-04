@@ -4,12 +4,15 @@ ost=$(date -r ~/Dokumenty/dni +"${format}")
 td=$(date +"${format}")
 dni=$(cat ~/Dokumenty/dni)
 help() {
-	echo "-r Reset"
-	echo "-h Help"
-	echo "-p (arg) dni + arg"
-	echo "-m (arg) dni - arg"
-	echo "-i info o dniach"
-	echo "else dni + 1"
+	cat << EOF
+-r Reset
+-h Help
+-p (arg) dni + arg
+-m (arg) dni - arg
+-i info o dniach
+-t info na telefon
+else dni + 1
+EOF
 }
 info() {
 	cat << EOF
