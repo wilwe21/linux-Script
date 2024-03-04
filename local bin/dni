@@ -1,4 +1,8 @@
 #!/bin/bash
+format="%Y-%m-%d"
+ost=$(date -r ~/Dokumenty/dni +"${format}")
+td=$(date +"${format}")
+dni=$(cat ~/Dokumenty/dni)
 help() {
 	echo "-r Reset"
 	echo "-h Help"
@@ -7,21 +11,29 @@ help() {
 	echo "-i info o dniach"
 	echo "else dni + 1"
 }
-dni=$(cat ~/Dokumenty/dni)
-format="%Y-%m-%d %T"
-while getopts rhp:m:i flag
+info() {
+	cat << EOF
+${by}
+Ostatni zapis: ${ost}
+Dzisiejszy dzień: ${td}
+Ostatni dzień: ${dni}
+Następny dzień: $((${dni}+1))
+EOF
+}
+if [ $ost == $td ]; then
+	by="Były dni skurwielu ${dni}"
+else
+	by="Nie było dni skurwielu Teraz:$((${dni}+1))"
+fi
+while getopts rhp:m:it flag
 do
 	case "${flag}" in
 		h) help && exit;;
 		r) echo 0 &> ~/Dokumenty/dni && echo "zresetowano dni" && exit;;
 		p) dni=$((${dni}+${OPTARG})) && echo "Zapisano dzień ${dni}" && echo ${dni} &> ~/Dokumenty/dni && exit;;
 		m) dni=$((${dni}-${OPTARG})) && echo "Zapisano dzień ${dni}" && echo ${dni} &> ~/Dokumenty/dni && exit;;
-		i) cat << EOF && exit;;
-Ostatni zapis: $(date -r ~/Dokumenty/dni +"${format}")
-Dzisiejszy dzień: $(date +"${format}")
-Ostatni dzień: ${dni}
-Następny dzień: $((${dni}+1))
-EOF
+		i) info && exit;;
+		t) kdeconnect-cli -d $(kdeconnect-cli -l --id-only) --ping-msg "${by}" && exit;;
 	esac
 done
 dni=$((${dni}+1))
