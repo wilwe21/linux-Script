@@ -28,7 +28,7 @@ if [ $ost == $td ]; then
 else
 	by="Nie było dni skurwielu Teraz:$((${dni}+1))"
 fi
-while getopts rhp:m:it flag
+while getopts rhp:m:itb flag
 do
 	case "${flag}" in
 		h) help && exit;;
@@ -37,6 +37,7 @@ do
 		m) dni=$((${dni}-${OPTARG})) && echo "Zapisano dzień ${dni}" && echo ${dni} &> ~/Dokumenty/dni && exit;;
 		i) info && exit;;
 		t) kdeconnect-cli -d $(kdeconnect-cli -l --id-only) --ping-msg "${by}" && exit;;
+		b) echo ${by} && echo ${by} && echo ${by} && echo ${by} && exit;;
 	esac
 done
 dni=$((${dni}+1))
