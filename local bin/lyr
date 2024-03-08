@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+import random, sys, os, argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("-l", "--language", help="Translate Language", default="pl")
+args = parser.parse_args()
+path = '/home/wilwe/Dokumenty/oryginał/Lyrics/'
+lis = os.popen('ls ' + path).readlines()
+file = lis[random.randrange(len(lis))]
+file = file.strip('\n')
+print(file)
+print('--------------------------')
+lin = open(f"{path}{file}").readlines()
+line = random.randrange(len(lin))
+print(lin[line].strip('\n'))
+if line+1 < len(lin):
+    print(lin[line+1].strip('\n'))
+print("")
+print(args.language)
+print('--------------------------')
+print(os.popen("trans -t " + args.language + " -j -brief -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi -no-autocorrect " + '"' + lin[line].strip('\n') + '"').read())
+print("\033[2A")
+if line+1 < len(lin):
+    print(os.popen("trans -t " + args.language + " -j -brief -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi -no-autocorrect " + '"' + lin[line+1].strip('\n') + '"').read())
