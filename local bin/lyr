@@ -11,13 +11,19 @@ print(file)
 print('--------------------------')
 lin = open(f"{path}{file}").readlines()
 line = random.randrange(len(lin))
+while lin[line].strip('\n') == '':
+    line += 1
 print(lin[line].strip('\n'))
-if line+1 < len(lin):
-    print(lin[line+1].strip('\n'))
+next = line+1
+while lin[next].strip('\n') == '':
+    if next < len(lin):
+        next += 1
+if next < len(lin):
+    print(lin[next].strip('\n'))
 print("")
 print(args.language)
 print('--------------------------')
 print(os.popen("trans -t " + args.language + " -j -brief -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi -no-autocorrect " + '"' + lin[line].strip('\n') + '"').read())
 print("\033[2A")
-if line+1 < len(lin):
-    print(os.popen("trans -t " + args.language + " -j -brief -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi -no-autocorrect " + '"' + lin[line+1].strip('\n') + '"').read())
+if next < len(lin):
+    print(os.popen("trans -t " + args.language + " -j -brief -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi -no-autocorrect " + '"' + lin[next].strip('\n') + '"').read())
