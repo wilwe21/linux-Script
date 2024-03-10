@@ -8,6 +8,8 @@ parser.add_argument("-ol", "--oryginalang", help="Specyfy oryginal file language
 parser.add_argument("-ls", "--list", help="List files", action=argparse.BooleanOptionalAction)
 parser.add_argument("-v", "--voice", help="Hear output", action=argparse.BooleanOptionalAction)
 parser.add_argument("-tv", "--tvoice", help="Hear translated output", action=argparse.BooleanOptionalAction)
+parser.add_argument("-r", "--random", help="2 line is randomized", action=argparse.BooleanOptionalAction)
+parser.add_argument("-tr", "--totalrandom", help="2 line is very randomized", action=argparse.BooleanOptionalAction)
 args = parser.parse_args()
 path = '/home/wilwe/Dokumenty/oryginał/Lyrics'
 if args.path != None:
@@ -29,6 +31,7 @@ while os.path.isdir(f"{path}/{file}"):
 if args.file != None:
     file = args.file
 print(f'\033[38;2;203;166;247m🭃\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37m{file}\033[0m\033[38;2;203;166;247m🭟\033[0m')
+namel = "\033["+ str(len(file)+2) + "C"
 print('--------------------------')
 if open(f"{path}/{file}").readline() == '':
     sys.exit()
@@ -38,20 +41,39 @@ while lin[line].strip('\n') == '':
     line += 1
 print(lin[line].strip('\n'))
 next = line+1
-if next < len(lin):
+if next < len(lin) and not args.random:
     while lin[next].strip('\n') == '':
         if next+1 < len(lin):
             next += 1
         else: 
             break
+if args.random:
+    while next > len(lin) or lin[next].strip('\n') == '':
+        next = random.randrange(len(lin))
+if args.totalrandom:
+    file = lis[random.randrange(len(lis))]
+    file = file.strip('\n')
+    while os.path.isdir(f"{path}/{file}"):
+        file = lis[random.randrange(len(lis))]
+        file = file.strip('\n')
+    lin2 = open(f"{path}/{file}").readlines()
+    print(f'\033[3A{namel} | \033[38;2;203;166;247m🭃\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37m{file}\033[0m\033[38;2;203;166;247m🭟\033[0m\033[2B')
+    while next > len(lin2) or lin2[next].strip('\n') == '':
+        next = random.randrange(len(lin2))
 o1 = lin[line].strip('\n').replace('"', '')
-if next < len(lin):
+if next < len(lin) and not args.totalrandom:
     print(lin[next].strip('\n'))
     o2 = lin[next].strip('\n').replace('"', '')
     if args.voice and not args.tvoice:
         os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}"')
-else:
+elif args.voice and not args.tvoice and not args.totalrandom:
+        os.popen(f'tts -m -l {args.oryginalang} -s "{o1}"')
+if args.totalrandom and next < len(lin2):
+    print(lin2[next].strip('\n'))
+    o2 = lin2[next].strip('\n').replace('"', '')
     if args.voice and not args.tvoice:
+        os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}"')
+elif args.voice and not args.tvoice and args.totalrandom:
         os.popen(f'tts -m -l {args.oryginalang} -s "{o1}"')
 if args.language != None:
     print("")
@@ -60,21 +82,35 @@ if args.language != None:
     t1 = os.popen("trans -t " + args.language + " -j -brief -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi -no-autocorrect " + '"' + o1 + '"').read()
     print(t1)
     print("\033[2A")
-    if next < len(lin):
+    if next < len(lin) and not args.totalrandom:
         t2 = os.popen("trans -t " + args.language + " -j -brief -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi -no-autocorrect " + '"' + o2 + '"').read()
         print(t2)
         if args.tvoice and not args.voice:
             os.popen(f'tts -m -l {args.language} -s "{t1}" && tts -m -l {args.language} -s "{t2}"')
-    else:
+    elif args.tvoice and not args.voice and not args.totalrandom:
+        os.popen(f'tts -m -l {args.language} -s "{t1}"')
+    if args.totalrandom and next < len(lin2):
+        t2 = os.popen("trans -t " + args.language + " -j -brief -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi -no-autocorrect " + '"' + o2 + '"').read()
+        print(t2)
         if args.tvoice and not args.voice:
-            os.popen(f'tts -m -l {args.language} -s "{t1}"')
+            os.popen(f'tts -m -l {args.language} -s "{t1}" && tts -m -l {args.language} -s "{t2}"')
+    elif args.tvoice and not args.voice and args.totalrandom:
+        os.popen(f'tts -m -l {args.language} -s "{t1}"')
 if args.voice and args.tvoice and args.language != None:
-    if next < len(lin):
+    if next < len(lin) and not args.totalrandom:
         os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}" && tts -m -l {args.language} -s "{t1}" && tts -m -l {args.language} -s "{t2}"')
-    else:
+    elif not args.totalrandom:
+        os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.language} -s "{t1}""')
+    if args.totalrandom and next < len(lin2):
+        os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}" && tts -m -l {args.language} -s "{t1}" && tts -m -l {args.language} -s "{t2}"')
+    elif args.totalrandom:
         os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.language} -s "{t1}""')
 elif args.voice and args.tvoice and args.language == None:
-    if next < len(lin):
+    if next < len(lin) and not args.totalrandom:
         os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}"')
-    else:
+    elif not args.totalrandom:
+        os.popen(f'tts -m -l {args.oryginalang} -s "{o1}"')
+    if args.totalrandom and next < len(lin2):
+        os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}"')
+    elif args.totalrandom:
         os.popen(f'tts -m -l {args.oryginalang} -s "{o1}"')
