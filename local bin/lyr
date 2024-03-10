@@ -5,6 +5,8 @@ parser.add_argument("-l", "--language", help="Translate Language")
 parser.add_argument("-f", "--file", help="Specyfy file")
 parser.add_argument("-p", "--path", help="Specyfy path")
 parser.add_argument("-ls", "--list", help="List files", action=argparse.BooleanOptionalAction)
+parser.add_argument("-v", "--voice", help="Hear output", action=argparse.BooleanOptionalAction)
+parser.add_argument("-tv", "--tvoice", help="Hear translated output", action=argparse.BooleanOptionalAction)
 args = parser.parse_args()
 path = '/home/wilwe/Dokumenty/oryginał/Lyrics'
 if args.path != None:
@@ -41,13 +43,37 @@ if next < len(lin):
             next += 1
         else: 
             break
+o1 = lin[line].strip('\n').strip('"')
 if next < len(lin):
     print(lin[next].strip('\n'))
+    o2 = lin[next].strip('\n').strip('"')
+    if args.voice and not args.tvoice:
+        os.popen(f'tts -m -l en -s "{o1}" && tts -m -l en -s "{o2}"')
+else:
+    if args.voice and not args.tvoice:
+        os.popen(f'tts -m -l en -s "{o1}"')
 if args.language != None:
     print("")
     print(args.language)
     print('--------------------------')
-    print(os.popen("trans -t " + args.language + " -j -brief -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi -no-autocorrect " + '"' + lin[line].strip('\n') + '"').read())
+    t1 = os.popen("trans -t " + args.language + " -j -brief -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi -no-autocorrect " + '"' + o1 + '"').read()
+    print(t1)
     print("\033[2A")
     if next < len(lin):
-        print(os.popen("trans -t " + args.language + " -j -brief -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi -no-autocorrect " + '"' + lin[next].strip('\n') + '"').read())
+        t2 = os.popen("trans -t " + args.language + " -j -brief -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi -no-autocorrect " + '"' + o2 + '"').read()
+        print(t2)
+        if args.tvoice and not args.voice:
+            os.popen(f'tts -m -l {args.language} -s "{t1}" && tts -m -l {args.language} -s "{t2}"')
+    else:
+        if args.tvoice and not args.voice:
+            os.popen(f'tts -m -l {args.language} -s "{t1}"')
+if args.voice and args.tvoice and args.language != None:
+    if next < len(lin):
+        os.popen(f'tts -m -l en -s "{o1}" && tts -m -l en -s "{o2}" && tts -m -l {args.language} -s "{t1}" && tts -m -l {args.language} -s "{t2}"')
+    else:
+        os.popen(f'tts -m -l en -s "{o1}" && tts -m -l {args.language} -s "{t1}""')
+elif args.voice and args.tvoice and args.language == None:
+    if next < len(lin):
+        os.popen(f'tts -m -l en -s "{o1}" && tts -m -l en -s "{o2}"')
+    else:
+        os.popen(f'tts -m -l en -s "{o1}"')

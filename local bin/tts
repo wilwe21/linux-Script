@@ -1,4 +1,19 @@
 #!/bin/bash
-playerctl pause
-spd-say -w "$1"
-playerctl play
+lang='en'
+say='nothing specyfyed'
+mus='false'
+while getopts s:l:m flag
+do
+	case "${flag}" in
+		s) say=${OPTARG};;
+		l) lang=${OPTARG};;
+		m) mus='true';;
+	esac
+done
+if [ $mus == 'true' ]; then
+	playerctl pause
+fi
+spd-say -l ${lang} -w "${say}"
+if [ $mus == 'true' ]; then
+	playerctl play
+fi
