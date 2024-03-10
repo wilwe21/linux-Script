@@ -4,6 +4,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-l", "--language", help="Translate Language")
 parser.add_argument("-f", "--file", help="Specyfy file")
 parser.add_argument("-p", "--path", help="Specyfy path")
+parser.add_argument("-ol", "--oryginalang", help="Specyfy oryginal file language", default="en")
 parser.add_argument("-ls", "--list", help="List files", action=argparse.BooleanOptionalAction)
 parser.add_argument("-v", "--voice", help="Hear output", action=argparse.BooleanOptionalAction)
 parser.add_argument("-tv", "--tvoice", help="Hear translated output", action=argparse.BooleanOptionalAction)
@@ -27,7 +28,7 @@ while os.path.isdir(f"{path}/{file}"):
     file = file.strip('\n')
 if args.file != None:
     file = args.file
-print(file)
+print(f'\033[38;2;203;166;247m🭃\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37m{file}\033[0m\033[38;2;203;166;247m🭟\033[0m')
 print('--------------------------')
 if open(f"{path}/{file}").readline() == '':
     sys.exit()
@@ -48,13 +49,13 @@ if next < len(lin):
     print(lin[next].strip('\n'))
     o2 = lin[next].strip('\n').strip('"')
     if args.voice and not args.tvoice:
-        os.popen(f'tts -m -l en -s "{o1}" && tts -m -l en -s "{o2}"')
+        os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}"')
 else:
     if args.voice and not args.tvoice:
-        os.popen(f'tts -m -l en -s "{o1}"')
+        os.popen(f'tts -m -l {args.oryginalang} -s "{o1}"')
 if args.language != None:
     print("")
-    print(args.language)
+    print(f'\033[38;2;203;166;247m🭃\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37m{args.language}\033[0m\033[38;2;203;166;247m🭟\033[0m')
     print('--------------------------')
     t1 = os.popen("trans -t " + args.language + " -j -brief -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi -no-autocorrect " + '"' + o1 + '"').read()
     print(t1)
@@ -69,11 +70,11 @@ if args.language != None:
             os.popen(f'tts -m -l {args.language} -s "{t1}"')
 if args.voice and args.tvoice and args.language != None:
     if next < len(lin):
-        os.popen(f'tts -m -l en -s "{o1}" && tts -m -l en -s "{o2}" && tts -m -l {args.language} -s "{t1}" && tts -m -l {args.language} -s "{t2}"')
+        os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}" && tts -m -l {args.language} -s "{t1}" && tts -m -l {args.language} -s "{t2}"')
     else:
-        os.popen(f'tts -m -l en -s "{o1}" && tts -m -l {args.language} -s "{t1}""')
+        os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.language} -s "{t1}""')
 elif args.voice and args.tvoice and args.language == None:
     if next < len(lin):
-        os.popen(f'tts -m -l en -s "{o1}" && tts -m -l en -s "{o2}"')
+        os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}"')
     else:
-        os.popen(f'tts -m -l en -s "{o1}"')
+        os.popen(f'tts -m -l {args.oryginalang} -s "{o1}"')
