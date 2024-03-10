@@ -44,10 +44,10 @@ if next < len(lin):
             next += 1
         else: 
             break
-o1 = lin[line].strip('\n').strip('"')
+o1 = lin[line].strip('\n').replace('"', '')
 if next < len(lin):
     print(lin[next].strip('\n'))
-    o2 = lin[next].strip('\n').strip('"')
+    o2 = lin[next].strip('\n').replace('"', '')
     if args.voice and not args.tvoice:
         os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}"')
 else:
