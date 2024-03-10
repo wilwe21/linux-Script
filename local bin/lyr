@@ -3,16 +3,33 @@ import random, sys, os, argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("-l", "--language", help="Translate Language")
 parser.add_argument("-f", "--file", help="Specyfy file")
+parser.add_argument("-p", "--path", help="Specyfy path")
+parser.add_argument("-ls", "--list", help="List files", action=argparse.BooleanOptionalAction)
 args = parser.parse_args()
-path = '/home/wilwe/Dokumenty/oryginał/Lyrics/'
+path = '/home/wilwe/Dokumenty/oryginał/Lyrics'
+if args.path != None:
+    path = args.path
 lis = os.popen('ls ' + path).readlines()
+if args.list:
+    if args.path != None:
+        print(f"Path {path}")
+    else:
+        print(f"Default Path {path}")
+    lis = list(map(str.strip, lis))
+    print(' | '.join(lis))
+    sys.exit()
 file = lis[random.randrange(len(lis))]
 file = file.strip('\n')
+while os.path.isdir(f"{path}/{file}"):
+    file = lis[random.randrange(len(lis))]
+    file = file.strip('\n')
 if args.file != None:
     file = args.file
 print(file)
 print('--------------------------')
-lin = open(f"{path}{file}").readlines()
+if open(f"{path}/{file}").readline() == '':
+    sys.exit()
+lin = open(f"{path}/{file}").readlines()
 line = random.randrange(len(lin))
 while lin[line].strip('\n') == '':
     line += 1
