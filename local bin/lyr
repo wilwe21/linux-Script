@@ -76,7 +76,7 @@ if args.totalrandom and next < len(lin2):
         os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}"')
 elif args.voice and not args.tvoice and args.totalrandom:
         os.popen(f'tts -m -l {args.oryginalang} -s "{o1}"')
-if args.language != None:
+if args.language != None and args.language.lower() != "braill" and args.language.lower() != "enchant":
     print("")
     print(f'\033[38;2;166;227;161m🭃\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37m{args.language}\033[0m\033[38;2;166;227;161m🭟\033[0m')
     print('--------------------------')
@@ -115,3 +115,27 @@ elif args.voice and args.tvoice and args.language == None:
         os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}"')
     elif args.totalrandom:
         os.popen(f'tts -m -l {args.oryginalang} -s "{o1}"')
+if args.language != None and args.language.lower() == "braill":
+    print("")
+    print(f'\033[38;2;166;227;161m🭃\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mBraill\033[0m\033[38;2;166;227;161m🭟\033[0m')
+    print('--------------------------')
+    b1 = o1.replace("'","")
+    print(os.popen(f"braill -s '{b1}'").read())
+    if next < len(lin) and not args.totalrandom:
+        b2 = o2.replace("'","")
+        print(os.popen(f"braill -s '{b2}'").read())
+    if args.totalrandom and next < len(lin2):
+        b2 = o2.replace("'","")
+        print(os.popen(f"braill -s '{b2}'").read())
+if args.language != None and args.language.lower() == "enchant":
+    print("")
+    print(f'\033[38;2;166;227;161m🭃\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mEnchanting Table\033[0m\033[38;2;166;227;161m🭟\033[0m')
+    print('--------------------------')
+    b1 = o1.replace("'","")
+    print(os.popen(f"enchant -s '{b1}'").read())
+    if next < len(lin) and not args.totalrandom:
+        b2 = o2.replace("'","")
+        print(os.popen(f"enchant -s '{b2}'").read())
+    if args.totalrandom and next < len(lin2):
+        b2 = o2.replace("'","")
+        print(os.popen(f"enchant -s '{b2}'").read())
