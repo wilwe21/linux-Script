@@ -78,7 +78,7 @@ elif args.voice and not args.tvoice and args.totalrandom:
         os.popen(f'tts -m -l {args.oryginalang} -s "{o1}"')
 if args.language != None:
     print("")
-    print(f'\033[38;2;203;166;247m🭃\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37m{args.language}\033[0m\033[38;2;203;166;247m🭟\033[0m')
+    print(f'\033[38;2;166;227;161m🭃\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37m{args.language}\033[0m\033[38;2;166;227;161m🭟\033[0m')
     print('--------------------------')
     t1 = os.popen("trans -t " + args.language + " -j -brief -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi -no-autocorrect " + '"' + o1 + '"').read()
     print(t1)
