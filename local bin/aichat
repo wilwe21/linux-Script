@@ -9,15 +9,18 @@ while 0 == 0:
     print("")
     print("\033[91;1m-----------------------\033[0m")
     print("")
-    if args.language != None and args.language.lower() != "enchant" and args.language.lower() == "braill":
+    if args.language != None and args.language.lower() != "enchant" and args.language.lower() != "braill":
         a = os.popen(f"trans -t {args.language} -j -brief -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi -no-autocorrect {a}").read()
-    b = os.popen(f'tgpt -q "{a}"').read().replace("(","").replace(")","").strip('\n')
+        b = os.popen(f'tgpt -q "{a}"').read().replace("(","").replace(")","").strip('\n')
     if args.language != None and args.language.lower() == "enchant":
         print("\033[38;2;166;227;161m🭃\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mEnchanting Table\033[0m\033[38;2;166;227;161m🭟\033[0m")
+        a = os.popen(f"trans -t en -j -brief -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi -no-autocorrect {a}").read()
+        b = os.popen(f'tgpt -q "{a}"').read().replace("(","").replace(")","").strip('\n')
         b = b.replace("'","")
         print(os.popen(f"enchant -s '{b}'").read())
     elif args.language != None and args.language.lower() == "braill":
-        print("\033[38;2;166;227;161m🭃\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mEnchanting Table\033[0m\033[38;2;166;227;161m🭟\033[0m")
+        print("\033[38;2;166;227;161m🭃\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37m⠁⠊\033[0m\033[38;2;166;227;161m🭟\033[0m")
+        b = os.popen(f'tgpt -q "{a}"').read().replace("(","").replace(")","").strip('\n')
         b = b.replace("'","")
         print(os.popen(f"braill -s '{b}'").read())
     else:
