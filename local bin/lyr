@@ -31,8 +31,8 @@ while os.path.isdir(f"{path}/{file}"):
     file = lis[random.randrange(len(lis))]
     file = file.strip('\n')
 if args.file != None:
-    file = args.file
-print(f'\033[38;2;203;166;247m🭃\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37m{file}\033[0m\033[38;2;203;166;247m🭟\033[0m')
+    file = args.file.lower()
+print(f'\033[38;2;203;166;247m🭃\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37m{file.title()}\033[0m\033[38;2;203;166;247m🭟\033[0m')
 namel = "\033["+ str(len(file)+2) + "C"
 print('--------------------------')
 if open(f"{path}/{file}").readline() == '':
@@ -67,7 +67,7 @@ if args.totalrandom:
         file = lis[random.randrange(len(lis))]
         file = file.strip('\n')
     lin2 = open(f"{path}/{file}").readlines()
-    print(f'\033[3A{namel} | \033[38;2;203;166;247m🭃\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37m{file}\033[0m\033[38;2;203;166;247m🭟\033[0m\033[2B')
+    print(f'\033[3A{namel} | \033[38;2;203;166;247m🭃\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37m{file.title()}\033[0m\033[38;2;203;166;247m🭟\033[0m\033[2B')
     if open(f"{path}/{file}").readline() == '':
         susy=''
     else:
@@ -92,7 +92,7 @@ elif args.voice and not args.tvoice and args.totalrandom:
         os.popen(f'tts -m -l {args.oryginalang} -s "{o1}"')
 if args.language != None and args.language.lower() != "braill" and args.language.lower() != "enchant":
     print("")
-    print(f'\033[38;2;166;227;161m🭃\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37m{args.language}\033[0m\033[38;2;166;227;161m🭟\033[0m')
+    print(f'\033[38;2;166;227;161m🭃\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37m{args.language.title()}\033[0m\033[38;2;166;227;161m🭟\033[0m')
     print('--------------------------')
     t1 = os.popen(f"tpl -l {args.language} -s " + '"' + o1 + '"').read()
     print(t1)
