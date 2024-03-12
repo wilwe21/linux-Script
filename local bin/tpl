@@ -2,17 +2,21 @@
 import os, argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("-l", "--language", help="Translate Language", default="pl")
+parser.add_argument("-s", "--single", help="single", nargs='*')
 args = parser.parse_args()
-while 0 == 0:
+while args.single == None:
     print('\033[38;2;203;166;247m🭃\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37mYou\033[0m\033[38;2;203;166;247m🭟\033[0m')
     a = str(input())
     print("")
     print("\033[91;1m-----------------------\033[0m")
     print("")
-    b = os.popen("trans -t " + args.language + " -j -brief -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi -no-auto " + '"' + a + '"').read()
+    b = os.popen("trans -t " + args.language + " -no-autocorrect -j -brief -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi " + '"' + a + '"').read()
     print(f'\033[38;2;166;227;161m🭃\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37m{args.language}\033[0m\033[38;2;166;227;161m🭟\033[0m')
     print(b)
     b = "'" + b + "'"
     os.popen('spd-say -l ' + args.language + ' -w ' + b)
     print("\033[91;1m-----------------------\033[0m")
     print("")
+if args.single != None:
+    a = ' '.join(args.single).replace("'","")
+    print(os.popen(f'trans -t {args.language} -j -brief -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi -no-auto {a}').read())

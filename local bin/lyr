@@ -68,9 +68,13 @@ if args.totalrandom:
         file = file.strip('\n')
     lin2 = open(f"{path}/{file}").readlines()
     print(f'\033[3A{namel} | \033[38;2;203;166;247m🭃\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37m{file}\033[0m\033[38;2;203;166;247m🭟\033[0m\033[2B')
-    next = random.randrange(len(lin2))
-    while next > len(lin2) or lin2[next].strip('\n') == '':
+    if open(f"{path}/{file}").readline() == '':
+        susy=''
+    else:
         next = random.randrange(len(lin2))
+        while next > len(lin2) or lin2[next].strip('\n') == '':
+            next = random.randrange(len(lin2))
+        susy=lin2[next]
 o1 = sas.strip('\n').replace('"', '')
 if next < len(lin) and not args.totalrandom:
     print(lin[next].strip('\n'))
@@ -80,8 +84,8 @@ if next < len(lin) and not args.totalrandom:
 elif args.voice and not args.tvoice and not args.totalrandom:
         os.popen(f'tts -m -l {args.oryginalang} -s "{o1}"')
 if args.totalrandom and next < len(lin2):
-    print(lin2[next].strip('\n'))
-    o2 = lin2[next].strip('\n').replace('"', '')
+    print(susy.strip('\n'))
+    o2 = susy.strip('\n').replace('"', '')
     if args.voice and not args.tvoice:
         os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}"')
 elif args.voice and not args.tvoice and args.totalrandom:
