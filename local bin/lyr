@@ -94,19 +94,21 @@ if args.language != None and args.language.lower() != "braill" and args.language
     print("")
     print(f'\033[38;2;166;227;161m🭃\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37m{args.language}\033[0m\033[38;2;166;227;161m🭟\033[0m')
     print('--------------------------')
-    t1 = os.popen("trans -t " + args.language + " -j -brief -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi -no-autocorrect " + '"' + o1 + '"').read()
+    t1 = os.popen(f"tpl -l {args.language} -s " + '"' + o1 + '"').read()
     print(t1)
-    print("\033[2A")
+    print("\033[3A")
     if next < len(lin) and not args.totalrandom:
-        t2 = os.popen("trans -t " + args.language + " -j -brief -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi -no-autocorrect " + '"' + o2 + '"').read()
+        t2 = os.popen(f"tpl -l {args.language} -s " + '"' + o2 + '"').read()
         print(t2)
+        print("\033[2A")
         if args.tvoice and not args.voice:
             os.popen(f'tts -m -l {args.language} -s "{t1}" && tts -m -l {args.language} -s "{t2}"')
     elif args.tvoice and not args.voice and not args.totalrandom:
         os.popen(f'tts -m -l {args.language} -s "{t1}"')
     if args.totalrandom and next < len(lin2):
-        t2 = os.popen("trans -t " + args.language + " -j -brief -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi -no-autocorrect " + '"' + o2 + '"').read()
+        t2 = os.popen(f"tpl -l {args.language} -s " + '"' + o2 + '"').read()
         print(t2)
+        print("\033[2A")
         if args.tvoice and not args.voice:
             os.popen(f'tts -m -l {args.language} -s "{t1}" && tts -m -l {args.language} -s "{t2}"')
     elif args.tvoice and not args.voice and args.totalrandom:
