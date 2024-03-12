@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import random, sys, os, argparse
+sus=1
 parser = argparse.ArgumentParser()
 parser.add_argument("-l", "--language", help="Translate Language")
 parser.add_argument("-f", "--file", help="Specyfy file")
@@ -35,12 +36,20 @@ print(f'\033[38;2;203;166;247m🭃\033[0m\033[48;2;203;166;247m\033[38;2;24;24;3
 namel = "\033["+ str(len(file)+2) + "C"
 print('--------------------------')
 if open(f"{path}/{file}").readline() == '':
-    sys.exit()
+    if not args.totalrandom:
+        sys.exit()
+    else:
+        sus=0
 lin = open(f"{path}/{file}").readlines()
-line = random.randrange(len(lin))
-while lin[line].strip('\n') == '':
-    line += 1
-print(lin[line].strip('\n'))
+if sus != 0:
+    line = random.randrange(len(lin))
+    while lin[line].strip('\n') == '':
+        line += 1
+    sas = lin[line]
+else:
+    line = 1
+    sas = ""
+print(sas.strip('\n'))
 next = line+1
 if next < len(lin) and not args.random:
     while lin[next].strip('\n') == '':
@@ -59,9 +68,10 @@ if args.totalrandom:
         file = file.strip('\n')
     lin2 = open(f"{path}/{file}").readlines()
     print(f'\033[3A{namel} | \033[38;2;203;166;247m🭃\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37m{file}\033[0m\033[38;2;203;166;247m🭟\033[0m\033[2B')
+    next = random.randrange(len(lin2))
     while next > len(lin2) or lin2[next].strip('\n') == '':
         next = random.randrange(len(lin2))
-o1 = lin[line].strip('\n').replace('"', '')
+o1 = sas.strip('\n').replace('"', '')
 if next < len(lin) and not args.totalrandom:
     print(lin[next].strip('\n'))
     o2 = lin[next].strip('\n').replace('"', '')
