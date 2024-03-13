@@ -22,7 +22,7 @@ if args.list:
     else:
         print(f"Default Path {path}")
     lis = list(map(str.strip, lis))
-    print(' | '.join(lis))
+    print(' | '.join(lis).title())
     print(f"There's {len(lis)} files")
     sys.exit()
 file = lis[random.randrange(len(lis))]
