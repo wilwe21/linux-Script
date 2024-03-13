@@ -3,8 +3,8 @@ import random, sys, os, argparse
 sus=1
 parser = argparse.ArgumentParser()
 parser.add_argument("-l", "--language", help="Translate Language")
-parser.add_argument("-f", "--file", help="Specyfy file")
-parser.add_argument("-p", "--path", help="Specyfy path")
+parser.add_argument("-f", "--file", help="Specyfy file", nargs="*")
+parser.add_argument("-p", "--path", help="Specyfy path", nargs="*")
 parser.add_argument("-ol", "--oryginalang", help="Specyfy oryginal file language", default="en")
 parser.add_argument("-ls", "--list", help="List files", action=argparse.BooleanOptionalAction)
 parser.add_argument("-v", "--voice", help="Hear output", action=argparse.BooleanOptionalAction)
@@ -31,7 +31,8 @@ while os.path.isdir(f"{path}/{file}"):
     file = lis[random.randrange(len(lis))]
     file = file.strip('\n')
 if args.file != None:
-    file = args.file.lower()
+    file = ' '.join(args.file)
+    file = file.lower()
 print(f'\033[38;2;203;166;247m🭃\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37m{file.title()}\033[0m\033[38;2;203;166;247m🭟\033[0m')
 namel = "\033["+ str(len(file)+2) + "C"
 print('--------------------------')
