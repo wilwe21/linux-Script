@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+import os, argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("-m", "--morse", help="From morse?", action=argparse.BooleanOptionalAction)
+parser.add_argument("-s", "--single", help="single")
+args = parser.parse_args()
+brail = {"a":".- ","b":"-... ","c":"-.-. ","d":"-.. ","e":". ","f":"..-. ","g":"--. ","h":".... ","i":".. ","j":".--- ","k":"-.- ","l":".-.. ","m":"-- ","n":"-. ","o":"--- ","p":".--. ","q":"--.- ","r":".-. ","s":"... ","t":"- ","u":"..- ","v":"...- ","w":".-- ","x":"-..- ","y":"-.-- ","z":"--.. ","ą":".-.- ","ć":"-.-.. ","ę":"..-.. ","ł":".-..- ","ń":"--.-- ","ó":"---. ","ś":"...-... ","ż":"--..- ","ź":"--..-. ","0":"----- ","1":".----⠁ ","2":"..--- ","3":"...--⠉ ","4":"....- ","5":"..... ","6":"-.... ","7":"--... ","8":"---.. ","9":"----."," ":"/ "}
+
+while not args.morse and args.single == None:
+    print("\033[38;2;203;166;247m🭃\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37mYou\033[0m\033[38;2;203;166;247m🭟\033[0m")
+    a = input().replace('"', '').lower()
+    print("")
+    print("\033[38;2;166;227;161m🭃\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mMorse\033[0m\033[38;2;166;227;161m🭟\033[0m")
+    print(''.join(brail.get(ch,ch) for ch in a))
+    print("")
+    print("\033[91;1m———————————————————————\033[0m")
+    print("")
+while args.morse and args.single == None:
+    print("\033[38;2;203;166;247m🭃\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37mYou\033[0m\033[38;2;203;166;247m🭟\033[0m")
+    a = input().replace('"', '').lower()
+    print("")
+    print("\033[38;2;166;227;161m🭃\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mUnMorse\033[0m\033[38;2;166;227;161m🭟\033[0m")
+    a = a.replace(".- ","a").replace("-... ","b").replace("-.-. ","c").replace("-.. ","d").replace(". ","e").replace("..-. ","f").replace("--. ","g").replace(".... ","h").replace(".. ","i").replace(".--- ","j").replace("-.- ","k").replace(".-.. ","l").replace("-- ","m").replace("-. ","n").replace("--- ","o").replace(".--. ","p").replace("--.- ","q").replace(".-. ","r").replace("... ","s").replace("- ","t").replace("..- ","u").replace("...- ","v").replace(".-- ","w").replace("-..- ","x").replace("-.-- ","y").replace("--.. ","z").replace(".-.- ","ą").replace("-.-.. ","ć").replace("..-.. ","ę").replace(".-..- ","ł").replace("--.-- ","ń").replace("---. ","ó").replace("...-... ","ś").replace("--..- ","ż").replace("--..-. ","ź").replace("----- ","0").replace(".----⠁ ","1").replace("..--- ","2").replace("...--⠉ ","3").replace("....- ","4").replace("..... ","5").replace("-.... ","6").replace("--... ","7").replace("---.. ","8").replace("----. ","9").replace("/ "," ")
+    print("")
+    print("\033[91;1m———————————————————————\033[0m")
+    print("")
+if args.single != None:
+    if not args.morse:
+        print(''.join(morse.get(ch,ch) for ch in args.single.lower()))
+    elif args.morse:
+        a = args.single.lower().replace(".- ","a").replace("-... ","b").replace("-.-. ","c").replace("-.. ","d").replace(". ","e").replace("..-. ","f").replace("--. ","g").replace(".... ","h").replace(".. ","i").replace(".--- ","j").replace("-.- ","k").replace(".-.. ","l").replace("-- ","m").replace("-. ","n").replace("--- ","o").replace(".--. ","p").replace("--.- ","q").replace(".-. ","r").replace("... ","s").replace("- ","t").replace("..- ","u").replace("...- ","v").replace(".-- ","w").replace("-..- ","x").replace("-.-- ","y").replace("--.. ","z").replace(".-.- ","ą").replace("-.-.. ","ć").replace("..-.. ","ę").replace(".-..- ","ł").replace("--.-- ","ń").replace("---. ","ó").replace("...-... ","ś").replace("--..- ","ż").replace("--..-. ","ź").replace("----- ","0").replace(".----⠁ ","1").replace("..--- ","2").replace("...--⠉ ","3").replace("....- ","4").replace("..... ","5").replace("-.... ","6").replace("--... ","7").replace("---.. ","8").replace("----. ","9").replace("/ "," ")
+        print(a)
