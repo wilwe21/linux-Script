@@ -39,7 +39,6 @@ while 0 == 0:
         print("")
     elif args.language != None and args.language.lower() == "morse":
         print("\033[38;2;166;227;161m🭃\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mMorsy\033[0m\033[38;2;166;227;161m🭟\033[0m")
-        a = os.popen(f"tpl -l en -s {a}").read()
         b = os.popen(f"tgpt -q '{a}'").read().replace("(","").replace(")","").strip('\n')
         b = b.replace("'","")
         print(os.popen(f"morse -s '{b}'").read())
