@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+import os, argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("-i", "--illuminati", help="From Illuminati?", action=argparse.BooleanOptionalAction)
+parser.add_argument("-s", "--single", help="single")
+args = parser.parse_args()
+illuminati = {"a":"ꚛ","b":"✡","c":"⌜","d":"↧","e":"⌟","f":"♂","g":"]","h":".","i":"+","j":"Δ","k":"☿","l":"⌞","m":"󰗧","n":"H","o":"T","p":":","q":"┴","r":"X","s":"◇","t":"⸷","u":"⸶","v":"♃","w":"⌧","x":"⼟","y":"󰇙","z":"𝒩","0":"⁞","1":"⸪","2":"⯊","3":"⯋","4":"□-□","5":"Ᏸ","6":"✀↑","7":"✀↓","8":"✀→","9":"✀←",",":"ᛞ",";":"𝟑",":":"𝟑̡",".":"𝟔","!":"𝟗","?":"𝟼𝟿"}
+normal = {"ꚛ":"a","✡":"b","⌜":"c","↧":"d","⌟":"e","♂":"f","]":"g",".":"h","+":"i","δ":"j","☿":"k","⌞":"l","󰗧":"m","h":"n","t":"o",":":"p","┴":"q","x":"r","◇":"s","⸷":"t","⸶":"u","♃":"v","⌧":"w","⼟":"x","󰇙":"y","𝒩":"z","⁞":"0","⸪":"1","⯊":"2","⯋":"3","Ᏸ":"5","ᛞ":",","𝟑":";","𝟑̡":":","𝟔":".","𝟗":"!"}
+
+while not args.illuminati and args.single == None:
+    print("\033[38;2;203;166;247m🭃\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37mYou\033[0m\033[38;2;203;166;247m🭟\033[0m")
+    a = input().replace('"', '').lower()
+    print("")
+    print("\033[91;1m-----------------------\033[0m")
+    print("")
+    print("\033[38;2;166;227;161m🭃\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mIlluminati\033[0m\033[38;2;166;227;161m🭟\033[0m")
+    print(''.join(illuminati.get(ch,ch) for ch in a))
+    print("\033[91;1m-----------------------\033[0m")
+    print("")
+while args.illuminati and args.single == None:
+    print("\033[38;2;203;166;247m🭃\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37mYou\033[0m\033[38;2;203;166;247m🭟\033[0m")
+    a = input().replace('"', '').lower()
+    print("")
+    print("\033[91;1m-----------------------\033[0m")
+    print("")
+    print("\033[38;2;166;227;161m🭃\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mAntyIlluminati\033[0m\033[38;2;166;227;161m🭟\033[0m")
+    a = a.replace("𝟼𝟿","?").replace("□-□","4").replace("✀↑","6").replace("✀↓","7").replace("✀→","8").replace("✀←","9")
+    print(''.join(normal.get(ch,ch) for ch in a))
+    print("\033[91;1m-----------------------\033[0m")
+    print("")
+if args.single != None:
+    if not args.illuminati:
+        print(''.join(illuminati.get(ch,ch) for ch in args.single.lower()))
+    elif args.enchant:
+        a = args.single.lower().replace("𝟼𝟿","?").replace("□-□","4").replace("✀↑","6").replace("✀↓","7").replace("✀→","8").replace("✀←","9")
+        print(''.join(normal.get(ch,ch) for ch in a))

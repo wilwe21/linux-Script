@@ -9,7 +9,7 @@ while 0 == 0:
     print("")
     print("\033[91;1m-----------------------\033[0m")
     print("")
-    if args.language != None and args.language.lower() != "enchant" and args.language.lower() != "braill":
+    if args.language != None and args.language.lower() != "enchant" and args.language.lower() != "braill" and args.language.lower() != "illuminati":
         a = os.popen(f"tpl -l {args.language} -s {a}").read()
         b = os.popen(f'tgpt -q "{a}"').read().replace("(","").replace(")","").strip('\n')
     if args.language != None and args.language.lower() == "enchant":
@@ -23,6 +23,12 @@ while 0 == 0:
         b = os.popen(f'tgpt -q "{a}"').read().replace("(","").replace(")","").strip('\n')
         b = b.replace("'","")
         print(os.popen(f"braill -s '{b}'").read())
+    elif args.language != None and args.language.lower() == "illuminati":
+        print("\033[38;2;166;227;161m🭃\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mIlluminaci\033[0m\033[38;2;166;227;161m🭟\033[0m")
+        a = os.popen(f"tpl -l en -s {a}").read()
+        b = os.popen(f'tgpt -q "{a}"').read().replace("(","").replace(")","").strip('\n')
+        b = b.replace("'","")
+        print(os.popen(f"illuminati -s '{b}'").read())
     else:
         print("\033[38;2;166;227;161m🭃\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mAI\033[0m\033[38;2;166;227;161m🭟\033[0m")
         print(str(b))
