@@ -5,14 +5,14 @@ parser.add_argument("-l", "--language", help="Specyfy language", default="pl")
 parser.add_argument("-v", "--voice", help="Speak answer", action=argparse.BooleanOptionalAction)
 args = parser.parse_args()
 while 0 == 0:
-    print("\033[38;2;203;166;247m🭃\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37mYou\033[0m\033[38;2;203;166;247m🭟\033[0m")
+    print("\033[38;2;203;166;247m\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37mYou\033[0m\033[38;2;203;166;247m\033[0m")
     a = input().replace('"', '').replace("'", "").replace("`","")
     print("")
     if args.language != None and args.language.lower() != "enchant" and args.language.lower() != "braill" and args.language.lower() != "illuminati" and args.language.lower() != "morse" and args.language.lower() != "spc":
         a = os.popen(f"tpl -l {args.language} -s {a}").read()
         b = os.popen(f"tgpt -q '{a}'").read().replace("(","").replace(")","").strip('\n')
     if args.language != None and args.language.lower() == "enchant":
-        print("\033[38;2;166;227;161m🭃\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mEnchanting Table\033[0m\033[38;2;166;227;161m🭟\033[0m")
+        print("\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mEnchanting Table\033[0m\033[38;2;166;227;161m\033[0m")
         a = os.popen(f"tpl -l en -s {a}").read()
         b = os.popen(f"tgpt -q '{a}'").read().replace("(","").replace(")","").strip('\n')
         b = b.replace("'","")
@@ -21,7 +21,7 @@ while 0 == 0:
         print("\033[91;1m———————————————————————\033[0m")
         print("")
     elif args.language != None and args.language.lower() == "braill":
-        print("\033[38;2;166;227;161m🭃\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37m⠁⠊\033[0m\033[38;2;166;227;161m🭟\033[0m")
+        print("\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37m⠁⠊\033[0m\033[38;2;166;227;161m\033[0m")
         b = os.popen(f"tgpt -q '{a}'").read().replace("(","").replace(")","").strip('\n')
         b = b.replace("'","")
         print(os.popen(f"braill -s '{b}'").read())
@@ -29,7 +29,7 @@ while 0 == 0:
         print("\033[91;1m———————————————————————\033[0m")
         print("")
     elif args.language != None and args.language.lower() == "illuminati":
-        print("\033[38;2;166;227;161m🭃\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mIlluminaci\033[0m\033[38;2;166;227;161m🭟\033[0m")
+        print("\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mIlluminaci\033[0m\033[38;2;166;227;161m\033[0m")
         a = os.popen(f"tpl -l en -s {a}").read()
         b = os.popen(f"tgpt -q '{a}'").read().replace("(","").replace(")","").strip('\n')
         b = b.replace("'","")
@@ -38,7 +38,7 @@ while 0 == 0:
         print("\033[91;1m———————————————————————\033[0m")
         print("")
     elif args.language != None and args.language.lower() == "morse":
-        print("\033[38;2;166;227;161m🭃\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mMorsy\033[0m\033[38;2;166;227;161m🭟\033[0m")
+        print("\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mMorsy\033[0m\033[38;2;166;227;161m\033[0m")
         b = os.popen(f"tgpt -q '{a}'").read().replace("(","").replace(")","").strip('\n')
         b = b.replace("'","")
         print(os.popen(f"morse -s '{b}'").read())
@@ -46,7 +46,7 @@ while 0 == 0:
         print("\033[91;1m———————————————————————\033[0m")
         print("")
     elif args.language != None and args.language.lower() == "spc":
-        print("\033[38;2;166;227;161m🭃\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mSpc\033[0m\033[38;2;166;227;161m🭟\033[0m")
+        print("\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mSpc\033[0m\033[38;2;166;227;161m\033[0m")
         b = os.popen(f"tgpt -q '{a}'").read().replace("(","").replace(")","").strip('\n')
         b = b.replace("'","¾")
         print(os.popen(f"spc -s '{b}'").read().replace("¾","'0"))
@@ -54,7 +54,7 @@ while 0 == 0:
         print("\033[91;1m———————————————————————\033[0m")
         print("")
     else:
-        print("\033[38;2;166;227;161m🭃\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mAI\033[0m\033[38;2;166;227;161m🭟\033[0m")
+        print("\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mAI\033[0m\033[38;2;166;227;161m\033[0m")
         print(str(b))
         if args.voice != None:
             b = b.replace('"',"")
