@@ -2,7 +2,7 @@
 import os, argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("-b", "--braill", help="From braill?", action=argparse.BooleanOptionalAction)
-parser.add_argument("-s", "--single", help="single")
+parser.add_argument("-s", "--single", help="single", nargs="*")
 args = parser.parse_args()
 brail = {"a": "⠁","b": "⠃","c": "⠉","d": "⠙","e": "⠑","f": "⠋","g": "⠛","h": "⠓","i": "⠊","j": "⠚","k": "⠅","l": "⠇","m": "⠍","n": "⠝","o": "⠕","p": "⠏","q": "⠟","r": "⠗","s": "⠎","t": "⠞","u": "⠥","v": "⠧","w": "⠺","x": "⠭","y": "⠽","z": "⠵","ą":"⠡","ć":"⠩","ę":"⠱","ł":"⠣","ń":"⠹","ó":"⠬","ś":"⠪","ż":"⠯","ź":"⠮","0":"⠼⠚","1":"⠼⠁","2":"⠼⠃","3":"⠼⠉","4":"⠼⠙","5":"⠼⠑","6":"⠼⠋","7":"⠼⠛","8":"⠼⠓","9":"⠼⠊"}
 normal = {"⠁":"a","⠃":"b","⠉":"c","⠙":"d","⠑":"e","⠋":"f","⠛":"g","⠓":"h","⠊":"i","⠚":"j","⠅":"k","⠇":"l","⠍":"m","⠝":"n","⠕":"o","⠏":"p","⠟":"q","⠗":"r","⠎":"s","⠞":"t","⠥":"u","⠧":"v","⠺":"w","⠭":"x","⠽":"y","⠵":"z","⠡":"ą","⠩":"ć","⠱":"ę","⠣":"ł","⠹":"ń","⠬":"ó","⠪":"ś","⠯":"ż","⠮":"ź"}
@@ -28,7 +28,7 @@ while args.braill and args.single == None:
     print("")
 if args.single != None:
     if not args.braill:
-        print(''.join(brail.get(ch,ch) for ch in args.single.lower()))
+        print(''.join(brail.get(ch,ch) for ch in ' '.join(args.single).lower()))
     elif args.braill:
-        a = args.single.lower().replace("⠼⠚", "0").replace("⠼⠁", "1").replace("⠼⠃", "2").replace("⠼⠉", "3").replace("⠼⠙", "4").replace("⠼⠑", "5").replace("⠼⠋", "6").replace("⠼⠛", "7").replace("⠼⠓", "8").replace("⠼⠊", "9")
+        a = ' '.join(args.single).lower().replace("⠼⠚", "0").replace("⠼⠁", "1").replace("⠼⠃", "2").replace("⠼⠉", "3").replace("⠼⠙", "4").replace("⠼⠑", "5").replace("⠼⠋", "6").replace("⠼⠛", "7").replace("⠼⠓", "8").replace("⠼⠊", "9")
         print(''.join(normal.get(ch,ch) for ch in a))
