@@ -182,11 +182,11 @@ if args.language != None and args.language.lower() == "morse":
     b1 = o1.replace("'","")
     print(os.popen(f"morse -s '{b1}'").read())
     if next < len(lin) and not args.totalrandom:
-        b2 = o2.replace("'","")
-        print(os.popen(f"echo \033[2A & morse -s '{b2}'").read())
+        b2 = o2.replace("'","¾")
+        print(os.popen(f"echo \033[2A & morse -s '{b2}'").read().replace("¾","'"))
     if args.totalrandom and next < len(lin2):
-        b2 = o2.replace("'","")
-        print(os.popen(f"echo \033[2A & morse -s '{b2}'").read())
+        b2 = o2.replace("'","¾")
+        print(os.popen(f"echo \033[2A & morse -s '{b2}'").read().replace("¾","'"))
 if args.language != None and args.language.lower() == "spc":
     print("")
     if args.decorator == True:
