@@ -5,6 +5,7 @@ parser.add_argument("-l", "--language", help="Translate Language", default="pl")
 parser.add_argument("-s", "--single", help="single", nargs='*')
 parser.add_argument("-v", "--voice", help="Hear output", action=argparse.BooleanOptionalAction)
 parser.add_argument("-p", "--noprint", help="print output", action=argparse.BooleanOptionalAction)
+parser.add_argument("-m", "--stopmusic", help="stop music output", action=argparse.BooleanOptionalAction)
 args = parser.parse_args()
 while args.single == None:
     print('\033[38;2;203;166;247m🭃\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37mYou\033[0m\033[38;2;203;166;247m🭟\033[0m')
@@ -17,7 +18,10 @@ while args.single == None:
         print("\033[91;1m———————————————————————\033[0m")
     b = b.replace('"','')
     if args.voice:
-        os.popen(f'tts -m -l {args.language} -s "{b}"')
+        if args.stopmusic:
+            os.popen(f'tts -m -l {args.language} -s "{b}"')
+        else:
+            os.popen(f'tts -l {args.language} -s "{b}"')
     print("")
 if args.single != None:
     a = ' '.join(args.single).replace("'","")
@@ -26,4 +30,7 @@ if args.single != None:
         print(b)
     b = b.replace('"','')
     if args.voice:
-        os.popen(f'tts -m -l {args.language} -s "{b}"')
+        if args.stopmusic:
+            os.popen(f'tts -m -l {args.language} -s "{b}"')
+        else:
+            os.popen(f'tts -l {args.language} -s "{b}"')
