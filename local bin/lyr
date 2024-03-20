@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import random, sys, os, argparse
-sus=1
 parser = argparse.ArgumentParser()
 parser.add_argument("-l", "--language", help="Translate Language")
 parser.add_argument("-f", "--file", help="Specyfy file", nargs="*")
@@ -11,191 +10,201 @@ parser.add_argument("-v", "--voice", help="Hear output", action=argparse.Boolean
 parser.add_argument("-tv", "--tvoice", help="Hear translated output", action=argparse.BooleanOptionalAction)
 parser.add_argument("-fl", "--fallbacklang", help="Fallback language to voice")
 parser.add_argument("-r", "--random", help="2 line is randomized", action=argparse.BooleanOptionalAction)
+parser.add_argument("-c", "--cont", help="continously", action=argparse.BooleanOptionalAction)
 parser.add_argument("-tr", "--totalrandom", help="2 line is very randomized", action=argparse.BooleanOptionalAction)
 parser.add_argument("-nd", "--decorator", help="Decorator", default=True, action=argparse.BooleanOptionalAction)
 args = parser.parse_args()
-path = '/home/wilwe/Dokumenty/oryginał/Lyrics'
-if args.path != None:
-    path = args.path
-lis = os.popen('ls ' + path).readlines()
-if args.list:
+def getlyr():
+    sus=1
+    path = '/home/wilwe/Dokumenty/oryginał/Lyrics'
     if args.path != None:
-        print(f"Path {path}")
-    else:
-        print(f"Default Path {path}")
-    lis = list(map(str.strip, lis))
-    print(' | '.join(lis).title())
-    print(f"There's {len(lis)} files")
-    sys.exit()
-file = lis[random.randrange(len(lis))]
-file = file.strip('\n')
-while os.path.isdir(f"{path}/{file}"):
-    file = lis[random.randrange(len(lis))]
-    file = file.strip('\n')
-if args.file != None:
-    file = ' '.join(args.file)
-    file = file.lower()
-if args.decorator == True:
-    print(f'\033[38;2;203;166;247m\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37m{file.title()}\033[0m\033[38;2;203;166;247m\033[0m')
-namel = "\033["+ str(len(file)+2) + "C"
-if open(f"{path}/{file}").readline() == '':
-    if not args.totalrandom:
+        path = args.path
+    lis = os.popen('ls ' + path).readlines()
+    if args.list:
+        if args.path != None:
+            print(f"Path {path}")
+        else:
+            print(f"Default Path {path}")
+        lis = list(map(str.strip, lis))
+        print(' | '.join(lis).title())
+        print(f"There's {len(lis)} files")
         sys.exit()
-    else:
-        sus=0
-lin = open(f"{path}/{file}").readlines()
-if sus != 0:
-    line = random.randrange(len(lin))
-    while lin[line].strip('\n') == '':
-        line += 1
-    sas = lin[line]
-else:
-    line = 1
-    sas = ""
-print(sas.strip('\n'))
-next = line+1
-if next < len(lin) and not args.random:
-    while lin[next].strip('\n') == '':
-        if next+1 < len(lin):
-            next += 1
-        else: 
-            break
-if args.random:
-    while next > len(lin) or lin[next].strip('\n') == '':
-        next = random.randrange(len(lin))
-if args.totalrandom:
     file = lis[random.randrange(len(lis))]
     file = file.strip('\n')
     while os.path.isdir(f"{path}/{file}"):
         file = lis[random.randrange(len(lis))]
         file = file.strip('\n')
-    lin2 = open(f"{path}/{file}").readlines()
+    if args.file != None:
+        file = ' '.join(args.file)
+        file = file.lower()
     if args.decorator == True:
-        print(f'\033[2A{namel} | \033[38;2;203;166;247m\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37m{file.title()}\033[0m\033[38;2;203;166;247m\033[0m\033[1B')
+        print(f'\033[38;2;203;166;247m\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37m{file.title()}\033[0m\033[38;2;203;166;247m\033[0m')
+    namel = "\033["+ str(len(file)+2) + "C"
     if open(f"{path}/{file}").readline() == '':
-        susy=''
+        if not args.totalrandom:
+            sys.exit()
+        else:
+            sus=0
+    lin = open(f"{path}/{file}").readlines()
+    if sus != 0:
+        line = random.randrange(len(lin))
+        while lin[line].strip('\n') == '':
+            line += 1
+        sas = lin[line]
     else:
-        next = random.randrange(len(lin2))
-        while next > len(lin2) or lin2[next].strip('\n') == '':
+        line = 1
+        sas = ""
+    print(sas.strip('\n'))
+    next = line+1
+    if next < len(lin) and not args.random:
+        while lin[next].strip('\n') == '':
+            if next+1 < len(lin):
+                next += 1
+            else: 
+                break
+    if args.random:
+        while next > len(lin) or lin[next].strip('\n') == '':
+            next = random.randrange(len(lin))
+    if args.totalrandom:
+        file = lis[random.randrange(len(lis))]
+        file = file.strip('\n')
+        while os.path.isdir(f"{path}/{file}"):
+            file = lis[random.randrange(len(lis))]
+            file = file.strip('\n')
+        lin2 = open(f"{path}/{file}").readlines()
+        if args.decorator == True:
+            print(f'\033[2A{namel} | \033[38;2;203;166;247m\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37m{file.title()}\033[0m\033[38;2;203;166;247m\033[0m\033[1B')
+        if open(f"{path}/{file}").readline() == '':
+            susy=''
+        else:
             next = random.randrange(len(lin2))
-        susy=lin2[next]
-o1 = sas.strip('\n').replace('"', '')
-if next < len(lin) and not args.totalrandom:
-    print(lin[next].strip('\n'))
-    o2 = lin[next].strip('\n').replace('"', '')
-    if args.voice and not args.tvoice:
-        os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}"')
-elif args.voice and not args.tvoice and not args.totalrandom:
-        os.popen(f'tts -m -l {args.oryginalang} -s "{o1}"')
-if args.totalrandom and next < len(lin2):
-    print(susy.strip('\n'))
-    o2 = susy.strip('\n').replace('"', '')
-    if args.voice and not args.tvoice:
-        os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}"')
-elif args.voice and not args.tvoice and args.totalrandom:
-        os.popen(f'tts -m -l {args.oryginalang} -s "{o1}"')
-if args.language != None and args.language.lower() != "braill" and args.language.lower() != "enchant" and args.language.lower() != "illuminati" and args.language.lower() != "morse" and args.language.lower() != "spc":
-    print("")
-    if args.decorator == True:
-        print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37m{args.language.title()}\033[0m\033[38;2;166;227;161m\033[0m')
-    t1 = os.popen(f"tpl -l {args.language} -s " + '"' + o1 + '"').read()
-    print(t1)
-    print("\033[3A")
-    if args.fallbacklang != None:
-        lang=args.fallbacklang
-    else:
-        lang=args.language
+            while next > len(lin2) or lin2[next].strip('\n') == '':
+                next = random.randrange(len(lin2))
+            susy=lin2[next]
+    o1 = sas.strip('\n').replace('"', '')
     if next < len(lin) and not args.totalrandom:
-        t2 = os.popen(f"tpl -l {args.language} -s " + '"' + o2 + '"').read()
-        print(t2)
-        print("\033[2A")
-        if args.tvoice and not args.voice:
-            os.popen(f'tts -m -l {lang} -s "{t1}" && tts -m -l {lang} -s "{t2}"')
-    elif args.tvoice and not args.voice and not args.totalrandom:
-        os.popen(f'tts -m -l {lang} -s "{t1}"')
+        print(lin[next].strip('\n'))
+        o2 = lin[next].strip('\n').replace('"', '')
+        if args.voice and not args.tvoice:
+            os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}"')
+    elif args.voice and not args.tvoice and not args.totalrandom:
+            os.popen(f'tts -m -l {args.oryginalang} -s "{o1}"')
     if args.totalrandom and next < len(lin2):
-        t2 = os.popen(f"tpl -l {args.language} -s " + '"' + o2 + '"').read()
-        print(t2)
-        print("\033[2A")
-        if args.tvoice and not args.voice:
-            os.popen(f'tts -m -l {lang} -s "{t1}" && tts -m -l {lang} -s "{t2}"')
-    elif args.tvoice and not args.voice and args.totalrandom:
-        os.popen(f'tts -m -l {lang} -s "{t1}"')
-if args.voice and args.tvoice and args.language != None:
-    if next < len(lin) and not args.totalrandom:
-        os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}" && tts -m -l {lang} -s "{t1}" && tts -m -l {lang} -s "{t2}"')
-    elif not args.totalrandom:
-        os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {lang} -s "{t1}""')
-    if args.totalrandom and next < len(lin2):
-        os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}" && tts -m -l {lang} -s "{t1}" && tts -m -l {lang} -s "{t2}"')
-    elif args.totalrandom:
-        os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {lang} -s "{t1}""')
-elif args.voice and args.tvoice and args.language == None:
-    if next < len(lin) and not args.totalrandom:
-        os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}"')
-    elif not args.totalrandom:
-        os.popen(f'tts -m -l {args.oryginalang} -s "{o1}"')
-    if args.totalrandom and next < len(lin2):
-        os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}"')
-    elif args.totalrandom:
-        os.popen(f'tts -m -l {args.oryginalang} -s "{o1}"')
-if args.language != None and args.language.lower() == "braill":
-    print("")
-    if args.decorator == True:
-        print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mBraill\033[0m\033[38;2;166;227;161m\033[0m')
-    b1 = o1.replace("'","")
-    print(os.popen(f"braill -s '{b1}'").read())
-    if next < len(lin) and not args.totalrandom:
-        b2 = o2.replace("'","")
-        print(os.popen(f"echo \033[2A & braill -s '{b2}'").read())
-    if args.totalrandom and next < len(lin2):
-        b2 = o2.replace("'","")
-        print(os.popen(f"echo \033[2A & braill -s '{b2}'").read())
-if args.language != None and args.language.lower() == "enchant":
-    print("")
-    if args.decorator == True:
-        print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mEnchanting Table\033[0m\033[38;2;166;227;161m\033[0m')
-    b1 = o1.replace("'","¾")
-    print(os.popen(f"enchant -s '{b1}'").read().replace("¾","'"))
-    if next < len(lin) and not args.totalrandom:
-        b2 = o2.replace("'","")
-        print(os.popen(f"echo \033[2A & enchant -s '{b2}'").read().replace("¾","'"))
-    if args.totalrandom and next < len(lin2):
-        b2 = o2.replace("'","")
-        print(os.popen(f"echo \033[2A & enchant -s '{b2}'").read().replace("¾","'"))
-if args.language != None and args.language.lower() == "illuminati":
-    print("")
-    if args.decorator == True:
-        print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mIlluminaci\033[0m\033[38;2;166;227;161m\033[0m')
-    b1 = o1.replace("'","¾")
-    print(os.popen(f"illuminati -s '{b1}'").read().replace("¾","'"))
-    if next < len(lin) and not args.totalrandom:
-        b2 = o2.replace("'","¾")
-        print(os.popen(f"echo \033[2A & illuminati -s '{b2}'").read().replace("¾","'"))
-    if args.totalrandom and next < len(lin2):
-        b2 = o2.replace("'","¾")
-        print(os.popen(f"echo \033[2A & illuminati -s '{b2}'").read().replace("¾","'"))
-if args.language != None and args.language.lower() == "morse":
-    print("")
-    if args.decorator == True:
-        print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mMorsy\033[0m\033[38;2;166;227;161m\033[0m')
-    b1 = o1.replace("'","")
-    print(os.popen(f"morse -s '{b1}'").read())
-    if next < len(lin) and not args.totalrandom:
-        b2 = o2.replace("'","¾")
-        print(os.popen(f"echo \033[2A & morse -s '{b2}'").read().replace("¾","'"))
-    if args.totalrandom and next < len(lin2):
-        b2 = o2.replace("'","¾")
-        print(os.popen(f"echo \033[2A & morse -s '{b2}'").read().replace("¾","'"))
-if args.language != None and args.language.lower() == "spc":
-    print("")
-    if args.decorator == True:
-        print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mSpc\033[0m\033[38;2;166;227;161m\033[0m')
-    b1 = o1.replace("'","¾")
-    print(os.popen(f"spc -s '{b1}'").read().replace("¾","'0"))
-    if next < len(lin) and not args.totalrandom:
-        b2 = o2.replace("'","")
-        print(os.popen(f"echo \033[2A & spc -s '{b2}'").read().replace("¾","'0"))
-    if args.totalrandom and next < len(lin2):
-        b2 = o2.replace("'","")
-        print(os.popen(f"echo \033[2A & spc -s '{b2}'").read().replace("¾","'0"))
+        print(susy.strip('\n'))
+        o2 = susy.strip('\n').replace('"', '')
+        if args.voice and not args.tvoice:
+            os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}"')
+    elif args.voice and not args.tvoice and args.totalrandom:
+            os.popen(f'tts -m -l {args.oryginalang} -s "{o1}"')
+    if args.language != None and args.language.lower() != "braill" and args.language.lower() != "enchant" and args.language.lower() != "illuminati" and args.language.lower() != "morse" and args.language.lower() != "spc":
+        print("")
+        if args.decorator == True:
+            print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37m{args.language.title()}\033[0m\033[38;2;166;227;161m\033[0m')
+        t1 = os.popen(f"tpl -l {args.language} -s " + '"' + o1 + '"').read()
+        print(t1)
+        print("\033[3A")
+        if args.fallbacklang != None:
+            lang=args.fallbacklang
+        else:
+            lang=args.language
+        if next < len(lin) and not args.totalrandom:
+            t2 = os.popen(f"tpl -l {args.language} -s " + '"' + o2 + '"').read()
+            print(t2)
+            print("\033[2A")
+            if args.tvoice and not args.voice:
+                os.popen(f'tts -m -l {lang} -s "{t1}" && tts -m -l {lang} -s "{t2}"')
+        elif args.tvoice and not args.voice and not args.totalrandom:
+            os.popen(f'tts -m -l {lang} -s "{t1}"')
+        if args.totalrandom and next < len(lin2):
+            t2 = os.popen(f"tpl -l {args.language} -s " + '"' + o2 + '"').read()
+            print(t2)
+            print("\033[2A")
+            if args.tvoice and not args.voice:
+                os.popen(f'tts -m -l {lang} -s "{t1}" && tts -m -l {lang} -s "{t2}"')
+        elif args.tvoice and not args.voice and args.totalrandom:
+            os.popen(f'tts -m -l {lang} -s "{t1}"')
+    if args.voice and args.tvoice and args.language != None:
+        if next < len(lin) and not args.totalrandom:
+            os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}" && tts -m -l {lang} -s "{t1}" && tts -m -l {lang} -s "{t2}"')
+        elif not args.totalrandom:
+            os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {lang} -s "{t1}""')
+        if args.totalrandom and next < len(lin2):
+            os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}" && tts -m -l {lang} -s "{t1}" && tts -m -l {lang} -s "{t2}"')
+        elif args.totalrandom:
+            os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {lang} -s "{t1}""')
+    elif args.voice and args.tvoice and args.language == None:
+        if next < len(lin) and not args.totalrandom:
+            os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}"')
+        elif not args.totalrandom:
+            os.popen(f'tts -m -l {args.oryginalang} -s "{o1}"')
+        if args.totalrandom and next < len(lin2):
+            os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}"')
+        elif args.totalrandom:
+            os.popen(f'tts -m -l {args.oryginalang} -s "{o1}"')
+    if args.language != None and args.language.lower() == "braill":
+        print("")
+        if args.decorator == True:
+            print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mBraill\033[0m\033[38;2;166;227;161m\033[0m')
+        b1 = o1.replace("'","")
+        print(os.popen(f"braill -s '{b1}'").read())
+        if next < len(lin) and not args.totalrandom:
+            b2 = o2.replace("'","")
+            print(os.popen(f"echo \033[2A & braill -s '{b2}'").read())
+        if args.totalrandom and next < len(lin2):
+            b2 = o2.replace("'","")
+            print(os.popen(f"echo \033[2A & braill -s '{b2}'").read())
+    if args.language != None and args.language.lower() == "enchant":
+        print("")
+        if args.decorator == True:
+            print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mEnchanting Table\033[0m\033[38;2;166;227;161m\033[0m')
+        b1 = o1.replace("'","¾")
+        print(os.popen(f"enchant -s '{b1}'").read().replace("¾","'"))
+        if next < len(lin) and not args.totalrandom:
+            b2 = o2.replace("'","")
+            print(os.popen(f"echo \033[2A & enchant -s '{b2}'").read().replace("¾","'"))
+        if args.totalrandom and next < len(lin2):
+            b2 = o2.replace("'","")
+            print(os.popen(f"echo \033[2A & enchant -s '{b2}'").read().replace("¾","'"))
+    if args.language != None and args.language.lower() == "illuminati":
+        print("")
+        if args.decorator == True:
+            print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mIlluminaci\033[0m\033[38;2;166;227;161m\033[0m')
+        b1 = o1.replace("'","¾")
+        print(os.popen(f"illuminati -s '{b1}'").read().replace("¾","'"))
+        if next < len(lin) and not args.totalrandom:
+            b2 = o2.replace("'","¾")
+            print(os.popen(f"echo \033[2A & illuminati -s '{b2}'").read().replace("¾","'"))
+        if args.totalrandom and next < len(lin2):
+            b2 = o2.replace("'","¾")
+            print(os.popen(f"echo \033[2A & illuminati -s '{b2}'").read().replace("¾","'"))
+    if args.language != None and args.language.lower() == "morse":
+        print("")
+        if args.decorator == True:
+            print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mMorsy\033[0m\033[38;2;166;227;161m\033[0m')
+        b1 = o1.replace("'","")
+        print(os.popen(f"morse -s '{b1}'").read())
+        if next < len(lin) and not args.totalrandom:
+            b2 = o2.replace("'","¾")
+            print(os.popen(f"echo \033[2A & morse -s '{b2}'").read().replace("¾","'"))
+        if args.totalrandom and next < len(lin2):
+            b2 = o2.replace("'","¾")
+            print(os.popen(f"echo \033[2A & morse -s '{b2}'").read().replace("¾","'"))
+    if args.language != None and args.language.lower() == "spc":
+        print("")
+        if args.decorator == True:
+            print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mSpc\033[0m\033[38;2;166;227;161m\033[0m')
+        b1 = o1.replace("'","¾")
+        print(os.popen(f"spc -s '{b1}'").read().replace("¾","'0"))
+        if next < len(lin) and not args.totalrandom:
+            b2 = o2.replace("'","")
+            print(os.popen(f"echo \033[2A & spc -s '{b2}'").read().replace("¾","'0"))
+        if args.totalrandom and next < len(lin2):
+            b2 = o2.replace("'","")
+            print(os.popen(f"echo \033[2A & spc -s '{b2}'").read().replace("¾","'0"))
+while args.cont:
+    getlyr()
+    a=input()
+    if a in ["exit",":q","q"]:
+        break
+if args.cont == None:
+    getlyr()
