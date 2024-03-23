@@ -10,6 +10,8 @@ normal = {"ꚛ":"a","✡":"b","⌜":"c","↧":"d","⌟":"e","♂":"f","]":"g",".
 while not args.illuminati and args.single == None:
     print("\033[38;2;203;166;247m\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37mYou\033[0m\033[38;2;203;166;247m\033[0m")
     a = input().replace('"', '').lower()
+    if a in ["exit",":q"]:
+        break
     print("")
     print("\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mIlluminati\033[0m\033[38;2;166;227;161m\033[0m")
     print(''.join(illuminati.get(ch,ch) for ch in a))
@@ -19,6 +21,8 @@ while not args.illuminati and args.single == None:
 while args.illuminati and args.single == None:
     print("\033[38;2;203;166;247m\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37mYou\033[0m\033[38;2;203;166;247m\033[0m")
     a = input().replace('"', '').lower()
+    if a in ["exit",":q"]:
+        break
     print("")
     print("\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mAntyIlluminati\033[0m\033[38;2;166;227;161m\033[0m")
     a = a.replace("𝟼𝟿","?").replace("□-□","4").replace("✀↑","6").replace("✀↓","7").replace("✀→","8").replace("✀←","9")

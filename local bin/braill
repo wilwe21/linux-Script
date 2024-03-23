@@ -10,6 +10,8 @@ normal = {"⠁":"a","⠃":"b","⠉":"c","⠙":"d","⠑":"e","⠋":"f","⠛":"g",
 while not args.braill and args.single == None:
     print("\033[38;2;203;166;247m\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37mYou\033[0m\033[38;2;203;166;247m\033[0m")
     a = input().replace('"', '').lower()
+    if a in ["exit",":q"]:
+        break
     print("")
     print("\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37m⠃⠗⠁⠊⠇⠇\033[0m\033[38;2;166;227;161m\033[0m")
     print(''.join(brail.get(ch,ch) for ch in a))
@@ -19,6 +21,8 @@ while not args.braill and args.single == None:
 while args.braill and args.single == None:
     print("\033[38;2;203;166;247m\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37m⠽⠕⠥\033[0m\033[38;2;203;166;247m\033[0m")
     a = input().replace('"', '').lower()
+    if a in ["exit",":q"]:
+        break
     print("")
     print("\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mBraill\033[0m\033[38;2;166;227;161m\033[0m")
     a = a.replace("⠼⠚", "0").replace("⠼⠁", "1").replace("⠼⠃", "2").replace("⠼⠉", "3").replace("⠼⠙", "4").replace("⠼⠑", "5").replace("⠼⠋", "6").replace("⠼⠛", "7").replace("⠼⠓", "8").replace("⠼⠊", "9")

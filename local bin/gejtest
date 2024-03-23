@@ -1,0 +1,41 @@
+#!/usr/bin/env python3
+import os, subprocess, time
+a = str(subprocess.check_output(["zenity", "--forms", "--add-entry=Czy jesteś gejem?", "--add-entry=Czy masz dziewczyne?", "--add-entry=Czy jesteś sigmą?", "--add-entry=czy grasz w lola?", "&>", "/dev/null"]))
+a = a.strip("b'")
+a = a.strip("\\n'")
+a = a.split("|")
+score = 0
+yes = ['tak','TAK',"YES",'yes','y',"Y","t","T"]
+empt = ['',' ','  ','.',',']
+if a[0] in yes:
+    score += 100
+elif a[0] in empt:
+    score += 0
+else:
+    score -= 5
+if a[1] in yes:
+    score -= 20
+elif a[1] in empt:
+    score += 0
+else:
+    score += 25
+if a[2] in yes:
+    score -= 69
+elif a[2] in empt:
+    score += 0
+else:
+    score += 14
+if a[3] in yes:
+    score += 50
+elif a[3] in empt:
+    score +=0
+else:
+    score -= 80
+if score > 0:
+    gej = "ale z ciebie gej"
+elif score < 0:
+    gej = "ale z ciebie sigma"
+else:
+    gej = "chyba ci się coś pojebąło\njak możesz mieć 0 punktów"
+wait = "{1,2,4,6,8,9,10,12,13,14,15,17,18,20,23,25,26,27,30,35,36,38,40,42,43,45,47,48,50,52,55,57,59,60,62,64,67,69,70,74,76,78,80,82,84,85,86,88,90,92,93,94,95,98,99,100}"
+os.popen(f"(for i in {wait}; do echo $i; sleep 0.1; done;)| zenity --progress --percentage=0 --auto-close=true --text='Sprawdzanie czy nie jesteś gejem'; zenity --info --icon=trophy-gold-symbolic --text='Otrzymałeś {score} punktów\n{gej}' --title='Wyniki testu na geja'")

@@ -10,6 +10,8 @@ args = parser.parse_args()
 while args.single == None:
     print('\033[38;2;203;166;247m🭃\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37mYou\033[0m\033[38;2;203;166;247m🭟\033[0m')
     a = str(input())
+    if a in ["exit",":q"]:
+        break
     print("")
     b = os.popen("trans -t " + args.language + " -no-autocorrect -j -brief -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi " + '"' + a + '"').read()
     if args.noprint == None:
