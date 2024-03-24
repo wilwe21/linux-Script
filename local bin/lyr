@@ -13,7 +13,7 @@ parser.add_argument("-fl", "--fallbacklang", help="Fallback language to voice")
 parser.add_argument("-r", "--random", help="2 line is randomized", action=argparse.BooleanOptionalAction)
 parser.add_argument("-c", "--cont", help="continously", action=argparse.BooleanOptionalAction)
 parser.add_argument("-tr", "--totalrandom", help="2 line is very randomized", action=argparse.BooleanOptionalAction)
-parser.add_argument("-nd", "--decorator", help="Decorator", default=True, action=argparse.BooleanOptionalAction)
+parser.add_argument("-d", "--decorator", help="Decorator", default=True, action=argparse.BooleanOptionalAction)
 args = parser.parse_args()
 mut = ' '
 totalrandom = False
@@ -21,6 +21,8 @@ voice = False
 tvoice = False
 language = None
 forcef = None
+decorator = True
+randomfas = None
 if args.mute != None:
     mut = ' -m '
 if args.voice != None:
@@ -31,6 +33,10 @@ if args.totalrandom != None:
     totalrandom = True
 if args.language != None:
     language = language
+if args.decorator != True:
+    decorator = False
+if args.random != None:
+    randomfas = True
 def getlyr():
     sus=1
     path = '/home/wilwe/Dokumenty/oryginał/Lyrics'
@@ -46,8 +52,7 @@ def getlyr():
         print(' | '.join(lis).title())
         print(f"There's {len(lis)} files")
         sys.exit()
-    file = lis[random.randrange(len(lis))]
-    file = file.strip('\n')
+    file = lis[random.randrange(len(lis))].strip('\n')
     while os.path.isdir(f"{path}/{file}"):
         file = lis[random.randrange(len(lis))]
         file = file.strip('\n')
@@ -56,7 +61,7 @@ def getlyr():
         file = file.lower()
     if forcef != None:
         file = forcef.lower()
-    if args.decorator == True:
+    if decorator == True:
         print(f'\033[38;2;203;166;247m\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37m{file.title()}\033[0m\033[38;2;203;166;247m\033[0m')
     namel = "\033["+ str(len(file)+2) + "C"
     if open(f"{path}/{file}").readline() == '':
@@ -75,23 +80,23 @@ def getlyr():
         sas = ""
     print(sas.strip('\n'))
     next = line+1
-    if next < len(lin) and not args.random:
+    if next < len(lin) and not randomfas:
         while lin[next].strip('\n') == '':
             if next+1 < len(lin):
                 next += 1
             else: 
                 break
-    if args.random:
+    if randomfas:
+        next = random.randrange(len(lin))
         while next > len(lin) or lin[next].strip('\n') == '':
             next = random.randrange(len(lin))
     if totalrandom:
-        file = lis[random.randrange(len(lis))]
-        file = file.strip('\n')
+        file = lis[random.randrange(len(lis))].strip('\n')
         while os.path.isdir(f"{path}/{file}"):
             file = lis[random.randrange(len(lis))]
             file = file.strip('\n')
         lin2 = open(f"{path}/{file}").readlines()
-        if args.decorator == True:
+        if decorator == True:
             print(f'\033[2A{namel}\033[1D\033[48;2;203;166;247m\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mAnd\033[0m\033[48;2;137;180;250m\033[38;2;166;227;161m\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37m{file.title()}\033[0m\033[38;2;203;166;247m\033[0m\033[1B')
         if open(f"{path}/{file}").readline() == '':
             susy=''
@@ -117,7 +122,7 @@ def getlyr():
             os.popen(f'tts{mut}-l {args.oryginalang} -s "{o1}"')
     if language != None and language.lower() != "braill" and language.lower() != "enchant" and language.lower() != "illuminati" and language.lower() != "morse" and language.lower() != "spc":
         print("")
-        if args.decorator == True:
+        if decorator == True:
             print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37m{language.title()}\033[0m\033[38;2;166;227;161m\033[0m')
         t1 = os.popen(f"tpl -l {language} -s " + '"' + o1 + '"').read()
         print(t1)
@@ -162,7 +167,7 @@ def getlyr():
             os.popen(f'tts{mut}-l {args.oryginalang} -s "{o1}"')
     if language != None and language.lower() == "braill":
         print("")
-        if args.decorator == True:
+        if decorator == True:
             print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mBraill\033[0m\033[38;2;166;227;161m\033[0m')
         b1 = o1.replace("'","")
         print(os.popen(f"braill -s '{b1}'").read())
@@ -174,7 +179,7 @@ def getlyr():
             print(os.popen(f"echo \033[2A & braill -s '{b2}'").read())
     if language != None and language.lower() == "enchant":
         print("")
-        if args.decorator == True:
+        if decorator == True:
             print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mEnchanting Table\033[0m\033[38;2;166;227;161m\033[0m')
         b1 = o1.replace("'","¾")
         print(os.popen(f"enchant -s '{b1}'").read().replace("¾","'"))
@@ -186,7 +191,7 @@ def getlyr():
             print(os.popen(f"echo \033[2A & enchant -s '{b2}'").read().replace("¾","'"))
     if language != None and language.lower() == "illuminati":
         print("")
-        if args.decorator == True:
+        if decorator == True:
             print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mIlluminaci\033[0m\033[38;2;166;227;161m\033[0m')
         b1 = o1.replace("'","¾")
         print(os.popen(f"illuminati -s '{b1}'").read().replace("¾","'"))
@@ -198,7 +203,7 @@ def getlyr():
             print(os.popen(f"echo \033[2A & illuminati -s '{b2}'").read().replace("¾","'"))
     if language != None and language.lower() == "morse":
         print("")
-        if args.decorator == True:
+        if decorator == True:
             print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mMorsy\033[0m\033[38;2;166;227;161m\033[0m')
         b1 = o1.replace("'","")
         print(os.popen(f"morse -s '{b1}'").read())
@@ -210,7 +215,7 @@ def getlyr():
             print(os.popen(f"echo \033[2A & morse -s '{b2}'").read().replace("¾","'"))
     if language != None and language.lower() == "spc":
         print("")
-        if args.decorator == True:
+        if decorator == True:
             print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mSpc\033[0m\033[38;2;166;227;161m\033[0m')
         b1 = o1.replace("'","¾")
         print(os.popen(f"spc -s '{b1}'").read().replace("¾","'0"))
@@ -222,7 +227,7 @@ def getlyr():
             print(os.popen(f"echo \033[2A & spc -s '{b2}'").read().replace("¾","'0"))
 while args.cont:
     getlyr()
-    a=input()
+    a=input().lower()
     count = 0
     a=a.split(" ")
     if any(i in ["exit",":q","q"] for i in a):
@@ -247,9 +252,19 @@ while args.cont:
             totalrandom = False
         else:
             totalrandom = True
+    if any(i in ["r", "random", "-r", "--random"]for i in a):
+        if randomfas == True:
+            randomfas = False 
+        else: 
+            randomfas = True  
+    if any(i in ["d", "decorator", "-d", "--decorator"]for i in a):
+        if decorator == True:
+            decorator = False 
+        else: 
+            decorator = True  
     for i in a:
         if i in ["f","file","-f","--file"]:
-            if a[a.index(i)+1] == 'None':
+            if a[a.index(i)+1] == 'none':
                 forcef = None
                 args.file = None
             elif a[a.index(i)+1].count('"') == 2:
