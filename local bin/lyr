@@ -7,6 +7,7 @@ parser.add_argument("-p", "--path", help="Specyfy path", nargs="*")
 parser.add_argument("-ol", "--oryginalang", help="Specyfy oryginal file language", default="en")
 parser.add_argument("-ls", "--list", help="List files", action=argparse.BooleanOptionalAction)
 parser.add_argument("-v", "--voice", help="Hear output", action=argparse.BooleanOptionalAction)
+parser.add_argument("-m", "--mute", help="Mute music", action=argparse.BooleanOptionalAction)
 parser.add_argument("-tv", "--tvoice", help="Hear translated output", action=argparse.BooleanOptionalAction)
 parser.add_argument("-fl", "--fallbacklang", help="Fallback language to voice")
 parser.add_argument("-r", "--random", help="2 line is randomized", action=argparse.BooleanOptionalAction)
@@ -82,20 +83,23 @@ def getlyr():
                 next = random.randrange(len(lin2))
             susy=lin2[next]
     o1 = sas.strip('\n').replace('"', '')
+    mut = ' '
+    if args.mute != None:
+        mut = ' -m '
     if next < len(lin) and not args.totalrandom:
         print(lin[next].strip('\n'))
         o2 = lin[next].strip('\n').replace('"', '')
         if args.voice and not args.tvoice:
-            os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}"')
+            os.popen(f'tts{mut}-l {args.oryginalang} -s "{o1}" && tts{mut}-l {args.oryginalang} -s "{o2}"')
     elif args.voice and not args.tvoice and not args.totalrandom:
-            os.popen(f'tts -m -l {args.oryginalang} -s "{o1}"')
+            os.popen(f'tts{mut}-l {args.oryginalang} -s "{o1}"')
     if args.totalrandom and next < len(lin2):
         print(susy.strip('\n'))
         o2 = susy.strip('\n').replace('"', '')
         if args.voice and not args.tvoice:
-            os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}"')
+            os.popen(f'tts{mut}-l {args.oryginalang} -s "{o1}" && tts{mut}-l {args.oryginalang} -s "{o2}"')
     elif args.voice and not args.tvoice and args.totalrandom:
-            os.popen(f'tts -m -l {args.oryginalang} -s "{o1}"')
+            os.popen(f'tts{mut}-l {args.oryginalang} -s "{o1}"')
     if args.language != None and args.language.lower() != "braill" and args.language.lower() != "enchant" and args.language.lower() != "illuminati" and args.language.lower() != "morse" and args.language.lower() != "spc":
         print("")
         if args.decorator == True:
@@ -112,35 +116,35 @@ def getlyr():
             print(t2)
             print("\033[2A")
             if args.tvoice and not args.voice:
-                os.popen(f'tts -m -l {lang} -s "{t1}" && tts -m -l {lang} -s "{t2}"')
+                os.popen(f'tts{mut}-l {lang} -s "{t1}" && tts{mut}-l {lang} -s "{t2}"')
         elif args.tvoice and not args.voice and not args.totalrandom:
-            os.popen(f'tts -m -l {lang} -s "{t1}"')
+            os.popen(f'tts{mut}-l {lang} -s "{t1}"')
         if args.totalrandom and next < len(lin2):
             t2 = os.popen(f"tpl -l {args.language} -s " + '"' + o2 + '"').read()
             print(t2)
             print("\033[2A")
             if args.tvoice and not args.voice:
-                os.popen(f'tts -m -l {lang} -s "{t1}" && tts -m -l {lang} -s "{t2}"')
+                os.popen(f'tts{mut}-l {lang} -s "{t1}" && tts{mut}-l {lang} -s "{t2}"')
         elif args.tvoice and not args.voice and args.totalrandom:
-            os.popen(f'tts -m -l {lang} -s "{t1}"')
+            os.popen(f'tts{mut}-l {lang} -s "{t1}"')
     if args.voice and args.tvoice and args.language != None:
         if next < len(lin) and not args.totalrandom:
-            os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}" && tts -m -l {lang} -s "{t1}" && tts -m -l {lang} -s "{t2}"')
+            os.popen(f'tts{mut}-l {args.oryginalang} -s "{o1}" && tts{mut}-l {args.oryginalang} -s "{o2}" && tts{mut}-l {lang} -s "{t1}" && tts{mut}-l {lang} -s "{t2}"')
         elif not args.totalrandom:
-            os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {lang} -s "{t1}""')
+            os.popen(f'tts{mut}-l {args.oryginalang} -s "{o1}" && tts{mut}-l {lang} -s "{t1}""')
         if args.totalrandom and next < len(lin2):
-            os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}" && tts -m -l {lang} -s "{t1}" && tts -m -l {lang} -s "{t2}"')
+            os.popen(f'tts{mut}-l {args.oryginalang} -s "{o1}" && tts{mut}-l {args.oryginalang} -s "{o2}" && tts{mut}-l {lang} -s "{t1}" && tts{mut}-l {lang} -s "{t2}"')
         elif args.totalrandom:
-            os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {lang} -s "{t1}""')
+            os.popen(f'tts{mut}-l {args.oryginalang} -s "{o1}" && tts{mut}-l {lang} -s "{t1}""')
     elif args.voice and args.tvoice and args.language == None:
         if next < len(lin) and not args.totalrandom:
-            os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}"')
+            os.popen(f'tts{mut}-l {args.oryginalang} -s "{o1}" && tts{mut}-l {args.oryginalang} -s "{o2}"')
         elif not args.totalrandom:
-            os.popen(f'tts -m -l {args.oryginalang} -s "{o1}"')
+            os.popen(f'tts{mut}-l {args.oryginalang} -s "{o1}"')
         if args.totalrandom and next < len(lin2):
-            os.popen(f'tts -m -l {args.oryginalang} -s "{o1}" && tts -m -l {args.oryginalang} -s "{o2}"')
+            os.popen(f'tts{mut}-l {args.oryginalang} -s "{o1}" && tts{mut}-l {args.oryginalang} -s "{o2}"')
         elif args.totalrandom:
-            os.popen(f'tts -m -l {args.oryginalang} -s "{o1}"')
+            os.popen(f'tts{mut}-l {args.oryginalang} -s "{o1}"')
     if args.language != None and args.language.lower() == "braill":
         print("")
         if args.decorator == True:

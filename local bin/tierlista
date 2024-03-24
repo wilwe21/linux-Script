@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import os, argparse
+import os, subprocess, argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("-f", "--file", help="Define file")
 args = parser.parse_args()
@@ -8,7 +8,8 @@ def read_items(file_path):
         items = [line.strip() for line in file]
     return items
 if args.file == None:
-    file = str(input('jaki plik wariacie: '))
+    file = str(subprocess.check_output(["zenity", "--file-selection"]))
+    file = file.strip("b'").strip("\\n'")
 else:
     file = args.file
 print("\033c")
@@ -35,6 +36,8 @@ print ("\033[31m—————————————————————�
 for i in items:
     print (i)
     x = str(input('Tier: '))
+    if x in ['exit',':q']:
+        break
     if x.lower() == 's':
         s = s + ' ' + i + " |"
     if x.lower() == 'a':
