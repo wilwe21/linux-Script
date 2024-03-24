@@ -1,0 +1,37 @@
+#!/usr/bin/env python3
+import os, argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("-b", "--alien", help="From alien?", action=argparse.BooleanOptionalAction)
+parser.add_argument("-s", "--single", help="single", nargs="*")
+args = parser.parse_args()
+alien = {"a": "𖹖","b": "𖹽","c": "🝑","d": "𝍴","e": "𝋐","f": "𝈨","g": "𖭄","h": "𖮈","i": "𖩎","j": "𒿙","k": "𒿨","l": "𑼣","m": "𑴄","n": "𑴅","o": "𑴫","p": "𑫬","q": "𑫴","r": "𑪺","s": "𑨕","t": "𑦫","u": "𑧐","v": "𑢷","w": "𑣭","x": "𑀫","y": "𑀵","z": "𑁞","0":"𐅀","1":"𐄇","2":"𐄊","3":"ꮠ","4":"ꭕ","5":"ꫴ","6":"꩔","7":"꧲","8":"ꧭ","9":"ꤰ"}
+normal = {"𖹖":"a","𖹽":"b","🝑":"c","𝍴":"d","𝋐":"e","𝈨":"f","𖭄":"g","𖮈":"h","𖩎":"i","𒿙":"j","𒿨":"k","𑼣":"l","𑴄":"m","𑴅":"n","𑴫":"o","𑫬":"p","𑫴":"q","𑪺":"r","𑨕":"s","𑦫":"t","𑧐":"u","𑢷":"v","𑣭":"w","𑀫":"x","𑀵":"y","𑁞":"z","𐅀":"0","𐄇":"1","𐄊":"2","ꮠ":"3","ꭕ":"4","ꫴ":"5","꩔":"6","꧲":"7","ꧭ":"8","ꤰ":"9"}
+
+while not args.alien and args.single == None:
+    print("\033[38;2;203;166;247m\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37mYou\033[0m\033[38;2;203;166;247m\033[0m")
+    a = input().replace('"', '').lower()
+    if a in ["exit",":q"]:
+        break
+    print("")
+    print("\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mAlien\033[0m\033[38;2;166;227;161m\033[0m")
+    print(''.join(alien.get(ch,ch) for ch in a))
+    print("")
+    print("\033[91;1m———————————————————————\033[0m")
+    print("")
+while args.alien and args.single == None:
+    print("\033[38;2;203;166;247m\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37mYou\033[0m\033[38;2;203;166;247m\033[0m")
+    a = input().replace('"', '').lower()
+    if a in ["exit",":q"]:
+        break
+    print("")
+    print("\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mAlien\033[0m\033[38;2;166;227;161m\033[0m")
+    print(''.join(normal.get(ch,ch) for ch in a))
+    print("")
+    print("\033[91;1m———————————————————————\033[0m")
+    print("")
+if args.single != None:
+    if not args.alien:
+        print(''.join(alien.get(ch,ch) for ch in ' '.join(args.single).lower()))
+    elif args.alien:
+        a = ' '.join(args.single).lower()
+        print(''.join(normal.get(ch,ch) for ch in a))
