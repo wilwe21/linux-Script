@@ -19,6 +19,8 @@ mut = ' '
 totalrandom = False
 voice = False
 tvoice = False
+language = None
+forcef = None
 if args.mute != None:
     mut = ' -m '
 if args.voice != None:
@@ -27,6 +29,8 @@ if  args.tvoice != None:
     tvoice = True
 if args.totalrandom != None:
     totalrandom = True
+if args.language != None:
+    language = language
 def getlyr():
     sus=1
     path = '/home/wilwe/Dokumenty/oryginał/Lyrics'
@@ -47,9 +51,11 @@ def getlyr():
     while os.path.isdir(f"{path}/{file}"):
         file = lis[random.randrange(len(lis))]
         file = file.strip('\n')
-    if args.file != None:
+    if args.file !=None:
         file = ' '.join(args.file)
         file = file.lower()
+    if forcef != None:
+        file = forcef.lower()
     if args.decorator == True:
         print(f'\033[38;2;203;166;247m\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37m{file.title()}\033[0m\033[38;2;203;166;247m\033[0m')
     namel = "\033["+ str(len(file)+2) + "C"
@@ -109,19 +115,19 @@ def getlyr():
             os.popen(f'tts{mut}-l {args.oryginalang} -s "{o1}" && tts{mut}-l {args.oryginalang} -s "{o2}"')
     elif voice and not tvoice and totalrandom:
             os.popen(f'tts{mut}-l {args.oryginalang} -s "{o1}"')
-    if args.language != None and args.language.lower() != "braill" and args.language.lower() != "enchant" and args.language.lower() != "illuminati" and args.language.lower() != "morse" and args.language.lower() != "spc":
+    if language != None and language.lower() != "braill" and language.lower() != "enchant" and language.lower() != "illuminati" and language.lower() != "morse" and language.lower() != "spc":
         print("")
         if args.decorator == True:
-            print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37m{args.language.title()}\033[0m\033[38;2;166;227;161m\033[0m')
-        t1 = os.popen(f"tpl -l {args.language} -s " + '"' + o1 + '"').read()
+            print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37m{language.title()}\033[0m\033[38;2;166;227;161m\033[0m')
+        t1 = os.popen(f"tpl -l {language} -s " + '"' + o1 + '"').read()
         print(t1)
         print("\033[3A")
         if args.fallbacklang != None:
             lang=args.fallbacklang
         else:
-            lang=args.language
+            lang=language
         if next < len(lin) and not totalrandom:
-            t2 = os.popen(f"tpl -l {args.language} -s " + '"' + o2 + '"').read()
+            t2 = os.popen(f"tpl -l {language} -s " + '"' + o2 + '"').read()
             print(t2)
             print("\033[2A")
             if tvoice and not voice:
@@ -129,14 +135,14 @@ def getlyr():
         elif tvoice and not voice and not totalrandom:
             os.popen(f'tts{mut}-l {lang} -s "{t1}"')
         if totalrandom and next < len(lin2):
-            t2 = os.popen(f"tpl -l {args.language} -s " + '"' + o2 + '"').read()
+            t2 = os.popen(f"tpl -l {language} -s " + '"' + o2 + '"').read()
             print(t2)
             print("\033[2A")
             if tvoice and not voice:
                 os.popen(f'tts{mut}-l {lang} -s "{t1}" && tts{mut}-l {lang} -s "{t2}"')
         elif tvoice and not voice and totalrandom:
             os.popen(f'tts{mut}-l {lang} -s "{t1}"')
-    if voice and tvoice and args.language != None:
+    if voice and tvoice and language != None:
         if next < len(lin) and not totalrandom:
             os.popen(f'tts{mut}-l {args.oryginalang} -s "{o1}" && tts{mut}-l {args.oryginalang} -s "{o2}" && tts{mut}-l {lang} -s "{t1}" && tts{mut}-l {lang} -s "{t2}"')
         elif not totalrandom:
@@ -145,7 +151,7 @@ def getlyr():
             os.popen(f'tts{mut}-l {args.oryginalang} -s "{o1}" && tts{mut}-l {args.oryginalang} -s "{o2}" && tts{mut}-l {lang} -s "{t1}" && tts{mut}-l {lang} -s "{t2}"')
         elif totalrandom:
             os.popen(f'tts{mut}-l {args.oryginalang} -s "{o1}" && tts{mut}-l {lang} -s "{t1}""')
-    elif voice and tvoice and args.language == None:
+    elif voice and tvoice and language == None:
         if next < len(lin) and not totalrandom:
             os.popen(f'tts{mut}-l {args.oryginalang} -s "{o1}" && tts{mut}-l {args.oryginalang} -s "{o2}"')
         elif not totalrandom:
@@ -154,7 +160,7 @@ def getlyr():
             os.popen(f'tts{mut}-l {args.oryginalang} -s "{o1}" && tts{mut}-l {args.oryginalang} -s "{o2}"')
         elif totalrandom:
             os.popen(f'tts{mut}-l {args.oryginalang} -s "{o1}"')
-    if args.language != None and args.language.lower() == "braill":
+    if language != None and language.lower() == "braill":
         print("")
         if args.decorator == True:
             print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mBraill\033[0m\033[38;2;166;227;161m\033[0m')
@@ -166,7 +172,7 @@ def getlyr():
         if totalrandom and next < len(lin2):
             b2 = o2.replace("'","")
             print(os.popen(f"echo \033[2A & braill -s '{b2}'").read())
-    if args.language != None and args.language.lower() == "enchant":
+    if language != None and language.lower() == "enchant":
         print("")
         if args.decorator == True:
             print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mEnchanting Table\033[0m\033[38;2;166;227;161m\033[0m')
@@ -178,7 +184,7 @@ def getlyr():
         if totalrandom and next < len(lin2):
             b2 = o2.replace("'","")
             print(os.popen(f"echo \033[2A & enchant -s '{b2}'").read().replace("¾","'"))
-    if args.language != None and args.language.lower() == "illuminati":
+    if language != None and language.lower() == "illuminati":
         print("")
         if args.decorator == True:
             print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mIlluminaci\033[0m\033[38;2;166;227;161m\033[0m')
@@ -190,7 +196,7 @@ def getlyr():
         if totalrandom and next < len(lin2):
             b2 = o2.replace("'","¾")
             print(os.popen(f"echo \033[2A & illuminati -s '{b2}'").read().replace("¾","'"))
-    if args.language != None and args.language.lower() == "morse":
+    if language != None and language.lower() == "morse":
         print("")
         if args.decorator == True:
             print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mMorsy\033[0m\033[38;2;166;227;161m\033[0m')
@@ -202,7 +208,7 @@ def getlyr():
         if totalrandom and next < len(lin2):
             b2 = o2.replace("'","¾")
             print(os.popen(f"echo \033[2A & morse -s '{b2}'").read().replace("¾","'"))
-    if args.language != None and args.language.lower() == "spc":
+    if language != None and language.lower() == "spc":
         print("")
         if args.decorator == True:
             print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mSpc\033[0m\033[38;2;166;227;161m\033[0m')
@@ -217,27 +223,51 @@ def getlyr():
 while args.cont:
     getlyr()
     a=input()
-    if a in ["exit",":q","q"]:
+    count = 0
+    a=a.split(" ")
+    if any(i in ["exit",":q","q"] for i in a):
         break
-    if a in ["v", "voice", "-v", "--voice"]:
+    if any(i in ["v", "voice", "-v", "--voice"]for i in a):
         if voice == True:
             voice = False
         else:
             voice = True
-    if a in ["tv", "tvoice", "-tv", "--tvoice"]:
+    if any(i in ["tv", "tvoice", "-tv", "--tvoice"]for i in a):
         if tvoice == True:
             tvoice = False
         else:
             tvoice = True
-    if a in ["m", "mute", "-m", "--mute"]:
+    if any(i in ["m", "mute", "-m", "--mute"]for i in a):
         if mut == ' ':
             mut = ' -m '
         else:
             mut = ' '
-    if a in ["tr", "totalrandom", "-tr", "--totalrandom"]:
+    if any(i in ["tr", "totalrandom", "-tr", "--totalrandom"]for i in a):
         if totalrandom == True:
             totalrandom = False
         else:
             totalrandom = True
+    for i in a:
+        if i in ["f","file","-f","--file"]:
+            if a[a.index(i)+1] == 'None':
+                forcef = None
+                args.file = None
+            elif a[a.index(i)+1].count('"') == 2:
+                forcef = a[a.index(i)+1].replace('"','')
+            else:
+                for l in range(len(a)-a.index(i)-1):
+                    if '"' in a[a.index(i)+l+1]:
+                        count += 1
+                        if count == 2:
+                            last = l+1
+                            break
+                forcef = ' '.join(a[a.index(i)+1:a.index(i)+last+1])
+                forcef = forcef.replace('"','')
+    for i in a:
+        if i in ['l','language','-l','--language']:
+            if a[a.index(i)+1] == 'None':
+                language = None
+            else:
+                language = a[a.index(i)+1]
 if args.cont == None:
     getlyr()
