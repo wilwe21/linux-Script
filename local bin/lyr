@@ -23,6 +23,7 @@ language = None
 forcef = None
 decorator = True
 randomfas = None
+lista = False
 if args.mute != None:
     mut = ' -m '
 if args.voice != None:
@@ -37,13 +38,15 @@ if args.decorator != True:
     decorator = False
 if args.random != None:
     randomfas = True
+if args.list != None:
+    lista = args.list
 def getlyr():
     sus=1
     path = '/home/wilwe/Dokumenty/oryginał/Lyrics'
     if args.path != None:
         path = args.path
     lis = os.popen('ls ' + path).readlines()
-    if args.list:
+    if lista == True:
         if args.path != None:
             print(f"Path {path}")
         else:
@@ -51,7 +54,7 @@ def getlyr():
         lis = list(map(str.strip, lis))
         print(' | '.join(lis).title())
         print(f"There's {len(lis)} files")
-        sys.exit()
+        return None
     file = lis[random.randrange(len(lis))].strip('\n')
     while os.path.isdir(f"{path}/{file}"):
         file = lis[random.randrange(len(lis))]
@@ -227,6 +230,7 @@ def getlyr():
             print(os.popen(f"echo \033[2A & spc -s '{b2}'").read().replace("¾","'0"))
 while args.cont:
     getlyr()
+    lista = False
     a=input().lower()
     count = 0
     a=a.split(" ")
@@ -262,6 +266,8 @@ while args.cont:
             decorator = False 
         else: 
             decorator = True  
+    if any(i in ["ls", "list", "-ls", "--list"]for i in a):
+        lista = True
     for i in a:
         if i in ["f","file","-f","--file"]:
             if a[a.index(i)+1] == 'none':
