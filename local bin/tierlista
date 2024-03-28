@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
-import os, subprocess, argparse
+import os, subprocess, argparse, random
 parser = argparse.ArgumentParser()
 parser.add_argument("-f", "--file", help="Define file")
+parser.add_argument("-t", "--tiers", help="Define Tiers", nargs="*")
 args = parser.parse_args()
+colors = ["\033[48;2;243;139;168;30m","\033[48;2;250;179;135;30m","\033[48;2;249;226;175;30m","\033[48;2;166;227;161;30m","\033[48;2;148;226;213;30m","\033[48;2;137;180;250;30m"]
 def read_items(file_path):
     with open(file_path, 'r') as file:
         items = [line.strip() for line in file]
     return items
+if args.tiers != None:
+    tiers = [f"{colors[random.randrange(len(colors))] if args.tiers.index(i) >= len(colors) else colors[args.tiers.index(i)]}| {i} |\033[0m" for i in args.tiers]
+else:
+    tiers = ["\033[48;2;243;139;168;30m| S |\033[0m","\033[48;2;250;179;135;30m| A |\033[0m","\033[48;2;249;226;175;30m| B |\033[0m","\033[48;2;166;227;161;30m| C |\033[0m","\033[48;2;148;226;213;30m| D |\033[0m","\033[48;2;137;180;250;30m| F |\033[0m"]
 if args.file == None:
     file = str(subprocess.check_output(["zenity", "--file-selection"]))
     file = file.strip("b'").strip("\\n'")
@@ -14,53 +20,46 @@ else:
     file = args.file
 print("\033c")
 items = read_items(file)
-s = '\033[101m| S |\033[0m'
-a = '\033[41m| A |\033[0m'
-b = '\033[43;90m| B |\033[0m'
-c = '\033[103;90m| C |\033[0m'
-d = '\033[42m| D |\033[0m'
-f = '\033[102;90m| F |\033[0m'
-print ("\033[31m—————————————————————————————————————————————\033[0m")
-print (s)
-print ("\033[31m—————————————————————————————————————————————\033[0m")
-print (a)
-print ("\033[31m—————————————————————————————————————————————\033[0m")
-print (b)
-print ("\033[31m—————————————————————————————————————————————\033[0m")
-print (c)
-print ("\033[31m—————————————————————————————————————————————\033[0m")
-print (d)
-print ("\033[31m—————————————————————————————————————————————\033[0m")
-print (f)
+for tier in range(len(tiers)):
+    print ("\033[31m—————————————————————————————————————————————\033[0m")
+    print(tiers[tier])
 print ("\033[31m—————————————————————————————————————————————\033[0m")
 for i in items:
     print (i)
     x = str(input('Tier: '))
     if x in ['exit',':q']:
         break
-    if x.lower() == 's':
-        s = s + ' ' + i + " |"
-    if x.lower() == 'a':
-        a = a + ' ' + i + " |"
-    if x.lower() == 'b':
-        b = b + ' ' + i + " |"
-    if x.lower() == 'c':
-        c = c + ' ' + i + " |"
-    if x.lower() == 'd':
-        d = d + ' ' + i + " |"
-    if x.lower() == 'f':
-        f = f + ' ' + i + " |"
     print("\033c")
-    print ("\033[31m—————————————————————————————————————————————\033[0m")
-    print (s)
-    print ("\033[31m—————————————————————————————————————————————\033[0m")
-    print (a)
-    print ("\033[31m—————————————————————————————————————————————\033[0m")
-    print (b)
-    print ("\033[31m—————————————————————————————————————————————\033[0m")
-    print (c)
-    print ("\033[31m—————————————————————————————————————————————\033[0m")
-    print (d)
-    print ("\033[31m—————————————————————————————————————————————\033[0m")
-    print (f)
-    print ("\033[31m—————————————————————————————————————————————\033[0m")
+    if args.tiers != None:
+        for tier in range(len(args.tiers)):
+            if x.lower() == args.tiers[tier].lower():
+                tiers[tier] += f" {i} |"
+            print ("\033[31m—————————————————————————————————————————————\033[0m")
+            print(tiers[tier])
+        print ("\033[31m—————————————————————————————————————————————\033[0m")
+    else:
+        if x.lower() == 's':
+            tiers[0] += f" {i} |"
+        if x.lower() == 'a':
+            tiers[1] += f" {i} |"
+        if x.lower() == 'b':
+            tiers[2] += f" {i} |"
+        if x.lower() == 'c':
+            tiers[3] += f" {i} |"
+        if x.lower() == 'd':
+            tiers[4] += f" {i} |"
+        if x.lower() == 'f':
+            tiers[5] += f" {i} |"
+        print ("\033[31m—————————————————————————————————————————————\033[0m")
+        print (tiers[0])
+        print ("\033[31m—————————————————————————————————————————————\033[0m")
+        print (tiers[1])
+        print ("\033[31m—————————————————————————————————————————————\033[0m")
+        print (tiers[2])
+        print ("\033[31m—————————————————————————————————————————————\033[0m")
+        print (tiers[3])
+        print ("\033[31m—————————————————————————————————————————————\033[0m")
+        print (tiers[4])
+        print ("\033[31m—————————————————————————————————————————————\033[0m")
+        print (tiers[5])
+        print ("\033[31m—————————————————————————————————————————————\033[0m")
