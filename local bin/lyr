@@ -24,6 +24,7 @@ forcef = None
 decorator = True
 randomfas = None
 lista = False
+pathf = None
 if args.mute != None:
     mut = ' -m '
 if args.voice != None:
@@ -40,14 +41,16 @@ if args.random != None:
     randomfas = True
 if args.list != None:
     lista = args.list
+if args.path != None:
+    pathf = args.path
 def getlyr():
     sus=1
     path = '/home/wilwe/Dokumenty/oryginał/Lyrics'
-    if args.path != None:
-        path = args.path
+    if pathf != None:
+        path = pathf
     lis = os.popen('ls ' + path).readlines()
     if lista == True:
-        if args.path != None:
+        if pathf != None:
             print(f"Path {path}")
         else:
             print(f"Default Path {path}")
@@ -231,9 +234,11 @@ def getlyr():
 while args.cont:
     getlyr()
     lista = False
-    a=input().lower()
+    b=input()
+    a = b.lower()
     count = 0
-    a=a.split(" ")
+    a = b.split(" ")
+    b = b.split(" ")
     if any(i in ["exit",":q","q"] for i in a):
         break
     if any(i in ["v", "voice", "-v", "--voice"]for i in a):
@@ -265,10 +270,27 @@ while args.cont:
         if decorator == True:
             decorator = False 
         else: 
-            decorator = True  
-    if any(i in ["ls", "list", "-ls", "--list"]for i in a):
-        lista = True
+            decorator = True 
     for i in a:
+        if i in ["p", "path", "-p", "--path"]:
+            if b[b.index(i)+1] == 'none':
+                pathf = None
+                args.path = None
+            elif b[b.index(i)+1].count('"') == 2:
+                pathf = b[b.index(i)+1].replace('"','')
+            elif '"' in b[b.index(i)+1]:
+                for l in range(len(b)-b.index(i)-1):
+                    if '"' in b[b.index(i)+l+1]:
+                        count += 1
+                        if count == 2:
+                            last = l+1
+                            break
+                pathf = ' '.join(b[b.index(i)+1:b.index(i)+last+1])
+                pathf = forcef.replace('"','')
+            else:
+                pathf = b[b.index(i)+1]
+        last = 0
+        count = 0
         if i in ["f","file","-f","--file"]:
             if a[a.index(i)+1] == 'none':
                 forcef = None
@@ -286,6 +308,8 @@ while args.cont:
                 forcef = forcef.replace('"','')
             else:
                 forcef = a[a.index(i)+1]
+    if any(i in ["ls", "list", "-ls", "--list"]for i in a):
+        lista = True
     for i in a:
         if i in ['l','language','-l','--language']:
             if a[a.index(i)+1] == 'none':
