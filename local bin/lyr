@@ -25,6 +25,7 @@ decorator = True
 randomfas = None
 lista = False
 pathf = None
+stop = None
 if args.mute != None:
     mut = ' -m '
 if args.voice != None:
@@ -44,7 +45,7 @@ if args.list != None:
 if args.path != None:
     pathf = args.path
 def getlyr():
-    global path, file
+    global path, file, o1, o2, t1, t2
     sus=1
     path = '/home/wilwe/Dokumenty/oryginał/Lyrics'
     if pathf != None:
@@ -237,7 +238,10 @@ def getlyr():
             b2 = o2.replace("'","")
             print(os.popen(f"echo \033[2A & spc -s '{b2}'").read().replace("¾","'0"))
 while args.cont:
-    getlyr()
+    if stop == None:
+        getlyr()
+    else:
+        stop = None
     lista = False
     b=input()
     a = b.lower()
@@ -277,7 +281,23 @@ while args.cont:
         else: 
             decorator = True 
     if any(i == "open"for i in a):
+        stop = True
         os.system(f'vim "{path}/{file}"')
+    if any(i in ["s", "stop", "-s","--stop"]for i in a):
+        if stop == None:
+            stop = True
+            if voice == True:
+                try:
+                    os.popen(f'tts{mut}-l {args.oryginalang} -s "{o1}" && tts{mut}-l {args.oryginalang} -s "{o2}"')
+                except:
+                    os.popen(f'tts{mut}-l {args.oryginalang} -s "{o1}"')
+            if tvoice == True:
+                try:
+                    os.popen(f'tts{mut}-l {language} -s "{t1}" && tts{mut}-l {language} -s "{t2}"')
+                except:
+                    os.popen(f'tts{mut}-l {language} -s "{t1}"')
+        else:
+            stop = None
     for i in a:
         if i in ["p", "path", "-p", "--path"]:
             if b[b.index(i)+1] == 'none':
