@@ -44,6 +44,7 @@ if args.list != None:
 if args.path != None:
     pathf = args.path
 def getlyr():
+    global path, file
     sus=1
     path = '/home/wilwe/Dokumenty/oryginał/Lyrics'
     if pathf != None:
@@ -275,6 +276,8 @@ while args.cont:
             decorator = False 
         else: 
             decorator = True 
+    if any(i == "open"for i in a):
+        os.system(f'vim "{path}/{file}"')
     for i in a:
         if i in ["p", "path", "-p", "--path"]:
             if b[b.index(i)+1] == 'none':
