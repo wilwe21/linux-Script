@@ -70,11 +70,15 @@ def getlyr():
     if decorator == True:
         print(f'\033[38;2;203;166;247m\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37m{file.title()}\033[0m\033[38;2;203;166;247m\033[0m')
     namel = "\033["+ str(len(file)+2) + "C"
-    if open(f"{path}/{file}").readline() == '':
-        if not totalrandom:
-            sys.exit()
-        else:
-            sus=0
+    try:
+        if open(f"{path}/{file}").readline() == '':
+            if not totalrandom:
+                sys.exit()
+            else:
+                sus=0
+    except:
+        print("ups random file picker pick wrong file of smth")
+        return
     lin = open(f"{path}/{file}").readlines()
     if sus != 0:
         line = random.randrange(len(lin))
