@@ -79,7 +79,10 @@ def main():
         print("you:"+handc)
         print(player.value)
         print(f"hit/stand {str(W)}/{str(L)}")
-        a = input("").lower()
+        try:
+            a = input("").lower()
+        except:
+            break
         match a:
             case "hit":
                 player.get_card()
@@ -133,7 +136,10 @@ def main():
 main()
 while run:
     print("Play Again?")
-    g = input("")
+    try:
+        g = input("")
+    except:
+        break
     if g in yes:
         main()
     else:

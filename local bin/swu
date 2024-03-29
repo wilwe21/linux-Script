@@ -67,7 +67,10 @@ class Character:
         print(f"{enemy.name}: Weapon {enemy.weapon.name}") 
         print(f"Health {enemy.dhealth} {enemy.health}/{enemy.max_health}")
         while True:
-            action = input("")
+            try:
+                action = input("")
+            except:
+                exit()
             if action == "atack":
                 self.atack(enemy)
                 enemy.Uhealth()
@@ -129,28 +132,43 @@ class Item:
 def CreateCharacter():
     global enemy, player
     print("\033cCharacter name:")
-    name = input("")
+    try:
+        name = input("")
+    except:
+        exit()
     print("\033cCharacter Health:")
     print("Max: 200")
-    health = input("")
+    try:
+        health = input("")
+    except:
+        exit()
     while True:
         try:
             int(health)
             if int(health) > 200:
                 print("\033cCharacter Health:")
                 print("Value must be a number lower than max value: 200")
-                health = input("")
+                try:
+                    health = input("")
+                except:
+                    exit()
                 continue
             else:
                 break
         except ValueError:
             print("\033cCharacter Health:")
             print("Value must be a number lower than max value: 200")
-            health = input("")
+            try:
+                health = input("")
+            except:
+                exit()
     while True:
         print("\033cCharacter Weapon:")
         print("fist, ak47, gun, maczeta")
-        weap = input("")
+        try:
+            weap = input("")
+        except:
+            exit()
         if weap in weapons:
             player = Character(name, health, fist, health)
             player.equip(weap)
@@ -160,7 +178,10 @@ def CreateCharacter():
     while True:
         print("\033cSelect Dificulty:")
         print("easy medium hard maffiaboss")
-        dif = input("")
+        try:
+            dif = input("")
+        except:
+            exit()
         if dif in dificulty:
             match dif:
                 case "easy":

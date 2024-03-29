@@ -4,6 +4,7 @@ al = ["rock", "paper", "scissors"]
 pr = ["rock", "r", "kamień", "k"]
 pp = ["paper", "p", "papier"]
 ps = ["scissors", "s", "nożyce", "n"]
+ext = ['exit', ':q']
 a = 0
 x = 0
 p = 0
@@ -14,7 +15,10 @@ while 0 == 0:
     b = int(random.randrange(0,3))
     if si == 0:
         print("Rock Paper Scissors " + str(l) + "/" + str(p))
-        a = input()
+        try:
+            a = input()
+        except:
+            break
         match a.lower():
             case yt if yt in pr:
                 out = "rock"
@@ -22,7 +26,7 @@ while 0 == 0:
                 out = "paper"
             case yt if yt in ps:
                 out = "scissors"
-            case "exit":
+            case yt if yt in ext:
                 break
             case _:
                 print("\033c")
@@ -50,7 +54,10 @@ while 0 == 0:
         p = p +1
         print("\033[4ARock Paper Scissors " + str(l) + "/" + str(p) + "\033[4B")
     print("Continue?")
-    o = input("")
+    try:
+        o = input("")
+    except:
+        break
     if o.lower() in pr:
         out = "rock"
         si = 1

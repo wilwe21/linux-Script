@@ -3,12 +3,18 @@ import random
 import time
 cost = 25
 print("Input Balance")
-balance = int(input("")) - cost
+try:
+    balance = int(input("")) - cost
+except:
+    exit()
 if balance < 0:
     print("\033cBalance must be higher than " + str(cost))
     while balance < cost:
         print("\033cBalance must be higher than " + str(cost))
-        balance = int(input("")) - cost
+        try:
+            balance = int(input("")) - cost
+        except:
+            exit()
 symbols = ["\033[91m🐕️\033[0m", "\033[95m🐈️\033[0m", "\033[93m🐦️\033[0m", "\033[94m🕷️\033[0m", "\033[92m☘️\033[0m"]
 value = [5, 10, 20, 50, 100] 
 multi = 1
@@ -42,9 +48,12 @@ while 0 == 0:
         print("Losesr")
         break
     print("continue")
-    a = str(input(""))
+    try:
+        a = str(input(""))
+    except:
+        break
     match a:
-        case "exit":
+        case yt if yt in ["exit", ":q"]:
             break
         case "x2":
             balance = balance - cost*2

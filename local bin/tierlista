@@ -26,7 +26,10 @@ for tier in range(len(tiers)):
 print ("\033[31m—————————————————————————————————————————————\033[0m")
 for i in items:
     print (i)
-    x = str(input('Tier: '))
+    try:
+        x = str(input('Tier: '))
+    except:
+        exit()
     if x in ['exit',':q']:
         break
     print("\033c")

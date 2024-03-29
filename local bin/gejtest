@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 import os, subprocess, time
-a = str(subprocess.check_output(["zenity", "--forms", "--add-entry=Czy jesteś gejem?", "--add-entry=Czy masz dziewczyne?", "--add-entry=Czy jesteś sigmą?", "--add-entry=czy grasz w lola?", "&>", "/dev/null"]))
+try:
+    a = str(subprocess.check_output(["zenity", "--forms", "--add-entry=Czy jesteś gejem?", "--add-entry=Czy masz dziewczyne?", "--add-entry=Czy jesteś sigmą?", "--add-entry=czy grasz w lola?", "&>", "/dev/null"]))
+except:
+    print("Potrzebujesz linuxowego programu zenity (chuju)")
+    print("Albo wyszedłeś z ankiety (chuju)")
+    exit()
 a = a.strip("b'")
 a = a.strip("\\n'")
 a = a.split("|")

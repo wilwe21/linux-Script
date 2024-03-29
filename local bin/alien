@@ -9,7 +9,10 @@ normal = {"𖹖":"a","𖹽":"b","🝑":"c","𝍴":"d","𝋐":"e","𝈨":"f","�
 
 while not args.alien and args.single == None:
     print("\033[38;2;203;166;247m\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37mYou\033[0m\033[38;2;203;166;247m\033[0m")
-    a = input().replace('"', '').lower()
+    try:
+        a = input().replace('"', '').lower()
+    except:
+        break
     if a in ["exit",":q"]:
         break
     print("")
@@ -20,7 +23,10 @@ while not args.alien and args.single == None:
     print("")
 while args.alien and args.single == None:
     print("\033[38;2;203;166;247m\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37mYou\033[0m\033[38;2;203;166;247m\033[0m")
-    a = input().replace('"', '').lower()
+    try:
+        a = input().replace('"', '').lower()
+    except:
+        break
     if a in ["exit",":q"]:
         break
     print("")

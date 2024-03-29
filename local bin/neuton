@@ -4,6 +4,9 @@ import sys
 sys.set_int_max_str_digits(99999999)
 def wzór(n, k):
     return math.factorial(n)//((math.factorial(n-k))*math.factorial(k))
-n = int(input("n: "))
-k = int(input("k: "))
+try:
+    n = int(input("n: "))
+    k = int(input("k: "))
+except:
+    exit()
 print(int(wzór(n,k)))

@@ -250,7 +250,11 @@ while args.cont:
     else:
         stop = None
     lista = False
-    b=input()
+    try:
+        b=input()
+    except:
+        print("")
+        break
     a = b.lower()
     count = 0
     a = b.split(" ")

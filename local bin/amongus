@@ -174,7 +174,10 @@ def table():
     for s in players:
         print(f"{s.name} {s.dead}")
     print('Którego chuja wygłosować:')
-    a = input('')
+    try:
+        a = input('')
+    except:
+        exit()
     for t in players:
         if a == t.name:
             t.dead = '\033[91mX\033[0m'
@@ -222,7 +225,10 @@ dirs = ['left', 'right', 'up', 'down']
 while 0 == 0:
     print('\033cCo zrobić')
     print(f"you:{player.position} {bot1.name}:{bot1.position} {bot2.name}:{bot2.position} {bot3.name}:{bot3.position} {bot4.name}:{bot4.position}")
-    pinput = input('')
+    try:
+        pinput = input('')
+    except:
+        break
     if pinput in dirs:
         player.move(pinput)
     elif pinput == 'button':

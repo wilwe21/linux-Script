@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 import random
 print("\033c")
-yes = ['yes', 'y', 'tak', 't']
+yes = ['yes', 'y', 'tak', 't', '']
+end = ['no', 'n', ':q', 'nie']
 red = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]
 green = [0]
 black = [2,4,6,8,10,11,13,15,17,20,22,24,26,28,29,31,33,35]
@@ -34,59 +35,69 @@ def help():
 def cont():
     print("Continue?")
     global a
-    F = input("")
+    try:
+        F = input("")
+    except:
+        F = ":q"
     match F.lower():
+        case R if R in end:
+            print("")
         case R if R in yes:
-            get_value()
             main()
         case R if R in chujnia:
             a = F.lower()
             main()
 def get_value():
     global a
-    a = str(input("Na co obstawiasz: "))
+    try:
+        a = str(input("Na co obstawiasz: "))
+    except:
+        a = None
+        return a
     return a
 def main():
-	los = int(random.randrange(0,37))
-	match a.lower():
-	    case "odd" if los in odd:
-	        print("Wygrałeś")
-	    case "red" if los in red:
-	        print("Wygrałeś")
-	    case "black" if los in black:
-	        print("Wygrałeś")
-	    case "even" if los in even:
-	        print("Wygrałeś")
-	    case "st12" if los in st12:
-	        print("Wygrałeś")
-	    case "nd12" if los in nd12:
-	        print("Wygrałeś")
-	    case "rd12" if los in rd12:
-	        print("Wygrałeś")
-	    case "stline" if los in stLine:
-	        print("Wygrałeś")
-	    case "ndline" if los in ndLine:
-	        print("Wygrałeś")
-	    case "rdline" if los in rdLine:
-	        print("Wygrałeś")
-	    case "hi" if los in hi:
-	        print("Wygrałeś")
-	    case "low" if los in low:
-	        print("Wygrałeś")
-	    case chu if chu in str(los):
-	        print("Wygrałeś")
-	    case "help":
-	        help()
-	    case _:
-	        print("przegrałeś")
-	if a.lower() != "help":
-	    if los in red:
-	        print(f"Czerwony {str(los)}")
-	    if los in green:
-	        print(f"Zielony {str(los)}")
-	    if los in black:
-	        print(f"Czarny {str(los)}")
-	cont()
+    if a == None:
+        return
+    los = int(random.randrange(0,37))
+    match a.lower():
+        case "odd" if los in odd:
+            print("Wygrałeś")
+        case "red" if los in red:
+            print("Wygrałeś")
+        case "black" if los in black:
+            print("Wygrałeś")
+        case "even" if los in even:
+            print("Wygrałeś")
+        case "st12" if los in st12:
+            print("Wygrałeś")
+        case "nd12" if los in nd12:
+            print("Wygrałeś")
+        case "rd12" if los in rd12:
+            print("Wygrałeś")
+        case "stline" if los in stLine:
+            print("Wygrałeś")
+        case "ndline" if los in ndLine:
+            print("Wygrałeś")
+        case "rdline" if los in rdLine:
+            print("Wygrałeś")
+        case "hi" if los in hi:
+            print("Wygrałeś")
+        case "low" if los in low:
+            print("Wygrałeś")
+        case chu if chu in str(los):
+            print("Wygrałeś")
+        case "help":
+            help()
+        case _:
+            print("przegrałeś")
+    if a.lower() != "help":
+        if los in red:
+            print(f"Czerwony {str(los)}")
+        if los in green:
+            print(f"Zielony {str(los)}")
+        if los in black:
+            print(f"Czarny {str(los)}")
+    cont()
 	
 help()
 get_value()
