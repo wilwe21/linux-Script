@@ -67,7 +67,7 @@ while 0 == 0:
     elif o.lower() in ps:
         out = "scissors"
         si = 1
-    elif o.lower() == "exit":
+    elif o.lower() == ext:
         break
     else:
         si = 0
