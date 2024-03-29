@@ -80,7 +80,7 @@ def getlyr():
             else:
                 sus=0
     except:
-        print("ups random file picker pick wrong file of smth")
+        print("ups random file picker pick wrong file of smth idk")
         return
     lin = open(f"{path}/{file}").readlines()
     if sus != 0:
