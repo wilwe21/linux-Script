@@ -1,2 +1,4 @@
 #!/bin/bash
+playerctl pause
 spd-say -l fr -w "$(cat "$(echo $NAUTILUS_SCRIPT_SELECTED_FILE_PATHS)")"
+playerctl play

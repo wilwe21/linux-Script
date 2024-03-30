@@ -1,4 +1,6 @@
 #!/bin/bash
 x=$(echo $NAUTILUS_SCRIPT_SELECTED_FILE_PATHS)
 trans -t cs -j -o $HOME/Dokumenty/trans -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi -no-bidi -brief -no-autocorrect -i "$x"
+playerctl pause
 spd-say -l CS -w "$(cat $HOME/Dokumenty/trans)"
+playerctl play

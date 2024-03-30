@@ -1,0 +1,2 @@
+#!/bin/bash
+magick $NAUTILUS_SCRIPT_SELECTED_FILE_PATHS -resize 768x432 resized_file.png

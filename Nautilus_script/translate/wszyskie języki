@@ -6,4 +6,6 @@ do
 	trans -t $z -j -brief -o $HOME/Dokumenty/trans -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi -no-bidi -no-autocorrect -i "$HOME/Dokumenty/trans"
 done
 notify-send "koniec chuju" -a "Maso Tłumacz"
+playerctl pause
 spd-say -l PL -w "$(cat $HOME/Dokumenty/trans)"
+playerctl play

@@ -300,49 +300,62 @@ while args.cont:
         forcef = None
     for i in a:
         if i in ["p", "path", "-p", "--path"]:
-            if b[b.index(i)+1] == 'none':
+            try:
+                if b[b.index(i)+1] == 'none':
+                    pathf = None
+                    args.path = None
+                elif b[b.index(i)+1].count('"') == 2:
+                    pathf = b[b.index(i)+1].replace('"','')
+                elif '"' in b[b.index(i)+1]:
+                    for l in range(len(b)-b.index(i)-1):
+                        if '"' in b[b.index(i)+l+1]:
+                            count += 1
+                            if count == 2:
+                                last = l+1
+                                break
+                    pathf = ' '.join(b[b.index(i)+1:b.index(i)+last+1])
+                    pathf = forcef.replace('"','')
+                else:
+                    pathf = b[b.index(i)+1]
+            except:
                 pathf = None
                 args.path = None
-            elif b[b.index(i)+1].count('"') == 2:
-                pathf = b[b.index(i)+1].replace('"','')
-            elif '"' in b[b.index(i)+1]:
-                for l in range(len(b)-b.index(i)-1):
-                    if '"' in b[b.index(i)+l+1]:
-                        count += 1
-                        if count == 2:
-                            last = l+1
-                            break
-                pathf = ' '.join(b[b.index(i)+1:b.index(i)+last+1])
-                pathf = forcef.replace('"','')
-            else:
-                pathf = b[b.index(i)+1]
+                print("Something's wrong")
         last = 0
         count = 0
         if i in ["f","file","-f","--file"]:
-            if a[a.index(i)+1] == 'none':
+            try:
+                if a[a.index(i)+1] == 'none':
+                    forcef = None
+                    args.file = None
+                elif a[a.index(i)+1].count('"') == 2:
+                    forcef = a[a.index(i)+1].replace('"','')
+                elif '"' in a[a.index(i)+1]:
+                    for l in range(len(a)-a.index(i)-1):
+                        if '"' in a[a.index(i)+l+1]:
+                            count += 1
+                            if count == 2:
+                                last = l+1
+                                break
+                    forcef = ' '.join(a[a.index(i)+1:a.index(i)+last+1])
+                    forcef = forcef.replace('"','')
+                else:
+                    forcef = a[a.index(i)+1]
+            except:
                 forcef = None
-                args.file = None
-            elif a[a.index(i)+1].count('"') == 2:
-                forcef = a[a.index(i)+1].replace('"','')
-            elif '"' in a[a.index(i)+1]:
-                for l in range(len(a)-a.index(i)-1):
-                    if '"' in a[a.index(i)+l+1]:
-                        count += 1
-                        if count == 2:
-                            last = l+1
-                            break
-                forcef = ' '.join(a[a.index(i)+1:a.index(i)+last+1])
-                forcef = forcef.replace('"','')
-            else:
-                forcef = a[a.index(i)+1]
+                print("Something's wrong")
     if any(i in ["ls", "list", "-ls", "--list"]for i in a):
         lista = True
     for i in a:
         if i in ['l','language','-l','--language']:
-            if a[a.index(i)+1] == 'none':
+            try:
+                if a[a.index(i)+1] == 'none':
+                    language = None
+                else:
+                    language = a[a.index(i)+1]
+            except:
                 language = None
-            else:
-                language = a[a.index(i)+1]
+                print("Something's wrong")
     if any(i in ["s", "stop", "-s","--stop"]for i in a):
         if stop == None:
             stop = True
