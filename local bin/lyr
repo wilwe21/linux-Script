@@ -296,6 +296,8 @@ while args.cont:
         os.system(f'vim "{path}/{file}"')
     if any(i in ["tf", "thisfile", "-tf", "--thisfile"]for i in a):
         forcef = file
+    if any(i in ["fn", "filenone", "-fn", "--filenone"]for i in a):
+        forcef = None
     for i in a:
         if i in ["p", "path", "-p", "--path"]:
             if b[b.index(i)+1] == 'none':
