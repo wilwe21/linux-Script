@@ -1,0 +1,3 @@
+#!/bin/bash
+scale=$(zenity --entry --text="Scale" --entry-text="1920x1080")
+magick ./"$1" -resize "$scale" ./"$1scaled"
