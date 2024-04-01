@@ -246,7 +246,7 @@ def trans(langfunc: str):
             print(os.popen(f"echo \033[2A & spc -s '{b2}'").read().replace("¾","'0"))
 class Bio:
     def __init__(self) -> None:
-        with open("/home/wilwe/config.yaml", encoding='utf-8', errors='ignore') as f:
+        with open("/home/wilwe/.config/lyr.yaml", encoding='utf-8', errors='ignore') as f:
             data = yaml.safe_load(f)
         self.data = data
         self.token = self.data["token"]
@@ -258,11 +258,9 @@ class Bio:
                 "Authorization": self.token
         }
         payload = {"custom_status": {"text":  message}}
-        print(f"{self.token}: {message}")
         try:
             res = requests.request("PATCH", self.endpoint, json=payload, headers=headers)
             res.raise_for_status()
-            print("success")
         except requests.exceptions.RequestException as e:
             print(f"error: {e}")
         return res.text
