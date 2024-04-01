@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+import random, sys, os, argparse, requests, yaml
+parser = argparse.ArgumentParser()
+parser.add_argument("-d", "--description", help="Set Description", nargs="*")
+args = parser.parse_args()
+class Bio:
+    def __init__(self) -> None:
+        with open("/home/wilwe/.config/lyr.yaml", encoding='utf-8', errors='ignore') as f:
+            data = yaml.safe_load(f)
+        self.data = data
+        self.token = self.data["token"]
+        self.endpoint = "https://discord.com/api/v10/users/@me/settings"
+    def change(self, message: str) -> dict:
+        headers = {
+                "cookie": "",
+                "Content-Type": "application/json",
+                "Authorization": self.token
+        }
+        payload = {"custom_status": {"text":  message}}
+        try:
+            res = requests.request("PATCH", self.endpoint, json=payload, headers=headers)
+            res.raise_for_status()
+            print("Done")
+            return res.text
+        except requests.exceptions.RequestException as e:
+            print(f"error: {e}")
+            return
+        except:
+            print("Something's wrong")
+    def changeInstance(self, mess):
+        self.change(mess)
+try:
+    if args.description != None:
+        mess = ' '.join(args.description)
+    else:
+        raise ValueError()
+except:
+    try:
+        mess = input("Enter Description: ")
+    except:
+        print("Something's wrong")
+if mess != None:
+    c = Bio()
+    c.changeInstance(mess)
