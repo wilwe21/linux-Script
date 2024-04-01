@@ -246,25 +246,28 @@ def trans(langfunc: str):
             print(os.popen(f"echo \033[2A & spc -s '{b2}'").read().replace("¾","'0"))
 class Bio:
     def __init__(self) -> None:
-        with open("/home/wilwe/config.yaml") as f:
+        with open("/home/wilwe/config.yaml", encoding='utf-8', errors='ignore') as f:
             data = yaml.safe_load(f)
         self.data = data
         self.token = self.data["token"]
-        self.endpoint = "https://discord.com/api/v10/users/@me"
+        self.endpoint = "https://discord.com/api/v10/users/@me/settings"
     def change(self, message: str) -> dict:
         headers = {
                 "cookie": "",
-                "ContentType": "application/jason",
+                "Content-Type": "application/json",
                 "Authorization": self.token
         }
-
-        payload = {"bio": message}
+        payload = {"custom_status": {"text":  message}}
         print(f"{self.token}: {message}")
-        res = requests.request("PATCH", self.endpoint, json = payload, headers = headers)
-        print("success")
+        try:
+            res = requests.request("PATCH", self.endpoint, json=payload, headers=headers)
+            res.raise_for_status()
+            print("success")
+        except requests.exceptions.RequestException as e:
+            print(f"error: {e}")
         return res.text
     def changeInstance(self, mess):
-        change = self.change(mess)
+        self.change(mess)
 while args.cont:
     if stop == None:
         getlyr()
@@ -321,7 +324,6 @@ while args.cont:
         forcef = None
     if any(i in ["dc", "discord", "-dc", "--discord"]for i in a):
         mess = f'{o1} {o2}'
-        print(f"updating to {mess}")
         c = Bio()
         c.changeInstance(mess)
     for i in a:
