@@ -339,7 +339,7 @@ while args.cont:
         forcef = None
     if any(i in ["dc", "discord", "-dc", "--discord"]for i in a):
         try:
-            mess = f'{o1} {o2}'
+            mess = f'{o1}\n{o2}'
         except:
             try:
                 mess = f'{o1}'
@@ -427,7 +427,7 @@ while args.cont:
             stop = None
     if any(i in ["tdc", "transdiscord", "-tdc", "--tdiscord"]for i in a):
         try:
-            messi = f'{t1} {t2}'
+            messi = f'{t1}\n{t2}'
         except:
             try:
                 messi = f'{t1}'
