@@ -188,62 +188,77 @@ def trans(langfunc: str):
         print("")
         if decorator == True:
             print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mBraill\033[0m\033[38;2;166;227;161m\033[0m')
-        b1 = o1.replace("'","")
-        print(os.popen(f"braill -s '{b1}'").read())
+        t1 = o1.replace("'","")
+        t1 = os.popen(f"braill -s '{t1}'").read()
+        print(t1)
         if next < len(lin) and not totalrandom:
-            b2 = o2.replace("'","")
-            print(os.popen(f"echo \033[2A & braill -s '{b2}'").read())
+            t2 = o2.replace("'","")
+            t2 = os.popen(f"braill -s '{t2}'").read()
+            print(f"\033[1A{t2}")
         if totalrandom and next < len(lin2):
-            b2 = o2.replace("'","")
-            print(os.popen(f"echo \033[2A & braill -s '{b2}'").read())
+            t2 = o2.replace("'","")
+            t2 = os.popen(f"braill -s '{t2}'").read()
+            print(f"\033[1A{t2}")
     if langfunc.lower() == "enchant":
         print("")
         if decorator == True:
             print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mEnchanting Table\033[0m\033[38;2;166;227;161m\033[0m')
-        b1 = o1.replace("'","¾")
-        print(os.popen(f"enchant -s '{b1}'").read().replace("¾","'"))
+        t1 = o1.replace("'","¾")
+        t1 = os.popen(f"enchant -s '{t1}'").read().replace("¾","'")
+        print(t1)
         if next < len(lin) and not totalrandom:
-            b2 = o2.replace("'","")
-            print(os.popen(f"echo \033[2A & enchant -s '{b2}'").read().replace("¾","'"))
+            t2 = o2.replace("'","")
+            t2 = os.popen(f"enchant -s '{t2}'").read().replace("¾","'")
+            print(f"\033[1A{t2}")
         if totalrandom and next < len(lin2):
-            b2 = o2.replace("'","")
-            print(os.popen(f"echo \033[2A & enchant -s '{b2}'").read().replace("¾","'"))
+            t2 = o2.replace("'","")
+            t2 = os.popen(f"enchant -s '{t2}'").read().replace("¾","'")
+            print(f"\033[1A{t2}")
     if langfunc.lower() == "illuminati":
         print("")
         if decorator == True:
             print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mIlluminaci\033[0m\033[38;2;166;227;161m\033[0m')
-        b1 = o1.replace("'","¾")
-        print(os.popen(f"illuminati -s '{b1}'").read().replace("¾","'"))
+        t1 = o1.replace("'","¾")
+        t1 = os.popen(f"illuminati -s '{t1}'").read().replace("¾","'")
+        print(t1)
         if next < len(lin) and not totalrandom:
-            b2 = o2.replace("'","¾")
-            print(os.popen(f"echo \033[2A & illuminati -s '{b2}'").read().replace("¾","'"))
+            t2 = o2.replace("'","¾")
+            t2 = os.popen(f"illuminati -s '{t2}'").read().replace("¾","'")
+            print(f"\033[1A{t2}")
         if totalrandom and next < len(lin2):
-            b2 = o2.replace("'","¾")
-            print(os.popen(f"echo \033[2A & illuminati -s '{b2}'").read().replace("¾","'"))
+            t2 = o2.replace("'","¾")
+            t2 = os.popen(f"illuminati -s '{t2}'").read().replace("¾","'")
+            print(f"\033[1A{t2}")
     if langfunc.lower() == "morse":
         print("")
         if decorator == True:
             print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mMorsy\033[0m\033[38;2;166;227;161m\033[0m')
-        b1 = o1.replace("'","")
-        print(os.popen(f"morse -s '{b1}'").read())
+        t1 = o1.replace("'","")
+        t1 = os.popen(f"morse -s '{t1}'").read()
+        print(t1)
         if next < len(lin) and not totalrandom:
-            b2 = o2.replace("'","¾")
-            print(os.popen(f"echo \033[2A & morse -s '{b2}'").read().replace("¾","'"))
+            t2 = o2.replace("'","¾")
+            t2 = os.popen(f"morse -s '{t2}'").read().replace("¾","'")
+            print(f"\033[1A{t2}")
         if totalrandom and next < len(lin2):
-            b2 = o2.replace("'","¾")
-            print(os.popen(f"echo \033[2A & morse -s '{b2}'").read().replace("¾","'"))
+            t2 = o2.replace("'","¾")
+            t2 = os.popen(f"morse -s '{t2}'").read().replace("¾","'")
+            print(f"\033[1A{t2}")
     if langfunc.lower() == "spc":
         print("")
         if decorator == True:
             print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mSpc\033[0m\033[38;2;166;227;161m\033[0m')
-        b1 = o1.replace("'","¾")
-        print(os.popen(f"spc -s '{b1}'").read().replace("¾","'0"))
+        t1 = o1.replace("'","¾")
+        t1 = os.popen(f"spc -s '{t1}'").read().replace("¾","'0")
+        print(t1)
         if next < len(lin) and not totalrandom:
-            b2 = o2.replace("'","")
-            print(os.popen(f"echo \033[2A & spc -s '{b2}'").read().replace("¾","'0"))
+            t2 = o2.replace("'","")
+            t2 = os.popen(f"spc -s '{t2}'").read().replace("¾","'0")
+            print(f"\033[1A{t2}")
         if totalrandom and next < len(lin2):
-            b2 = o2.replace("'","")
-            print(os.popen(f"echo \033[2A & spc -s '{b2}'").read().replace("¾","'0"))
+            t2 = o2.replace("'","")
+            t2 = os.popen(f"spc -s '{t2}'").read().replace("¾","'0")
+            print(f"\033[1A{t2}")
 class Bio:
     def __init__(self) -> None:
         with open("/home/wilwe/.config/lyr.yaml", encoding='utf-8', errors='ignore') as f:
@@ -261,9 +276,11 @@ class Bio:
         try:
             res = requests.request("PATCH", self.endpoint, json=payload, headers=headers)
             res.raise_for_status()
+            print("Done")
+            return res.text
         except requests.exceptions.RequestException as e:
             print(f"error: {e}")
-        return res.text
+            return
     def changeInstance(self, mess):
         self.change(mess)
 while args.cont:
@@ -321,9 +338,17 @@ while args.cont:
     if any(i in ["fn", "filenone", "-fn", "--filenone"]for i in a):
         forcef = None
     if any(i in ["dc", "discord", "-dc", "--discord"]for i in a):
-        mess = f'{o1} {o2}'
-        c = Bio()
-        c.changeInstance(mess)
+        try:
+            mess = f'{o1} {o2}'
+        except:
+            try:
+                mess = f'{o1}'
+            except:
+                mess = None
+                print("Something's wrong")
+        if mess != None:
+            c = Bio()
+            c.changeInstance(mess)
     for i in a:
         if i in ["p", "path", "-p", "--path"]:
             try:
@@ -400,5 +425,17 @@ while args.cont:
                     os.popen(f'tts{mut}-l {language} -s "{t1}"')
         else:
             stop = None
+    if any(i in ["tdc", "transdiscord", "-tdc", "--tdiscord"]for i in a):
+        try:
+            messi = f'{t1} {t2}'
+        except:
+            try:
+                messi = f'{t1}'
+            except:
+                messi = None
+                print("Something's wrong")
+        if messi != None:
+            bi = Bio()
+            bi.changeInstance(messi)
 if args.cont == None:
     getlyr()
