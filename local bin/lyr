@@ -465,6 +465,35 @@ while args.cont:
             if len(msg) > 60:
                 raise ValueError()
             print("Message is good")
+    if any(i in ["tms", "transmessenger", "-tms", "--transmessenger"]for i in a):
+        try:
+            msg = f'{t1}\n{t2}'
+            if len(msg) > 60:
+                raise ValueError()
+            print("Message is good")
+        except ValueError:
+            msg = msg.title().replace(" ","").replace("\n","")
+            if len(msg) < 60:
+                print("Shorted String")
+                print(msg)
+            else:
+                if language != "morse":
+                    msg = msg.replace(".","")
+                if len(msg) < 60:
+                    print("Shored String")
+                    print(msg)
+                else:
+                    msg = msg.replace(",","")
+                    if len(msg) < 60:
+                        print("Shorted String")
+                        print(msg)
+                    else:
+                        print("Message is to long")
+        except:
+            msg = t1
+            if len(msg) > 60:
+                raise ValueError()
+            print("Message is good")
     if any(i in ["tdc", "transdiscord", "-tdc", "--tdiscord"]for i in a):
         try:
             messi = f'{t1}\n{t2}'
