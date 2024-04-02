@@ -458,7 +458,6 @@ while args.cont:
                     os.popen(f'wl-copy "{msg}"')
                 else:
                     print("\033[91mMessage is to long\033[0m")
-                    os.popen(f'wl-copy "{msg}"')
         except:
             msg = o1
             if len(msg) > 60:
@@ -488,14 +487,34 @@ while args.cont:
                     os.popen(f'wl-copy "{msg}"')
                 else:
                     print("\033[91mMessage is to long\033[0m")
-                    os.popen(f'wl-copy "{msg}"')
         except:
-            msg = f'{t1}'
-            if len(msg) > 60:
+            try:
+                msg = f'{t1}'
+            except:
+                print("Something's wrong")
+                msg = None
+            if msg != None and len(msg) > 60:
                 raise ValueError()
             if msg != None:
                 print("\033[92mMessage is good\033[0m")
                 os.popen(f'wl-copy "{msg}"')
+    if any(i in ["cp", "copy", "-cp", "--cp"]for i in a):
+        try:
+            cpv = f'{o1}\n{o2}'
+            os.popen(f'wl-copy "{cpv}"')
+        except:
+            cpv = o1
+            os.popen(f'wl-copy "{cpv}"')
+    if any(i in ["tcp", "transcopy", "-tcp", "--transcopy"]for i in a):
+        try:
+            cpv = f'{t1}\n{t2}'
+            os.popen(f'wl-copy "{cpv}"')
+        except:
+            try:
+                cpv = t1
+                os.popen(f'wl-copy "{cpv}"')
+            except:
+                print("something's wrong")
     if any(i in ["tdc", "transdiscord", "-tdc", "--tdiscord"]for i in a):
         try:
             messi = f'{t1}\n{t2}'
