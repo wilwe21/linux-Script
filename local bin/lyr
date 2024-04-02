@@ -467,6 +467,13 @@ while args.cont:
             print("Message is good")
     if any(i in ["tms", "transmessenger", "-tms", "--transmessenger"]for i in a):
         try:
+            try:
+                if t1 != None:
+                    sex = False
+            except:
+                sex = True
+            if sex:
+                raise error
             msg = f'{t1}\n{t2}'
             if len(msg) > 60:
                 raise ValueError()
@@ -479,21 +486,27 @@ while args.cont:
             else:
                 if language != "morse":
                     msg = msg.replace(".","")
+                msg = msg.replace(",","")
                 if len(msg) < 60:
                     print("Shored String")
                     print(msg)
                 else:
-                    msg = msg.replace(",","")
-                    if len(msg) < 60:
-                        print("Shorted String")
-                        print(msg)
-                    else:
-                        print("Message is to long")
+                    print("Message is to long")
+        except NameError:
+            print("None")
         except:
-            msg = t1
+            try:
+                if t1 != None:
+                    sex = False
+            except:
+                sex = True
+            if sex:
+                raise NameError()
+            msg = f'{t1}'
             if len(msg) > 60:
                 raise ValueError()
-            print("Message is good")
+            if msg != None:
+                print("Message is good")
     if any(i in ["tdc", "transdiscord", "-tdc", "--tdiscord"]for i in a):
         try:
             messi = f'{t1}\n{t2}'
