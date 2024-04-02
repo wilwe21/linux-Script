@@ -93,7 +93,7 @@ def getlyr():
         sas = ""
     print(sas.strip('\n'))
     next = line+1
-    if next < len(lin) and not randomfas:
+    if next < len(lin) and not randomfas and not totalrandom:
         while lin[next].strip('\n') == '':
             if next+1 < len(lin):
                 next += 1
@@ -126,6 +126,8 @@ def getlyr():
             os.popen(f'tts{mut}-l {args.oryginalang} -s "{o1}" && tts{mut}-l {args.oryginalang} -s "{o2}"')
     elif voice and not tvoice and not totalrandom:
             os.popen(f'tts{mut}-l {args.oryginalang} -s "{o1}"')
+    if next >= len(lin) and not totalrandom:
+        del o2
     if totalrandom and next < len(lin2):
         print(susy.strip('\n'))
         o2 = susy.strip('\n').replace('"', '')
@@ -143,25 +145,22 @@ def trans(langfunc: str):
         print("")
         if decorator == True:
             print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37m{langfunc.title()}\033[0m\033[38;2;166;227;161m\033[0m')
-        t1 = os.popen(f"tpl -l {langfunc} -s " + '"' + o1 + '"').read()
+        t1 = os.popen(f"tpl -l {langfunc} -s " + '"' + o1 + '"').read().strip("\n")
         print(t1)
-        print("\033[3A")
         if args.fallbacklang != None:
             lang=args.fallbacklang
         else:
             lang=langfunc
         if next < len(lin) and not totalrandom:
-            t2 = os.popen(f"tpl -l {langfunc} -s " + '"' + o2 + '"').read()
+            t2 = os.popen(f"tpl -l {langfunc} -s " + '"' + o2 + '"').read().strip("\n")
             print(t2)
-            print("\033[2A")
             if tvoice and not voice:
                 os.popen(f'tts{mut}-l {lang} -s "{t1}" && tts{mut}-l {lang} -s "{t2}"')
         elif tvoice and not voice and not totalrandom:
             os.popen(f'tts{mut}-l {lang} -s "{t1}"')
         if totalrandom and next < len(lin2):
-            t2 = os.popen(f"tpl -l {langfunc} -s " + '"' + o2 + '"').read()
+            t2 = os.popen(f"tpl -l {langfunc} -s " + '"' + o2 + '"').read().strip("\n")
             print(t2)
-            print("\033[2A")
             if tvoice and not voice:
                 os.popen(f'tts{mut}-l {lang} -s "{t1}" && tts{mut}-l {lang} -s "{t2}"')
         elif tvoice and not voice and totalrandom:
@@ -442,71 +441,61 @@ while args.cont:
             msg = f'{o1}\n{o2}'
             if len(msg) > 60:
                 raise ValueError()
-            print("Message is good")
+            print("\033[92mMessage is good\033[0m")
+            os.popen(f'wl-copy "{msg}"')
         except ValueError:
             msg = msg.title().replace(" ","").replace("\n","")
             if len(msg) < 60:
-                print("Shorted String")
+                print("\033[93mShorted String\033[0m")
                 print(msg)
+                os.popen(f'wl-copy "{msg}"')
             else:
                 msg = msg.replace(".","")
+                msg = msg.replace(",","")
                 if len(msg) < 60:
-                    print("Shored String")
+                    print("\033[93mShored String\033[0m")
                     print(msg)
+                    os.popen(f'wl-copy "{msg}"')
                 else:
-                    msg = msg.replace(",","")
-                    if len(msg) < 60:
-                        print("Shorted String")
-                        print(msg)
-                    else:
-                        print("Message is to long")
+                    print("\033[91mMessage is to long\033[0m")
+                    os.popen(f'wl-copy "{msg}"')
         except:
             msg = o1
             if len(msg) > 60:
                 raise ValueError()
-            print("Message is good")
+            print("\033[92mMessage is good\033[0m")
+            os.popen(f'wl-copy "{msg}"')
     if any(i in ["tms", "transmessenger", "-tms", "--transmessenger"]for i in a):
         try:
-            try:
-                if t1 != None:
-                    sex = False
-            except:
-                sex = True
-            if sex:
-                raise error
             msg = f'{t1}\n{t2}'
             if len(msg) > 60:
                 raise ValueError()
-            print("Message is good")
+            print("\033[92mMessage is good\033[0m")
+            os.popen(f'wl-copy "{msg}"')
         except ValueError:
             msg = msg.title().replace(" ","").replace("\n","")
             if len(msg) < 60:
-                print("Shorted String")
+                print("\033[93mShorted String\033[0m")
                 print(msg)
+                os.popen(f'wl-copy "{msg}"')
             else:
                 if language != "morse":
                     msg = msg.replace(".","")
                 msg = msg.replace(",","")
                 if len(msg) < 60:
-                    print("Shored String")
+                    print("\033[93mShored String\033[0m")
                     print(msg)
+                    os.popen(f'wl-copy "{msg}"')
                 else:
-                    print("Message is to long")
-        except NameError:
-            print("None")
+                    print("\033[91mMessage is to long\033[0m")
+                    os.popen(f'wl-copy "{msg}"')
         except:
-            try:
-                if t1 != None:
-                    sex = False
-            except:
-                sex = True
-            if sex:
-                raise NameError()
             msg = f'{t1}'
             if len(msg) > 60:
                 raise ValueError()
             if msg != None:
-                print("Message is good")
+                print("\033[92mMessage is good\033[0m")
+                os.popen(f'wl-copy "{msg}"')
     if any(i in ["tdc", "transdiscord", "-tdc", "--tdiscord"]for i in a):
         try:
             messi = f'{t1}\n{t2}'
