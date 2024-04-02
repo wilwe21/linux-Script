@@ -342,9 +342,19 @@ while args.cont:
     if any(i in ["dc", "discord", "-dc", "--discord"]for i in a):
         try:
             mess = f'{o1}\n{o2}'
+            if len(mess) > 128:
+                mess = None
+                raise ValueError()
+        except ValueError:
+            print("Message is to long")
         except:
             try:
                 mess = f'{o1}'
+                if len(mess) > 128:
+                    mess = None
+                    raise ValueError()
+            except ValueError:
+                print("Message is to long")
             except:
                 mess = None
                 print("Something's wrong")
@@ -427,12 +437,50 @@ while args.cont:
                     os.popen(f'tts{mut}-l {language} -s "{t1}"')
         else:
             stop = None
+    if any(i in ["ms", "messenger", "-ms", "--messenger"]for i in a):
+        try:
+            msg = f'{o1}\n{o2}'
+            if len(msg) > 60:
+                raise ValueError()
+            print("Message is good")
+        except ValueError:
+            msg = msg.title().replace(" ","").replace("\n","")
+            if len(msg) < 60:
+                print("Shorted String")
+                print(msg)
+            else:
+                msg = msg.replace(".","")
+                if len(msg) < 60:
+                    print("Shored String")
+                    print(msg)
+                else:
+                    msg = msg.replace(",","")
+                    if len(msg) < 60:
+                        print("Shorted String")
+                        print(msg)
+                    else:
+                        print("Message is to long")
+        except:
+            msg = o1
+            if len(msg) > 60:
+                raise ValueError()
+            print("Message is good")
     if any(i in ["tdc", "transdiscord", "-tdc", "--tdiscord"]for i in a):
         try:
             messi = f'{t1}\n{t2}'
+            if len(messi) > 128:
+                messi = None
+                raise ValueError()
+        except ValueError:
+            print("Message is to long")
         except:
             try:
                 messi = f'{t1}'
+                if len(messi) > 128:
+                    messi = None
+                    raise ValueError()
+            except ValueError:
+                print("Message is to long")
             except:
                 messi = None
                 print("Something's wrong")

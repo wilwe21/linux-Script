@@ -32,11 +32,21 @@ class Bio:
 try:
     if args.description != None:
         mess = ' '.join(args.description)
+        if len(mess) > 128:
+            mess = None
+            raise ValueError()
     else:
-        raise ValueError()
+        raise Error()
+except ValueError:
+    print("Message is to long")
 except:
     try:
         mess = input("Enter Description: ")
+        if len(mess) > 128:
+            mess = None
+            raise ValueError()
+    except ValueError:
+        print("Message is to long")
     except:
         print("Something's wrong")
 if mess != None:
