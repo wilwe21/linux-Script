@@ -130,7 +130,10 @@ def getlyr():
     elif voice and not tvoice and not totalrandom:
             os.popen(f'tts{mut}-l {orlang} -s "{o1}"')
     if next >= len(lin) and not totalrandom:
-        del o2
+        try:
+            del o2
+        except:
+            pass
     if totalrandom and next < len(lin2):
         print(susy.strip('\n'))
         o2 = susy.strip('\n').replace('"', '')
@@ -287,6 +290,29 @@ class Bio:
             print("Something's wrong")
     def changeInstance(self, mess):
         self.change(mess)
+def shorten(msg: str,leng: int,tr: bool) -> str:
+    try:
+        if msg != None and len(msg) > leng:
+            raise ValueError()
+        if msg != None:
+            print("\033[92mMessage is good\033[0m")
+            return msg
+    except ValueError:
+        msg = msg.title().replace(" ","").replace("\n","")
+        if len(msg) < leng:
+            print("\033[93mShorted String\033[0m")
+            print(msg)
+            return msg
+        else:
+            if not tr and language != "morse":
+                msg = msg.replace(".","")
+            msg = msg.replace(",","")
+            if len(msg) < leng:
+                print("\033[93mShored String\033[0m")
+                print(msg)
+                return(msg)
+            else:
+                print("\033[91mMessage is to long\033[0m")
 while args.cont:
     if stop == None:
         getlyr()
@@ -344,25 +370,17 @@ while args.cont:
     if any(i in ["dc", "discord", "-dc", "--discord"]for i in a):
         try:
             mess = f'{o1}\n{o2}'
-            if len(mess) > 128:
-                mess = None
-                raise ValueError()
-        except ValueError:
-            print("Message is to long")
+            messa = shorten(mess,128,False)
         except:
             try:
                 mess = f'{o1}'
-                if len(mess) > 128:
-                    mess = None
-                    raise ValueError()
-            except ValueError:
-                print("Message is to long")
+                messa = shorten(mess,128,False)
             except:
-                mess = None
+                messa = None
                 print("Something's wrong")
-        if mess != None:
+        if messa != None:
             c = Bio()
-            c.changeInstance(mess)
+            c.changeInstance(messa)
     for i in a:
         if i in ["p", "path", "-p", "--path"]:
             try:
@@ -451,65 +469,49 @@ while args.cont:
     if any(i in ["ms", "messenger", "-ms", "--messenger"]for i in a):
         try:
             msg = f'{o1}\n{o2}'
-            if len(msg) > 60:
-                raise ValueError()
-            print("\033[92mMessage is good\033[0m")
-            os.popen(f'wl-copy "{msg}"')
-        except ValueError:
-            msg = msg.title().replace(" ","").replace("\n","")
-            if len(msg) < 60:
-                print("\033[93mShorted String\033[0m")
-                print(msg)
-                os.popen(f'wl-copy "{msg}"')
-            else:
-                msg = msg.replace(".","")
-                msg = msg.replace(",","")
-                if len(msg) < 60:
-                    print("\033[93mShored String\033[0m")
-                    print(msg)
-                    os.popen(f'wl-copy "{msg}"')
-                else:
-                    print("\033[91mMessage is to long\033[0m")
+            msgs = shorten(msg,60,False)
+            os.popen(f'wl-copy "{msgs}"')
         except:
             msg = o1
-            if len(msg) > 60:
-                raise ValueError()
-            print("\033[92mMessage is good\033[0m")
-            os.popen(f'wl-copy "{msg}"')
+            msgs = shorten(msg,60,False)
+            os.popen(f'wl-copy "{msgs}"')
     if any(i in ["tms", "transmessenger", "-tms", "--transmessenger"]for i in a):
         try:
             msg = f'{t1}\n{t2}'
-            if len(msg) > 60:
-                raise ValueError()
-            print("\033[92mMessage is good\033[0m")
-            os.popen(f'wl-copy "{msg}"')
-        except ValueError:
-            msg = msg.title().replace(" ","").replace("\n","")
-            if len(msg) < 60:
-                print("\033[93mShorted String\033[0m")
-                print(msg)
-                os.popen(f'wl-copy "{msg}"')
-            else:
-                if language != "morse":
-                    msg = msg.replace(".","")
-                msg = msg.replace(",","")
-                if len(msg) < 60:
-                    print("\033[93mShored String\033[0m")
-                    print(msg)
-                    os.popen(f'wl-copy "{msg}"')
-                else:
-                    print("\033[91mMessage is to long\033[0m")
+            msgs = shorten(msg,60,True)
+            os.popen(f'wl-copy "{msgs}"')
         except:
             try:
-                msg = f'{t1}'
+                msg = t1
+                msgs = shorten(msg,60,True)
+                os.popen(f'wl-copy "{msgs}"')
             except:
                 print("Something's wrong")
                 msg = None
-            if msg != None and len(msg) > 60:
-                raise ValueError()
-            if msg != None:
-                print("\033[92mMessage is good\033[0m")
-                os.popen(f'wl-copy "{msg}"')
+    if any(i in ["ms1", "messenger1", "-ms1", "--messenger1"]for i in a):
+        msg = o1
+        msgs = shorten(msg,60,False)
+        os.popen(f'wl-copy "{msg}"')
+    if any(i in ["ms2", "messenger2", "-ms2", "--messenger2"]for i in a):
+        msg = o2
+        msgs = shorten(msg,60,False)
+        os.popen(f'wl-copy "{msg}"')
+    if any(i in ["tms1", "transmessenger1", "-tms1", "--transmessenger1"]for i in a):
+        try:
+            msg = t1
+            msgs = shorten(msg,60,True)
+            os.popen(f'wl-copy "{msgs}"')
+        except:
+            print("Something's wrong")
+            msg = None
+    if any(i in ["tms2", "transmessenger2", "-tms2", "--transmessenger2"]for i in a):
+        try:
+            msg = t2
+            msgs = shorten(msg,60,True)
+            os.popen(f'wl-copy "{msgs}"')
+        except:
+            print("Something's wrong")
+            msg = None
     if any(i in ["cp", "copy", "-cp", "--cp"]for i in a):
         try:
             cpv = f'{o1}\n{o2}'
@@ -527,28 +529,29 @@ while args.cont:
                 os.popen(f'wl-copy "{cpv}"')
             except:
                 print("something's wrong")
+    if any(i in ["cp1", "copy1", "-cp1", "--cp1"]for i in a):
+        cpv = o1
+        os.popen(f'wl-copy "{cpv}"')
+    if any(i in ["tcp1", "transcopy1", "-tcp1", "--transcopy1"]for i in a):
+        try:
+            cpv = t1
+            os.popen(f'wl-copy "{cpv}"')
+        except:
+            print("something's wrong")
     if any(i in ["tdc", "transdiscord", "-tdc", "--tdiscord"]for i in a):
         try:
             messi = f'{t1}\n{t2}'
-            if len(messi) > 128:
-                messi = None
-                raise ValueError()
-        except ValueError:
-            print("Message is to long")
+            messia = shorten(messi,128,True)
         except:
             try:
                 messi = f'{t1}'
-                if len(messi) > 128:
-                    messi = None
-                    raise ValueError()
-            except ValueError:
-                print("Message is to long")
+                messia = shorten(messi,128,False)
             except:
-                messi = None
+                messia = None
                 print("Something's wrong")
-        if messi != None:
+        if messia != None:
             bi = Bio()
-            bi.changeInstance(messi)
+            bi.changeInstance(messia)
     if any(i in ["c", "congif", "-c", "--config"]for i in a):
         stop = True
         print(f"Path: {pathf}\n\
