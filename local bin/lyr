@@ -367,20 +367,6 @@ while args.cont:
         forcef = file
     if any(i in ["fn", "filenone", "-fn", "--filenone"]for i in a):
         forcef = None
-    if any(i in ["dc", "discord", "-dc", "--discord"]for i in a):
-        try:
-            mess = f'{o1}\n{o2}'
-            messa = shorten(mess,128,False)
-        except:
-            try:
-                mess = f'{o1}'
-                messa = shorten(mess,128,False)
-            except:
-                messa = None
-                print("Something's wrong")
-        if messa != None:
-            c = Bio()
-            c.changeInstance(messa)
     for i in a:
         if i in ["p", "path", "-p", "--path"]:
             try:
@@ -538,17 +524,71 @@ while args.cont:
             os.popen(f'wl-copy "{cpv}"')
         except:
             print("something's wrong")
+    if any(i in ["dc", "discord", "-dc", "--discord"]for i in a):
+        try:
+            mess = f'{o1}\n{o2}'
+            messa = shorten(mess,128,False)
+        except:
+            try:
+                mess = f'{o1}'
+                messa = shorten(mess,128,False)
+            except:
+                messa = None
+                print("Something's wrong")
+        if messa != None:
+            c = Bio()
+            c.changeInstance(messa)
+    if any(i in ["dc1", "discord1", "-dc1", "--discord1"]for i in a):
+        try:
+            mess = o1
+            messa = shorten(mess,128,False)
+        except:
+            messa = None
+            print("Something's wrong")
+        if messa != None:
+            c = Bio()
+            c.changeInstance(messa)
+    if any(i in ["dc2", "discord2", "-dc2", "--discord2"]for i in a):
+        try:
+            mess = o2
+            messa = shorten(mess,128,False)
+        except:
+            messa = None
+            print("Something's wrong")
+        if messa != None:
+            c = Bio()
+            c.changeInstance(messa)
     if any(i in ["tdc", "transdiscord", "-tdc", "--tdiscord"]for i in a):
         try:
             messi = f'{t1}\n{t2}'
             messia = shorten(messi,128,True)
         except:
             try:
-                messi = f'{t1}'
-                messia = shorten(messi,128,False)
+                messi = t1
+                messia = shorten(messi,128,True)
             except:
                 messia = None
                 print("Something's wrong")
+        if messia != None:
+            bi = Bio()
+            bi.changeInstance(messia)
+    if any(i in ["tdc1", "transdiscord1", "-tdc1", "--tdiscord1"]for i in a):
+        try:
+            messi = t1
+            messia = shorten(messi,128,True)
+        except:
+            messia = None
+            print("Something's wrong")
+        if messia != None:
+            bi = Bio()
+            bi.changeInstance(messia)
+    if any(i in ["tdc2", "transdiscord2", "-tdc2", "--tdiscord2"]for i in a):
+        try:
+            messi = t2
+            messia = shorten(messi,128,True)
+        except:
+            messia = None
+            print("Something's wrong")
         if messia != None:
             bi = Bio()
             bi.changeInstance(messia)
