@@ -306,7 +306,7 @@ def shorten(msg: str,leng: int,tr: bool) -> str:
         else:
             if not tr and language != "morse":
                 msg = msg.replace(".","")
-            msg = msg.replace(",","")
+            msg = msg.replace(",","").replace("'","")
             if len(msg) < leng:
                 print("\033[93mShored String\033[0m")
                 print(msg)
