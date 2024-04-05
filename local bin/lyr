@@ -147,7 +147,7 @@ def getlyr():
         trans(language)
 def trans(langfunc: str):
     global t1, t2
-    if langfunc.lower() != "braill" and langfunc.lower() != "enchant" and langfunc.lower() != "illuminati" and langfunc.lower() != "morse" and langfunc.lower() != "spc":
+    if langfunc.lower() != "braill" and langfunc.lower() != "enchant" and langfunc.lower() != "illuminati" and langfunc.lower() != "morse"  and langfunc.lower() != "spc" and langfunc.lower() != "alien":
         print("")
         if decorator == True:
             print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37m{langfunc.title()}\033[0m\033[38;2;166;227;161m\033[0m')
@@ -263,6 +263,21 @@ def trans(langfunc: str):
         if totalrandom and next < len(lin2):
             t2 = o2.replace("'","")
             t2 = os.popen(f"spc -s '{t2}'").read().replace("¾","'0")
+            print(f"\033[1A{t2}")
+    if langfunc.lower() == "alien":
+        print("")
+        if decorator == True:
+            print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mAliens\033[0m\033[38;2;166;227;161m\033[0m')
+        t1 = o1.replace("'","¼")
+        t1 = os.popen(f"alien -s '{t1}'").read().replace("¼","'")
+        print(t1)
+        if next < len(lin) and not totalrandom:
+            t2 = o2.replace("'","")
+            t2 = os.popen(f"alien -s '{t2}'").read().replace("¾","'0")
+            print(f"\033[1A{t2}")
+        if totalrandom and next < len(lin2):
+            t2 = o2.replace("'","")
+            t2 = os.popen(f"alien -s '{t2}'").read().replace("¾","'0")
             print(f"\033[1A{t2}")
 class Bio:
     def __init__(self) -> None:
