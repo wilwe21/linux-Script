@@ -665,7 +665,8 @@ while args.cont:
         except:
             keywords: str = file
         imgdown(keywords)
-    if any(i in ["dod", "downloadbackground", "-dod", "--downloadbackground"]for i in a):
+    if any(i in ["gb", "generatebackground", "-gb", "--generatebackground"]for i in a):
+        #under development
         try:
             keywords: str = f'{o1} {o2}'
         except:
@@ -679,6 +680,12 @@ while args.cont:
         bgf = bglis[random.randrange(len(bglis))].strip("\n")
         bg = f"/home/wilwe/Obrazy/python/{tit}/{bgf}"
         imgcreate(keywords, bg=bg,blur=20)
+    if any(i in ["gbc", "generatebackgroundcolor", "-gbc", "--generatebackgroundcolor"]for i in a):
+        try:
+            keywords: str = f'{o1} {o2}'
+        except:
+            keywords: str = o1
+        imgcreate(keywords)
     if any(i in ["c", "congif", "-c", "--config"]for i in a):
         stop = True
         print(f"Path: {pathf}\n\
