@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from bing_image_downloader import downloader
-import random, sys, os, argparse, requests, yaml
+from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageFilter
+import random, sys, os, argparse, requests, yaml, textwrap
 parser = argparse.ArgumentParser()
 parser.add_argument("-l", "--language", help="Translate Language")
 parser.add_argument("-f", "--file", help="Specyfy file", nargs="*")
@@ -336,16 +337,34 @@ def shorten(msg: str,leng: int,tr: bool) -> str:
                 return(msg)
             else:
                 print("\033[91mMessage is to long\033[0m")
-def imgdown(koks) -> None:
+def imgdown(koks:str, lim: int = 10) -> None:
     downloader.download(
         koks,
-        limit=10,
+        limit=lim,
         output_dir=r'/home/wilwe/Obrazy/python',
         adult_filter_off=False,
         timeout=60,
         filter='',
         verbose=False
     )
+def imgcreate(koks: str = None,bg: str = None, width: int = 1920, height: int = 1080, blur: int = 10) -> None:
+    try:
+        image = Image.open(bg).resize((width,height))
+    except:
+        color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
+        while color == (255,255,255):
+            color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
+        image = Image.new("RGB",(width,height),color)
+    if blur != 0:
+        image = image.filter(ImageFilter.GaussianBlur(20))
+    draw = ImageDraw.Draw(image)
+    font = ImageFont.truetype("mononoki-Regular.ttf", 100)
+    margin = offset = 270
+    for line in textwrap.wrap(koks, width=22):
+        w = draw.textlength(line,font=font)
+        draw.text(((width - w)/2, offset), line, font=font, fill=(255,255,255,255),align="center",)
+        offset += font.size
+    image.save('chuj.png')
 while args.cont:
     if stop == None:
         getlyr()
@@ -648,14 +667,18 @@ while args.cont:
         imgdown(keywords)
     if any(i in ["dod", "downloadbackground", "-dod", "--downloadbackground"]for i in a):
         try:
-            keywords: str = f'{o1} {o2}'.replace("'","")
+            keywords: str = f'{o1} {o2}'
         except:
             keywords: str = o1
-        keywordf = os.popen(f"tgpt -q 'in few words generate name for ladscape with sentence {keywords}'").read()
         try:
-            imgdown(keywordf)
+            tit: str = f'{file1} {file}'
         except:
-            print("something's wrong")
+            tit: str = file
+        imgdown(tit, 5)
+        bglis = os.popen(f'ls "/home/wilwe/Obrazy/python/{tit}"').readlines()
+        bgf = bglis[random.randrange(len(bglis))].strip("\n")
+        bg = f"/home/wilwe/Obrazy/python/{tit}/{bgf}"
+        imgcreate(keywords, bg=bg,blur=20)
     if any(i in ["c", "congif", "-c", "--config"]for i in a):
         stop = True
         print(f"Path: {pathf}\n\
