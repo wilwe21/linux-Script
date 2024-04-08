@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 from bing_image_downloader import downloader
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageFilter
-import random, sys, os, argparse, requests, yaml, textwrap
+from instagram_web_api import Client, ClientCompatPatch, ClientError, ClientLoginError
+import random, sys, os, argparse, requests, yaml, textwrap, hashlib
 parser = argparse.ArgumentParser()
 parser.add_argument("-l", "--language", help="Translate Language")
 parser.add_argument("-f", "--file", help="Specyfy file", nargs="*")
@@ -364,7 +365,19 @@ def imgcreate(koks: str = None,bg: str = None, width: int = 1920, height: int = 
         w = draw.textlength(line,font=font)
         draw.text(((width - w)/2, offset), line, font=font, fill=(255,255,255,255),align="center",)
         offset += font.size
-    image.save('chuj.png')
+    image.save(f'/home/wilwe/Obrazy/python/end/{koks}.png')
+#def instpost(img: str,cap: str):
+#    with open("/home/wilwe/.config/lyr.yaml", encoding='utf-8', errors='ignore') as f:
+#        data = yaml.safe_load(f)
+#    usern = data["inst_username"]
+#    passwd = data["inst_passwd"]
+#    image = img
+#    def extract_rhx_gis(html):
+#        tmp_str = ':{"id":"'+f'{random.randint(10000000,99999999)}'+'"}'
+#        return hashlib.md5(b'tmp_str')
+#    web_api = Client(rhx_gis = extract_rhx_gis('https://www.instagram.com/accounts/login'),auto_patch=True, authenticate=True,username=usern,password=passwd)
+#    web_api.login()
+#    web_api.post_photo(photo_data=img,caption=cap)
 while args.cont:
     if stop == None:
         getlyr()
@@ -683,9 +696,16 @@ while args.cont:
     if any(i in ["gbc", "generatebackgroundcolor", "-gbc", "--generatebackgroundcolor"]for i in a):
         try:
             keywords: str = f'{o1} {o2}'
+            cap: str = f'{o1}\n{o2}'
         except:
             keywords: str = o1
+            cap: str = o1
+        try:
+            tit: str = f'{file1} {file}'
+        except:
+            tit: str = file
         imgcreate(keywords)
+        #instpost(f'/home/wilwe/Obrazy/python/end/{tit}',cap)
     if any(i in ["c", "congif", "-c", "--config"]for i in a):
         stop = True
         print(f"Path: {pathf}\n\
