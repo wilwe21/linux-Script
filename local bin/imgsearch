@@ -1,0 +1,14 @@
+#!/usr/bin/env python3
+from bing_image_downloader import downloader
+
+keywords: str = input ("Input: ")
+downloader.download(
+    keywords,
+    limit=10,
+    output_dir=r"/home/wilwe/Obrazy/python",
+    adult_filter_off=False,
+    force_replace=False,
+    timeout=60,
+    filter='',
+    verbose=False
+)

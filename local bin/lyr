@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from bing_image_downloader import downloader
 import random, sys, os, argparse, requests, yaml
 parser = argparse.ArgumentParser()
 parser.add_argument("-l", "--language", help="Translate Language")
@@ -49,7 +50,7 @@ if args.list != None:
 if args.path != None:
     pathf = args.path
 def getlyr():
-    global path, file, o1, o2, lin, next, language, lin2, tran
+    global path, file, file1, o1, o2, lin, next, language, lin2, tran
     sus=1
     path = '/home/wilwe/Dokumenty/oryginał/Lyrics'
     if pathf != None:
@@ -65,6 +66,13 @@ def getlyr():
         print(f"There's {len(lis)} files")
         return None
     file = lis[random.randrange(len(lis))].strip('\n')
+    if totalrandom:
+        file1 = file
+    else:
+        try:
+            del file1
+        except:
+            pass
     while os.path.isdir(f"{path}/{file}"):
         file = lis[random.randrange(len(lis))]
         file = file.strip('\n')
@@ -328,6 +336,16 @@ def shorten(msg: str,leng: int,tr: bool) -> str:
                 return(msg)
             else:
                 print("\033[91mMessage is to long\033[0m")
+def imgdown(koks) -> None:
+    downloader.download(
+        koks,
+        limit=10,
+        output_dir=r'/home/wilwe/Obrazy/python',
+        adult_filter_off=False,
+        timeout=60,
+        filter='',
+        verbose=False
+    )
 while args.cont:
     if stop == None:
         getlyr()
@@ -607,6 +625,37 @@ while args.cont:
         if messia != None:
             bi = Bio()
             bi.changeInstance(messia)
+    if any(i in ["do", "download", "-do", "--download"]for i in a):
+        try:
+            keywords: str = f'{o1} {o2}'
+        except:
+            keywords: str = o1
+        imgdown(keywords)
+    if any(i in ["tdo", "transdownload", "-tdo", "--transdownload"]for i in a):
+        try:
+            keywords: str = f'{t1} {t2}'
+        except:
+            try:
+                keywords: str = t1
+            except:
+                keywords: "Error"
+        imgdown(keywords)
+    if any(i in ["tido", "titledownload", "-tido", "--titledownload"]for i in a):
+        try:
+            keywords: str = f'{file1} {file}'
+        except:
+            keywords: str = file
+        imgdown(keywords)
+    if any(i in ["dod", "downloadbackground", "-dod", "--downloadbackground"]for i in a):
+        try:
+            keywords: str = f'{o1} {o2}'.replace("'","")
+        except:
+            keywords: str = o1
+        keywordf = os.popen(f"tgpt -q 'in few words generate name for ladscape with sentence {keywords}'").read()
+        try:
+            imgdown(keywordf)
+        except:
+            print("something's wrong")
     if any(i in ["c", "congif", "-c", "--config"]for i in a):
         stop = True
         print(f"Path: {pathf}\n\
