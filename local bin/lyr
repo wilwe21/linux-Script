@@ -361,10 +361,14 @@ def imgcreate(koks: str = None,bg: str = None, width: int = 1920, height: int = 
     draw = ImageDraw.Draw(image)
     font = ImageFont.truetype("mononoki-Regular.ttf", 100)
     margin = offset = 270
+    lineindex = 0
     for line in textwrap.wrap(koks, width=22):
-        w = draw.textlength(line,font=font)
-        draw.text(((width - w)/2, offset), line, font=font, fill=(255,255,255,255),align="center",)
-        offset += font.size
+        lineindex += 1
+        if lineindex <= 5:
+            w = draw.textlength(line,font=font)
+            draw.text(((width - w)/2, offset), line, font=font, fill=(255,255,255,255),align="center",)
+            offset += font.size
+    lineindex = 0
     image.save(f'/home/wilwe/Obrazy/python/end/{koks}.png')
 #def instpost(img: str,cap: str):
 #    with open("/home/wilwe/.config/lyr.yaml", encoding='utf-8', errors='ignore') as f:

@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+wl-copy < "${NAUTILUS_SCRIPT_SELECTED_FILE_PATHS::-1}"
