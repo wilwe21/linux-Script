@@ -695,11 +695,11 @@ while args.cont:
         imgcreate(keywords, bg=bg,blur=20)
     if any(i in ["gbc", "generatebackgroundcolor", "-gbc", "--generatebackgroundcolor"]for i in a):
         try:
-            keywords: str = f'{o1} {o2}'
-            cap: str = f'{o1}\n{o2}'
+            keywords: str = f'{o1} {o2}'.replace("/","")
+            cap: str = f'{o1}\n{o2}'.replace("/","")
         except:
-            keywords: str = o1
-            cap: str = o1
+            keywords: str = o1.replace("/","")
+            cap: str = o1.replace("/","")
         try:
             tit: str = f'{file1} {file}'
         except:

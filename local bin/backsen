@@ -1,0 +1,51 @@
+#!/usr/bin/env python3
+from bing_image_downloader import downloader
+from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageFilter
+import random, sys, os, argparse, requests, yaml, textwrap, hashlib
+parser = argparse.ArgumentParser()
+parser.add_argument("-bg", "--background", help="Background", default=None)
+parser.add_argument("-genbg", "--generatebackground", help="Generate Background", default=False, action=argparse.BooleanOptionalAction)
+parser.add_argument("-t", "--text", help="Text", default=None)
+args = parser.parse_args()
+def imgdown(koks:str, lim: int = 10) -> None:
+    downloader.download(
+        koks,
+        limit=lim,
+        output_dir=r'/home/wilwe/Obrazy/python',
+        adult_filter_off=False,
+        timeout=60,
+        filter='',
+        verbose=False
+    )
+def imgcreate(koks: str = None,bg: str = None, width: int = 1920, height: int = 1080, blur: int = 10) -> None:
+    try:
+        image = Image.open(bg).resize((width,height))
+    except:
+        color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
+        while color == (255,255,255):
+            color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
+        image = Image.new("RGB",(width,height),color)
+    if blur != 0:
+        image = image.filter(ImageFilter.GaussianBlur(20))
+    draw = ImageDraw.Draw(image)
+    font = ImageFont.truetype("mononoki-Regular.ttf", 100)
+    margin = offset = 270
+    for line in textwrap.wrap(koks, width=22):
+        w = draw.textlength(line,font=font)
+        draw.text(((width - w)/2, offset), line, font=font, fill=(255,255,255,255),align="center",)
+        offset += font.size
+    image.save(f'/home/wilwe/Obrazy/python/end/{koks}.png')
+if args.text == None:
+    args.text: str = input("Give text: ") 
+if args.generatebackground:
+    imgdown(args.text, 5)
+    bglis = os.popen(f'ls "/home/wilwe/Obrazy/python/{args.text}"').readlines()
+    bgf = bglis[random.randrange(len(bglis))].strip("\n")
+    bg = f"/home/wilwe/Obrazy/python/{args.text}/{bgf}"
+if args.background != None:
+    imgcreate(args.text, bg=args.background, blur=20)
+else:
+    try:
+        imgcreate(args.text, bg=bg,blur=20)
+    except:
+        imgcreate(args.text)
