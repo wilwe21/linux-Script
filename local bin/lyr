@@ -348,7 +348,7 @@ def imgdown(koks:str, lim: int = 10) -> None:
         filter='',
         verbose=False
     )
-def imgcreate(koks: str = None,bg: str = None, width: int = 1920, height: int = 1080, blur: int = 10) -> None:
+def imgcreate(koks: str = None,bg: str = None, width: int = 1920, height: int = 1080, blur: int = 10, mline: int = 5) -> None:
     try:
         image = Image.open(bg).resize((width,height))
     except:
@@ -364,7 +364,7 @@ def imgcreate(koks: str = None,bg: str = None, width: int = 1920, height: int = 
     lineindex = 0
     for line in textwrap.wrap(koks, width=22):
         lineindex += 1
-        if lineindex <= 5:
+        if lineindex <= mline:
             w = draw.textlength(line,font=font)
             draw.text(((width - w)/2, offset), line, font=font, fill=(255,255,255,255),align="center",)
             offset += font.size
