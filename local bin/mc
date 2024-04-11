@@ -57,7 +57,7 @@ def cordformat(name: str,filename=fn):
     try:
         j = cords["X"]
     except:
-        print("Wrong value")
+        print(f"No entry with name {name}")
         return
     print(name)
     print(f'X: {cords["X"]}')
