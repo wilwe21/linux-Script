@@ -4,6 +4,9 @@ from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageFilter
 import random, sys, os, argparse, requests, yaml, textwrap, hashlib
 parser = argparse.ArgumentParser()
 parser.add_argument("-bg", "--background", help="Background", default=None)
+parser.add_argument("-r", "--red", help="Background red", type=int)
+parser.add_argument("-g", "--green", help="Background green", type=int)
+parser.add_argument("-b", "--blue", help="Background blue", type=int)
 parser.add_argument("-genbg", "--generatebackground", help="Generate Background", default=False, action=argparse.BooleanOptionalAction)
 parser.add_argument("-t", "--text", help="Text", default=None)
 args = parser.parse_args()
@@ -21,9 +24,23 @@ def imgcreate(koks: str = None,bg: str = None, width: int = 1920, height: int = 
     try:
         image = Image.open(bg).resize((width,height))
     except:
-        color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
-        while color == (255,255,255):
+        if args.red != None or args.green != None or args.blue != None:
+            try:
+                if args.red == None:
+                    args.red = 0
+                if args.green == None:
+                    args.green = 0
+                if args.blue == None:
+                    args.blue = 0
+                color = (args.red,args.green,args.blue)
+            except:
+                print(args.red,args.green,args.blue)
+                print("It's not a int")
+                return
+        else:
             color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
+            while color == (255,255,255):
+                color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
         image = Image.new("RGB",(width,height),color)
     if blur != 0:
         image = image.filter(ImageFilter.GaussianBlur(20))
