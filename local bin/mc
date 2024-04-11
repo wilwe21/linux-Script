@@ -1,0 +1,85 @@
+#!/usr/bin/env python3
+import subprocess, os, yaml, argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("-a", "--add", help="Add cords", action=argparse.BooleanOptionalAction)
+parser.add_argument("-l", "--list", help="List cords", choices=["f","full","s","short"],type = lambda s : s.lower())
+parser.add_argument("-g", "--get", help="Get Cords", nargs="*")
+args = parser.parse_args()
+fn = '/home/wilwe/Dokumenty/minecraft_cords'
+def jmod(x: int, y: int, z: int, name: str, filename=fn):
+    try:
+        lis = {name: {'X': int(x),'Y': int(y),'Z': int(z)}}
+    except:
+        print("Cords isn't int")
+        return
+    try:
+        with open(filename, "r") as file:
+            data = yaml.load(file, Loader=yaml.FullLoader)
+            if type(data) != type(None):
+                data = data | lis
+            else:
+                data = lis
+    except:
+        open(filename, "x")
+        data = lis
+    with open(filename, "w") as file:
+        yaml.dump(data, file, sort_keys=True)
+        print(data)
+def addcords():
+    try:
+        entry: str = subprocess.check_output(["zenity", "--forms", "--add-entry=X", "--add-entry=Y", "--add-entry=Z", "--add-entry=Name"])
+    except subprocess.CalledProcessError:
+        print("You exit")
+        return
+    except:
+        print("Require Zenity")
+        return
+    entry = str(entry).strip("\\n'")
+    entry = str(entry).strip("b'")
+    entry = entry.split("|")
+    na = entry[3]
+    za = entry[2]
+    ya = entry[1]
+    xa = entry[0]
+    print(f'{na}\nx: {xa}\ny: {ya}\nz: {za}')
+    jmod(xa,ya,za,na)
+def getcords(name: str, filename=fn):
+    try:
+        with open(filename, "r") as file:
+            data = yaml.load(file, Loader=yaml.FullLoader)
+            return data[name]
+    except KeyError:
+        return f"{args.get} don't exist"
+    except:
+        return "File Don't exist or smth"
+def cordformat(name: str,filename=fn):
+    cords = getcords(name,filename)
+    try:
+        j = cords["X"]
+    except:
+        print("Wrong value")
+        return
+    print(name)
+    print(f'X: {cords["X"]}')
+    print(f'Y: {cords["Y"]}')
+    print(f'Z: {cords["Z"]}')
+    print()
+def listcords(mode="full",filename=fn):
+    with open(filename, "r") as file:
+        data = yaml.load(file, Loader=yaml.FullLoader)
+    for key in data:
+        if mode == "full":
+            cordformat(key)
+        if mode == "short":
+            print(key)
+if args.add != None:
+    addcords()
+if args.get != None:
+    args.get = ' '.join(args.get)
+    cordformat(args.get)
+if args.list != None:
+    if args.list.lower() == "f":
+        args.list = "full"
+    if args.list.lower() == "s":
+        args.list = "short"
+    listcords(args.list.lower())

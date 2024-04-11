@@ -2,6 +2,7 @@
 from bing_image_downloader import downloader
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageFilter
 from instagram_web_api import Client, ClientCompatPatch, ClientError, ClientLoginError
+from pathlib import Path
 import random, sys, os, argparse, requests, yaml, textwrap, hashlib
 parser = argparse.ArgumentParser()
 parser.add_argument("-l", "--language", help="Translate Language")
@@ -18,6 +19,13 @@ parser.add_argument("-c", "--cont", help="continously", action=argparse.BooleanO
 parser.add_argument("-tr", "--totalrandom", help="2 line is very randomized", action=argparse.BooleanOptionalAction)
 parser.add_argument("-d", "--decorator", help="Decorator", default=True, action=argparse.BooleanOptionalAction)
 args = parser.parse_args()
+try:
+    with open(f"{Path.home()}/.config/lyr.yaml", "r") as fas:
+        conf = yaml.load(fas, Loader=yaml.FullLoader)
+    defpath = conf["path"]
+except Exception as e:
+    print(e)
+    defpath = Path.home()
 mut = ' '
 tran = None
 totalrandom = False
@@ -54,7 +62,7 @@ if args.path != None:
 def getlyr():
     global path, file, file1, o1, o2, lin, next, language, lin2, tran
     sus=1
-    path = '/home/wilwe/Dokumenty/oryginał/Lyrics'
+    path = defpath
     if pathf != None:
         path = pathf
     lis = os.popen('ls ' + path).readlines()
@@ -291,7 +299,7 @@ def trans(langfunc: str):
             print(f"\033[1A{t2}")
 class Bio:
     def __init__(self) -> None:
-        with open("/home/wilwe/.config/lyr.yaml", encoding='utf-8', errors='ignore') as f:
+        with open("~/.config/lyr.yaml", encoding='utf-8', errors='ignore') as f:
             data = yaml.safe_load(f)
         self.data = data
         self.token = self.data["token"]
