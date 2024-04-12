@@ -22,7 +22,7 @@ def jmod(x: int, y: int, z: int, name: str, filename=fn):
     except:
         open(filename, "x")
         data = lis
-    with open(filename, "w") as file:
+    with open(filename, "w+") as file:
         yaml.dump(data, file, sort_keys=True)
         print(data)
 def addcords():
