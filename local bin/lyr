@@ -8,7 +8,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-l", "--language", help="Translate Language")
 parser.add_argument("-f", "--file", help="Specyfy file", nargs="*")
 parser.add_argument("-p", "--path", help="Specyfy path", nargs="*")
-parser.add_argument("-ol", "--oryginalang", help="Specyfy oryginal file language", default="en")
+parser.add_argument("-ol", "--oryginalang", help="Specyfy oryginal file language")
 parser.add_argument("-ls", "--list", help="List files", action=argparse.BooleanOptionalAction)
 parser.add_argument("-v", "--voice", help="Hear output", action=argparse.BooleanOptionalAction)
 parser.add_argument("-m", "--mute", help="Mute music", action=argparse.BooleanOptionalAction)
@@ -32,8 +32,13 @@ try:
                 cont = False
     except:
         pass
+    try:
+        orlang = conf["OryginalLanguage"]
+    except:
+        orlang = "en"
 except:
     defpath = Path.home()
+    orlang = "en"
 if args.cont == None:
     args.cont = False
 mut = ' '
@@ -42,7 +47,6 @@ totalrandom = False
 voice = False
 tvoice = False
 language = None
-orlang = None
 forcef = None
 decorator = True
 randomfas = None
