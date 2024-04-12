@@ -23,8 +23,15 @@ try:
     with open(f"{Path.home()}/.config/lyr.yaml", "r") as fas:
         conf = yaml.load(fas, Loader=yaml.FullLoader)
     defpath = conf["path"]
-except Exception as e:
-    print(e)
+    try:
+        cont = conf["alwayscontinue"] 
+        if cont == True:
+            args.cont = True
+        else:
+            cont = False
+    except:
+        pass
+except:
     defpath = Path.home()
 mut = ' '
 tran = None
