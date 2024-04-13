@@ -9,10 +9,58 @@ def read_items(file_path):
     with open(file_path, 'r') as file:
         items = [line.strip() for line in file]
     return items
-def save(data):
+def save(data: dict, susd: str = "yaml"):
     name: str = file.split('/')
-    with open(f"tierlista {name[-1]}", 'w+') as f:
+    f = open(f"tierlista {name[-1]}", 'w+')
+    if susd.lower() == "yaml":
+        print("saved yaml file")
         yaml.dump(data, f, sort_keys=False, allow_unicode=True)
+    elif susd.lower() == "normal":
+        print("saved as normal file")
+        if args.tiers != None:
+            for tier in range(len(args.tiers)):
+                f.write("—————————————————————————————————————————————\n")
+                f.write(f"{tier} {' | '.join(yam[tier])}\n")
+            f.write("—————————————————————————————————————————————\n")
+        else:
+            f.write("—————————————————————————————————————————————\n")
+            f.write(f"| S | {' | '.join(yam['S'])}\n")
+            f.write("—————————————————————————————————————————————\n")
+            f.write(f"| A | {' | '.join(yam['A'])}\n")
+            f.write("—————————————————————————————————————————————\n")
+            f.write(f"| B | {' | '.join(yam['B'])}\n")
+            f.write("—————————————————————————————————————————————\n")
+            f.write(f"| C | {' | '.join(yam['C'])}\n")
+            f.write("—————————————————————————————————————————————\n")
+            f.write(f"| D | {' | '.join(yam['D'])}\n")
+            f.write("—————————————————————————————————————————————\n")
+            f.write(f"| F | {' | '.join(yam['F'])}\n")
+            f.write("—————————————————————————————————————————————\n")
+def askforsave(data):
+    print("\033[2K\033[999999DSave to file?")
+    try:
+        sas = input("")
+    except:
+        exit()
+    sas = sas.split(" ")
+    if any(s in ["y","yes"]for s in sas):
+        sav = True
+    else:
+        sav = False
+    for i in sas:
+        if i in ["mode","m","normal","yaml","no","ya"]:
+            try:
+                mode = sas[sas.index(i)+1]
+                print(f"Using mode: {mode}")
+            except:
+                if i not in ["normal", "yaml", "no", "ya"]:
+                    print("No mode declared using yaml")
+                    mode = "yaml"
+                else:
+                    mode = i
+                    print(f"Using mode: {mode}")
+    if sav:
+        save(data, mode)
 if args.tiers != None:
     tiers = [f"{colors[random.randrange(len(colors))] if args.tiers.index(i) >= len(colors) else colors[args.tiers.index(i)]}| {i} |\033[0m" for i in args.tiers]
     yam = {f"{tier}": [] for tier in args.tiers}
@@ -37,10 +85,7 @@ for i in items:
     try:
         x = str(input('Tier: '))
     except:
-        print("\033[2K\033[999999DSave to file?")
-        sas: str = input("")
-        if sas in ["y","yes"]:
-            save(yam)
+        askforsave(yam)
         exit()
     if x in ['exit',':q']:
         break
@@ -85,7 +130,4 @@ for i in items:
         print ("\033[31m—————————————————————————————————————————————\033[0m")
         print (tiers[5])
         print ("\033[31m—————————————————————————————————————————————\033[0m")
-print("Save to file?")
-sas: str = input("")
-if sas in ["y","yes"]:
-    save(yam)
+asktosave(yam)
