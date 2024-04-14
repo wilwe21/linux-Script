@@ -37,8 +37,11 @@ def sorts(lis, last):
                     elif args.lagr != None:
                         lagr += i
                 except:
-                    fin += i
-                    last = i.strip()
+                    if s[-1] != l[-1] and len(s) != len(l):
+                        pass
+                    else:
+                        fin += i
+                        last = i.strip()
             elif args.lagr != None:
                 lagr += i
 if args.random != None:
