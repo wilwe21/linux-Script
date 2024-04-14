@@ -35,3 +35,4 @@ try:
             yaml.dump({"dzień": 0,"data": td.strip()}, f)
 except Exception as e:
     print(e)
+    pass
