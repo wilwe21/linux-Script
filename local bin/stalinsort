@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+import random, argparse, string
+parser = argparse.ArgumentParser()
+parser.add_argument("-r","--random", help="Take random numbers", action=argparse.BooleanOptionalAction)
+parser.add_argument("-f","--file", help="Take file")
+parser.add_argument("-l","--lagr", help="Print łagr", action=argparse.BooleanOptionalAction)
+args = parser.parse_args()
+
+def sort(lis: list):
+    global lagr
+    last = 0
+    for i in lis:
+        if int(lis[lis.index(i)]) > int(last):
+            last = i
+            print(i)
+        elif args.lagr != None:
+            lagr += f"{str(i)} "
+def sorts(lis, last):
+    global fin, lagr
+    for i in lis:
+        if i.strip() == '':
+           continue
+        else:
+            s = [ord(ch) for ch in i.lower()]
+            l = [ord(ch) for ch in last.lower()]
+            chk = 0
+            if s[chk] > l[chk]:
+                last = i.strip()
+                fin += i
+            elif s[chk] == l[chk]:
+                try:
+                    while s[chk] == l[chk]:
+                        chk += 1
+                    if s[chk] > l[chk]:
+                        fin += i
+                        last = i.strip()
+                    elif args.lagr != None:
+                        lagr += i
+                except:
+                    fin += i
+                    last = i.strip()
+            elif args.lagr != None:
+                lagr += i
+if args.random != None:
+    a = []
+    lagr = ''
+    for i in range(random.randint(0,100)):
+        a.append(random.randint(0,100))
+    print(a)
+    sort(a)
+    if args.lagr != None:
+        print(f"Łagr: {lagr}")
+if args.file != None:
+    lagr = ''
+    file = open(args.file, "r")
+    lines = file.readlines()
+    fin = ''
+    sorts(lines, lines[0])
+    print(fin)
+    if args.lagr != None:
+        print(f"Łagr: {lagr}")
