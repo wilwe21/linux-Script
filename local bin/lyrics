@@ -1,3 +1,9 @@
 #!/usr/bin/env python3
-import lyricsgenius
-
+import lyricsgenius, yaml
+from pathlib import Path
+with open(f"{Path.home()}/.config/lyrics.yaml", "r") as f:
+    data = yaml.load(f,Loader=yaml.FullLoader)
+token = data["token"]
+genius = lyricsgenius.Genius(token)
+artist = genius.search_artist(input("Artist: "), max_songs=0, include_features=True)
+print(artist.song(input("what a Song: ")).save_lyrics())
