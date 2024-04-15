@@ -4,6 +4,7 @@ from pathlib import Path
 with open(f"{Path.home()}/.config/lyrics.yaml", "r") as f:
     data = yaml.load(f,Loader=yaml.FullLoader)
 token = data["token"]
-genius = lyricsgenius.Genius(token)
-artist = genius.search_artist(input("Artist: "), max_songs=0, include_features=True)
-print(artist.song(input("what a Song: ")).save_lyrics())
+genius = lyricsgenius.Genius(token, verbose=False)
+artist = genius.search_artist(input("Artist: "),get_full_info=False,per_page=0, max_songs=0)
+song = input("What a Song: ")
+artist.song(song).save_lyrics(extension="TXT", filename=song)
