@@ -596,8 +596,11 @@ while args.cont:
             cpz = f"{cpv}\n{cpx}"
             os.popen(f'wl-copy "{cpz}"')
         except:
-            cpv = str(o1.encode("ascii"))[2::][:-1]
-            os.popen(f'wl-copy "{cpv}"')
+            try:
+                cpv = str(o1.encode("ascii"))[2::][:-1]
+                os.popen(f'wl-copy "{cpv}"')
+            except:
+                print("something's wrong")
     if any(i in ["tcp", "transcopy", "-tcp", "--transcopy"]for i in a):
         try:   
             cpv = str(t1.encode("ascii"))[2::][:-1]
