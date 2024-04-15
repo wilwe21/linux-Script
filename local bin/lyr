@@ -591,28 +591,44 @@ while args.cont:
             msg = None
     if any(i in ["cp", "copy", "-cp", "--cp"]for i in a):
         try:
-            cpv = f'{o1}\n{o2}'
-            os.popen(f'wl-copy "{cpv}"')
+            cpv = str(o1.encode("ascii"))[2::][:-1]
+            cpx = str(o2.encode("ascii"))[2::][:-1]
+            cpz = f"{cpv}\n{cpx}"
+            os.popen(f'wl-copy "{cpz}"')
         except:
-            cpv = o1
+            cpv = str(o1.encode("ascii"))[2::][:-1]
             os.popen(f'wl-copy "{cpv}"')
     if any(i in ["tcp", "transcopy", "-tcp", "--transcopy"]for i in a):
-        try:
-            cpv = f'{t1}\n{t2}'
-            os.popen(f'wl-copy "{cpv}"')
+        try:   
+            cpv = str(t1.encode("ascii"))[2::][:-1]
+            cpx = str(t2.encode("ascii"))[2::][:-1]
+            cpz = f"{cpv}\n{cpx}"
+            os.popen(f'wl-copy "{cpz}"')
         except:
             try:
-                cpv = t1
+                cpv = str(t1.encode("ascii"))[2::][:-1]
                 os.popen(f'wl-copy "{cpv}"')
             except:
                 print("something's wrong")
     if any(i in ["cp1", "copy1", "-cp1", "--cp1"]for i in a):
-        cpv = o1
+        cpv = str(o1.encode("ascii"))[2::][:-1]
         os.popen(f'wl-copy "{cpv}"')
     if any(i in ["tcp1", "transcopy1", "-tcp1", "--transcopy1"]for i in a):
         try:
-            cpv = t1
+            cpv = str(o1.encode("ascii"))[2::][:-1]
             os.popen(f'wl-copy "{cpv}"')
+        except:
+            print("something's wrong")
+    if any(i in ["cp2", "copy2", "-cp2", "--cp2"]for i in a):
+        try:
+            cpv = str(o2.encode("ascii"))[2::][:-1]
+            os.popen(f'wl-copy "{cpv}"')
+        except:
+            print("something's wrong")
+    if any(i in ["tcp2", "transcopy2", "-tcp2", "--transcopy2"]for i in a):
+        try:
+            cpv = str(t2.encode("ascii"))[2::][:-1]
+            os.popen(f'wl-copy {cpv}')
         except:
             print("something's wrong")
     if any(i in ["dc", "discord", "-dc", "--discord"]for i in a):
