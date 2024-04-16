@@ -1,10 +1,19 @@
 #!/usr/bin/env python
-import os, argparse, yaml
+import os, argparse, yaml, random
 from pathlib import Path
+import importlib.machinery
+import importlib.util
+
+loader = importlib.machinery.SourceFileLoader( "backsen", path='/home/wilwe/Dokumenty/localbin/backsen' )
+spec = importlib.util.spec_from_loader( 'backsen', loader )
+backsen = importlib.util.module_from_spec( spec )
+loader.exec_module( backsen )
+
 parser = argparse.ArgumentParser()
 parser.add_argument("-r", "--reset", help="Reset", action=argparse.BooleanOptionalAction)
 parser.add_argument("-i", "--info", help="Show info", action=argparse.BooleanOptionalAction)
 parser.add_argument("-a", "--add", help="Add value", action=argparse.BooleanOptionalAction)
+parser.add_argument("-gen", "--gendni", help="Generate dni image", action=argparse.BooleanOptionalAction)
 parser.add_argument("-v", "--value", help="Value to add", default=1)
 args = parser.parse_args()
 format="%Y-%m-%d"
@@ -30,9 +39,17 @@ try:
         with open(path, "w") as f:
             yaml.dump(sav, f, sort_keys=False, allow_unicode=True)
         print(sav)
-    if args.reset !=None:
+    if args.reset != None:
         with open(path, "w") as f:
             yaml.dump({"dzień": 0,"data": td.strip()}, f)
+    if args.gendni != None:
+        imas = ["cursed images", "creapy images", "cute images","fucked images", "hardcore images"]
+        pat = f"{dni['dzień']+1} My little pony {imas[random.randrange(len(imas))]}"
+        backsen.imgdown(pat, unsafe=True)
+        bglis = os.popen(f'ls "/home/wilwe/Obrazy/python/{pat}"').readlines()
+        bgf = bglis[random.randrange(len(bglis))].strip()
+        bg = f"/home/wilwe/Obrazy/python/{pat}/{bgf}"
+        backsen.imgcreate(f"{dni['dzień']+1} czekania aż @maciekpro2137 nagra recenzje my little pony", bg=bg, blur=15)
 except Exception as e:
     print(e)
     pass
