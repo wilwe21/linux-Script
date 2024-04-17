@@ -1,12 +1,20 @@
 #!/usr/bin/env python3
-import lyricsgenius, yaml, os
+import lyricsgenius, yaml, os, subprocess
 from pathlib import Path
 with open(f"{Path.home()}/.config/lyrics.yaml", "r") as f:
     data = yaml.load(f,Loader=yaml.FullLoader)
 token = data["token"]
 genius = lyricsgenius.Genius(token, verbose=False)
-artist = genius.search_artist(input("Artist: "),get_full_info=False,per_page=0, max_songs=0)
+arti = input("Artist: ")
+artist = genius.search_artist(arti,get_full_info=False,per_page=0, max_songs=0)
 song = input("What a Song: ")
+audio = input("Audio: ")
+if audio != None:
+    if audio in ["only", "o"]:
+        subprocess.run(["yt-dlp", f"ytsearch1:'{arti} {song}'", '-o', "%(title)s.%(ext)s", "-x", "--audio-format", "mp3"])
+        exit()
+    if audio in ["yes", "y", "tak", "t"]:
+        subprocess.run(["yt-dlp", f"ytsearch1:'{arti} {song}'", '-o', "%(title)s.%(ext)s", "-x", "--audio-format", "mp3"])
 try:
     artist.song(song).save_lyrics(extension="TXT", filename=song)
 except:
