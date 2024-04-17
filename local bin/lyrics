@@ -22,6 +22,14 @@ with open(f"{song}.txt") as f:
     file[0] = oline
     file[-1] = file[-1][:file[-1].find("Embed")]
     for line in range(len(file)):
+        if file[line].find("’") != -1:
+            file[line] = file[line].replace("’","'")
+        if file[line].find('“') != -1:
+            file[line] = file[line].replace('“','"')
+        if file[line].find("‘") != -1:
+            file[line] = file[line].replace("‘","'")
+        if file[line].find('”') != -1:
+            file[line] = file[line].replace('”','"')
         if file[line].find("You might also like") != -1:
             file[line] = file[line].replace(file[line][:oline.find("You might also like")], "")
         if file[line].find("]") != -1:
