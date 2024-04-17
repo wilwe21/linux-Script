@@ -33,13 +33,11 @@ with open(f"{song}.txt") as f:
         f2.remove(f2[0])
     for line in range(len(f2)):
         try:
-            print(line, len(f2[line]), len(f2[line+1]))
             if len(f2[line]) == 0 and len(f2[line+1]) == 0:
                 continue
         except:
             pass
         fins.append(f2[line])
-    print(fins)
 with open(f"{song}", "w+") as fin:
     fin.write('\n'.join(fins))
 os.remove(f"{song}.txt")

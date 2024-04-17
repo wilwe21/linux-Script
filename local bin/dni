@@ -43,7 +43,7 @@ try:
         with open(path, "w") as f:
             yaml.dump({"dzień": 0,"data": td.strip()}, f)
     if args.gendni != None:
-        imas = ["cursed images", "creepy images", "cute images", "fucked images", "hardcore images", "intresting images", "???", "creepy past images", "gore images", "i forgore", "going crazy", "blood images", "genoside images", "vore images"]
+        imas = ["cursed images", "creepy images", "cute images", "fucked images", "hardcore images", "intresting images", "???", "creepy past images", "gore images", "i forgore", "going crazy", "blood images", "genoside images", "vore images", "dump images", "memes", "decapitated images", "messed up images", "canibalizm images", "dupa"]
         pat = f"{dni['dzień']+1} My little pony {imas[random.randrange(len(imas))]}"
         if pat == f"{dni['dzień']+1} My little pony fucked images":
             backsen.imgdown(pat, unsafe=False)
