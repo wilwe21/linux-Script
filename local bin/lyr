@@ -74,7 +74,7 @@ if args.list != None:
 if args.path != None:
     pathf = args.path
 def getlyr():
-    global path, file, file1, o1, o2, lin, next, language, lin2, tran
+    global path, file, file1, o1, o2, lin, next, language, lin2, tran, lis
     sus=1
     path = defpath
     if pathf != None:
@@ -439,6 +439,7 @@ while args.cont:
     if any(i in ["tr", "totalrandom", "-tr", "--totalrandom"]for i in a):
         if totalrandom == True:
             totalrandom = False
+            del file1
         else:
             totalrandom = True
     if any(i in ["r", "random", "-r", "--random"]for i in a):
@@ -751,6 +752,15 @@ while args.cont:
             tit: str = file
         imgcreate(keywords)
         #instpost(f'/home/wilwe/Obrazy/python/end/{tit}',cap)
+    if any(i in ["i", "index", "-i", "--index"]for i in a):
+        try:
+            index1 = lis.index(file1+'\n')
+            index2 = lis.index(file+'\n')
+            print(f"File 1: {index1+1}/{lis.index(lis[-1])+1}")
+            print(f"File 2: {index2+1}/{lis.index(lis[-1])+1}")
+        except:
+            index = lis.index(file+'\n')
+            print(f"File : {index+1}/{lis.index(lis[-1])+1}")
     if any(i in ["c", "congif", "-c", "--config"]for i in a):
         stop = True
         print(f"Path: {pathf}\n\
