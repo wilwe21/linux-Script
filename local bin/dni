@@ -52,7 +52,7 @@ try:
         bglis = os.popen(f'ls "/home/wilwe/Obrazy/python/{pat}"').readlines()
         bgf = bglis[random.randrange(len(bglis))].strip()
         bg = f"/home/wilwe/Obrazy/python/{pat}/{bgf}"
-        backsen.imgcreate(f"{dni['dzień']+1} czekania aż @maciekpro2137 nagra recenzje my little pony", bg=bg, blur=15)
+        backsen.imgcreate(f"{dni['dzień']+1} czekania aż @maciekpro2137 nagra recenzje my little pony", bg=bg, blur=5)
 except Exception as e:
     print(e)
     pass
