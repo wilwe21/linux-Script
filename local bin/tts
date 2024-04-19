@@ -1,19 +1,13 @@
-#!/bin/bash
-lang='en'
-say='nothing specyfyed'
-mus='false'
-while getopts s:l:m flag
-do
-	case "${flag}" in
-		s) say=${OPTARG};;
-		l) lang=${OPTARG};;
-		m) mus='true';;
-	esac
-done
-if [ $mus == 'true' ]; then
-	playerctl pause
-fi
-spd-say -l ${lang} -w "${say}"
-if [ $mus == 'true' ]; then
-	playerctl play
-fi
+#!/usr/bin/env python3
+import argparse, subprocess
+parser = argparse.ArgumentParser()
+parser.add_argument("-s", "--say", help="What to say")
+parser.add_argument("-l", "--lang", help="Language", default="en")
+parser.add_argument("-m", "--mute", help="Mute player", action=argparse.BooleanOptionalAction)
+args = parser.parse_args()
+if args.say == None:
+    args.say = input("What to say: ")
+if args.mute:
+    subprocess.run(['playerctl', 'pause;', 'spd-say', '-l', args.lang, '-w', args.say, ';', 'playerctl play'])
+else:
+    subprocess.run(['spd-say', '-l', args.lang, '-w', args.say])
