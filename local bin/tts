@@ -8,6 +8,8 @@ args = parser.parse_args()
 if args.say == None:
     args.say = input("What to say: ")
 if args.mute:
-    subprocess.run(['playerctl', 'pause;', 'spd-say', '-l', args.lang, '-w', args.say, ';', 'playerctl play'])
+    subprocess.run(['playerctl', 'pause'])
+    subprocess.run(['spd-say', '-l', args.lang, '-w', args.say])
+    subprocess.run(['playerctl', 'play'])
 else:
     subprocess.run(['spd-say', '-l', args.lang, '-w', args.say])
