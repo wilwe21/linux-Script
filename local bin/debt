@@ -1,0 +1,74 @@
+#!/usr/bin/env python3
+import yaml, os, subprocess, argparse
+from pathlib import Path
+parser = argparse.ArgumentParser()
+parser.add_argument("-o", "--open", help="Open file", action=argparse.BooleanOptionalAction)
+parser.add_argument("-c", "--config", help="Open config file", action=argparse.BooleanOptionalAction)
+parser.add_argument("-l", "--list", help="List entries", action=argparse.BooleanOptionalAction)
+parser.add_argument("-a", "--add", help="Add value", default=0, type=float)
+parser.add_argument("-k", "--key", help="Manipulate key", default=["Dług", "Publiczny"], nargs="*")
+parser.add_argument("-r", "--remove", help="Remove key from list", action=argparse.BooleanOptionalAction)
+args = parser.parse_args()
+args.key = ' '.join(args.key)
+try:
+    with open(f"{Path.home()}/.config/debt.yaml", "r") as f:
+        global data
+        data = yaml.load(f, Loader=yaml.FullLoader)
+except:
+    with open(f"{Path.home()}/.config/debt.yaml", "w+") as f:
+        pat = {"dir": None, "currency": None}
+        yaml.dump(pat, f, sort_keys=True)
+    data = {}
+if args.config != None:
+    subprocess.call(["xdg-open", f"{Path.home()}/.config/debt.yaml"])
+if data["dir"] != None:
+    dirc = data["dir"]
+if data["currency"] == None:
+    currency = "USD"
+else:
+    currency = data["currency"]
+try:
+    dirc = subprocess.check_output(["xdg-user-dir", "DOCUMENTS"], universal_newlines=True).strip()
+except:
+    exit()    
+try:
+    with open(f"{dirc}/debt.yaml", "r") as f:
+        global debtfile
+        debtfile = yaml.load(f, Loader=yaml.FullLoader)
+except:
+    print(f"It will create a debt file in dir {dirc}. Continue?")
+    try:
+        a = input("")
+    except:
+        exit()
+    if a not in ["y", "yes", "tak", "t"]:
+        exit()
+    with open(f"{dirc}/debt.yaml", "w+") as f:
+        yaml.dump({}, f, sort_keys=True)
+    debtfile = {}
+if args.open != None:
+    subprocess.call(["xdg-open", f"{dirc}/debt.yaml"])
+enfi = {}
+for key, value in debtfile.items():
+    if value != 0:
+        enfi.update({key: value})
+debtfile = enfi
+if args.remove != None:
+    try:
+        del debtfile[args.key]
+    except:
+        print("something's wrong")
+if args.list != None:
+    for key, value in debtfile.items():
+        print(f"{key}: {value:.2f}{currency}")
+    exit()
+try:
+    debtfile[args.key] += args.add
+except KeyError:
+    debtfile.update({args.key: args.add})
+except Exception as e:
+    print(e)
+    print("something's wrong")
+print(f"{args.key}: ${debtfile[args.key]:.2f}{currency}")
+with open(f"{dirc}/debt.yaml", "w") as f:
+    yaml.dump(debtfile, f, sort_keys=True)
