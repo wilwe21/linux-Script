@@ -3,7 +3,7 @@ from bing_image_downloader import downloader
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageFilter
 from instagram_web_api import Client, ClientCompatPatch, ClientError, ClientLoginError
 from pathlib import Path
-import random, sys, os, argparse, requests, yaml, textwrap, hashlib
+import random, sys, os, argparse, requests, yaml, textwrap, hashlib, subprocess
 parser = argparse.ArgumentParser()
 parser.add_argument("-l", "--language", help="Translate Language")
 parser.add_argument("-f", "--file", help="Specyfy file", nargs="*")
@@ -761,6 +761,19 @@ while args.cont:
         except:
             index = lis.index(file+'\n')
             print(f"File : {index+1}/{lis.index(lis[-1])+1}")
+    if any(i in ["-qr", "--qrcode", "qr", "qrcode"]for i in a):
+        try:
+            subprocess.run(["qrencode", f"{o1}\n{o2}", "-o", f"{o1}\n{o2}"])
+        except:
+            subprocess.run(["qrencode", f"{o1}", "-o", f"{o1}"])
+    if any(i in ["-tqr", "--transqrcode", "tqr", "transqrcode"]for i in a):
+        try:
+            subprocess.run(["qrencode", f"{t1}\n{t2}", "-o", f"{t1}\n{t2}"])
+        except:
+            try:
+                subprocess.run(["qrencode", f"{t1}", "-o", f"{t1}"])
+            except:
+                print("something's wrong")
     if any(i in ["c", "congif", "-c", "--config"]for i in a):
         stop = True
         print(f"Path: {pathf}\n\
