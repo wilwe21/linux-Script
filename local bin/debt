@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-import yaml, os, subprocess, argparse
+import yaml, os, subprocess, argparse, datetime
+from dateutil.relativedelta import relativedelta
 from pathlib import Path
 parser = argparse.ArgumentParser()
 parser.add_argument("-o", "--open", help="Open file", action=argparse.BooleanOptionalAction)
 parser.add_argument("-c", "--config", help="Open config file", action=argparse.BooleanOptionalAction)
 parser.add_argument("-l", "--list", help="List entries", action=argparse.BooleanOptionalAction)
-parser.add_argument("-a", "--add", help="Add value", default=0, type=float)
+parser.add_argument("-a", "--add", help="Add value", type=float)
 parser.add_argument("-k", "--key", help="Manipulate key", default=["Dług", "Publiczny"], nargs="*")
 parser.add_argument("-r", "--remove", help="Remove key from list", action=argparse.BooleanOptionalAction)
 args = parser.parse_args()
@@ -16,8 +17,8 @@ try:
         data = yaml.load(f, Loader=yaml.FullLoader)
 except:
     with open(f"{Path.home()}/.config/debt.yaml", "w+") as f:
-        pat = {"dir": None, "currency": None}
-        yaml.dump(pat, f, sort_keys=True)
+        pat = {"dir": None, "currency": None, "const": None}
+        yaml.dump(pat, f)
     data = {}
 if args.config != None:
     subprocess.call(["xdg-open", f"{Path.home()}/.config/debt.yaml"])
@@ -46,8 +47,53 @@ except:
     with open(f"{dirc}/debt.yaml", "w+") as f:
         yaml.dump({}, f, sort_keys=True)
     debtfile = {}
+try:
+    time = datetime.datetime.now()
+    if data["const"] != None:
+        for key in data["const"]:
+            t = data["const"][key]["date"]
+            t = t.split(".")[::-1]
+            try:
+                if time.strftime("%Y%m%d") >= datetime.date(int(t[0]), int(t[1]), int(t[2])).strftime("%Y%m%d"):
+                    con = 0
+                    if data["const"][key]["years"] != None:
+                        ryears = data['const'][key]['years']
+                    else:
+                        ryears = 0
+                        con += 1
+                    if data["const"][key]["months"] != None:
+                        rmonths = data['const'][key]['months']
+                    else:
+                        rmonths = 0
+                        con += 1
+                    if data["const"][key]["days"] != None:
+                        rdays = data['const'][key]['days']
+                    else:
+                        rdays = 0
+                        con += 1
+                    if con == 3:
+                        raise Exception("No days")
+                    nex = datetime.date(int(t[0]), int(t[1]), int(t[2])) + relativedelta(years = ryears, months = rmonths, days = rdays)
+                    try:
+                        debtfile[key] += data["const"][key]["value"]
+                        data["const"][key].update({"date": nex.strftime("%d.%m.%Y")})
+                        with open(f"{Path.home()}/.config/debt.yaml", "w") as f:
+                            yaml.dump(data, f)
+                    except KeyError:
+                        debtfile.update({key: data["const"][key]["value"]})
+                        data["const"][key].update({"date": time.strftime("%d.%m.%Y")})
+                        with open(f"{Path.home()}/.config/debt.yaml", "w") as f:
+                            yaml.dump(data, f)
+                    except:
+                        print("something's wrong")
+            except Exception as e:
+                print(e)
+                print("Wrong date")
+except:
+    pass
 if args.open != None:
     subprocess.call(["xdg-open", f"{dirc}/debt.yaml"])
+    exit()
 enfi = {}
 for key, value in debtfile.items():
     if value != 0:
@@ -61,14 +107,14 @@ if args.remove != None:
 if args.list != None:
     for key, value in debtfile.items():
         print(f"{key}: {value:.2f}{currency}")
-    exit()
-try:
-    debtfile[args.key] += args.add
-except KeyError:
-    debtfile.update({args.key: args.add})
-except Exception as e:
-    print(e)
-    print("something's wrong")
-print(f"{args.key}: ${debtfile[args.key]:.2f}{currency}")
+if args.add != None:
+    try:
+        debtfile[args.key] += args.add
+    except KeyError:
+        debtfile.update({args.key: args.add})
+    except Exception as e:
+        print(e)
+        print("something's wrong")
+    print(f"{args.key}: ${debtfile[args.key]:.2f}{currency}")
 with open(f"{dirc}/debt.yaml", "w") as f:
     yaml.dump(debtfile, f, sort_keys=True)
