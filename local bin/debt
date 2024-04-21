@@ -12,6 +12,13 @@ parser.add_argument("-k", "--key", help="Manipulate key", default=["Dług", "Pub
 parser.add_argument("-r", "--remove", help="Remove key from list", action=argparse.BooleanOptionalAction)
 args = parser.parse_args()
 args.key = ' '.join(args.key)
+def is_int(s):
+    try:
+        int(s)
+    except ValueError:
+        return False
+    else:
+        return True
 try:
     with open(f"{Path.home()}/.config/debt.yaml", "r") as f:
         global data
@@ -34,7 +41,7 @@ class error(Exception):
 if args.addconstant == True:
     print("Key:")
     k = input()
-    print("Start date mm.dd.yyyy:")
+    print("Start date dd.mm.yyyy:")
     d = None
     ds = None
     while type(ds) != type(1):
@@ -48,30 +55,38 @@ if args.addconstant == True:
             pass
     print("Loop:")
     da = mo = ye = ""
-    try:
-        raise ValueError()
-    except ValueError:
-        while da == '' and mo == "" and ye == "":
-            try:
+    def damoye():
+        global da, mo, ye
+        c = 1
+        while c != 0:
+            c = 0
+            while da == '' and mo == "" and ye == "":
                 da = input("days: ")
                 mo = input("months: ")
                 ye = input("years: ")
-            except KeyboardInterrupt:
-                exit()
-        raise error()
-    except error:
-        if da == '':
-            da = None
-        else:
-            da = int(da)
-        if mo == '':
-            mo = None
-        else:
-            mo = int(mo)
-        if ye == '':
-            ye = None
-        else:
-            ye = int(ye)
+            try:
+                if da == '':
+                    da = 0
+                else:
+                    da = int(da)
+            except:
+                c += 1
+            try:
+                if mo == '':
+                    mo = 0
+                else:
+                    mo = int(mo)
+            except:
+                c += 1
+            try:
+                if ye == '':
+                    pass
+                else:
+                    mo += int(ye)*12
+            except:
+                c += 1
+            print(c)
+    damoye()
     val = None
     print("Value:")
     while type(val) != type(1):
@@ -81,7 +96,7 @@ if args.addconstant == True:
             exit()
         except:
             pass
-    con = {k: {"date": d, "days": da, "months": mo, "years": ye, "value": val}}
+    con = {k: {"date": d, "days": da, "months": mo, "value": val}}
     print(con)
     data["const"].update(con)
     with open(f"{Path.home()}/.config/debt.yaml", "w") as f:
@@ -114,11 +129,6 @@ try:
             try:
                 if time.strftime("%Y%m%d") >= datetime.date(int(t[0]), int(t[1]), int(t[2])).strftime("%Y%m%d"):
                     con = 0
-                    if data["const"][key]["years"] != None:
-                        ryears = data['const'][key]['years']
-                    else:
-                        ryears = 0
-                        con += 1
                     if data["const"][key]["months"] != None:
                         rmonths = data['const'][key]['months']
                     else:
@@ -131,7 +141,7 @@ try:
                         con += 1
                     if con == 3:
                         raise Exception("No days")
-                    nex = datetime.date(int(t[0]), int(t[1]), int(t[2])) + relativedelta(years = ryears, months = rmonths, days = rdays)
+                    nex = datetime.date(int(t[0]), int(t[1]), int(t[2])) + relativedelta(months = rmonths, days = rdays)
                     try:
                         debtfile[key] += data["const"][key]["value"]
                         data["const"][key].update({"date": nex.strftime("%d.%m.%Y")})
