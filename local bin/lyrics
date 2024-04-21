@@ -1,12 +1,19 @@
 #!/usr/bin/env python3
-import lyricsgenius, yaml, os, subprocess
+import lyricsgenius, yaml, os, subprocess, argparse
 from pathlib import Path
+parser = argparse.ArgumentParser()
+parser.add_argument("-f", "--formated", help="Format lyrics file", action=argparse.BooleanOptionalAction)
+args = parser.parse_args()
 with open(f"{Path.home()}/.config/lyrics.yaml", "r") as f:
     data = yaml.load(f,Loader=yaml.FullLoader)
 token = data["token"]
+if args.formated == None:
+    try:
+        args.formated = data["formated"]
+    except:
+        args.formated = False
 genius = lyricsgenius.Genius(token, verbose=False)
 arti = input("Artist: ")
-artist = genius.search_artist(arti,get_full_info=False,per_page=0, max_songs=0)
 song = input("What a Song: ")
 audio = input("Audio: ")
 if audio != None:
@@ -15,45 +22,49 @@ if audio != None:
         exit()
     if audio in ["yes", "y", "tak", "t"]:
         subprocess.run(["yt-dlp", f"ytsearch1:'{arti} {song}'", '-o', "%(title)s.%(ext)s", "-x", "--audio-format", "mp3"])
-try:
+def genius(arti=arti, song=song):
+    artist = genius.search_artist(arti,get_full_info=False,per_page=0, max_songs=0)
     artist.song(song).save_lyrics(extension="TXT", filename=song)
+try:
+    genius()
 except:
-    print("No song finde or check internet connection")
+    print("something's wrong")
     exit()
-song = song.replace("'","").replace('"',"")
-fins = []
-f2 = []
-with open(f"{song}.txt") as f:
-    file = f.read().split("\n")
-    oline = file[0]
-    oline = oline.replace(oline[:oline.find("Lyrics")+6], "")
-    file[0] = oline
-    file[-1] = file[-1][:file[-1].find("Embed")]
-    for line in range(len(file)):
-        if file[line].find("’") != -1:
-            file[line] = file[line].replace("’","'")
-        if file[line].find('“') != -1:
-            file[line] = file[line].replace('“','"')
-        if file[line].find("‘") != -1:
-            file[line] = file[line].replace("‘","'")
-        if file[line].find('”') != -1:
-            file[line] = file[line].replace('”','"')
-        if file[line].find("You might also like") != -1:
-            file[line] = file[line].replace(file[line][:oline.find("You might also like")], "")
-        if file[line].find("]") != -1:
-            file[line] = file[line].replace(file[line][:file[line].find("]")+1],"")
-        if file[line] == "—":
-            continue
-        f2.append(file[line])
-    if f2[0] == "":
-        f2.remove(f2[0])
-    for line in range(len(f2)):
-        try:
-            if len(f2[line]) == 0 and len(f2[line+1]) == 0:
+if args.formated:
+    song = song.replace("'","").replace('"',"")
+    fins = []
+    f2 = []
+    with open(f"{song}.txt") as f:
+        file = f.read().split("\n")
+        oline = file[0]
+        oline = oline.replace(oline[:oline.find("Lyrics")+6], "")
+        file[0] = oline
+        file[-1] = file[-1][:file[-1].find("Embed")]
+        for line in range(len(file)):
+            if file[line].find("’") != -1:
+                file[line] = file[line].replace("’","'")
+            if file[line].find('“') != -1:
+                file[line] = file[line].replace('“','"')
+            if file[line].find("‘") != -1:
+                file[line] = file[line].replace("‘","'")
+            if file[line].find('”') != -1:
+                file[line] = file[line].replace('”','"')
+            if file[line].find("You might also like") != -1:
+                file[line] = file[line].replace("You might also like", "")
+            if file[line].find("]") != -1:
+                file[line] = file[line].replace(file[line][:file[line].find("]")+1],"")
+            if file[line] == "—":
                 continue
-        except:
-            pass
-        fins.append(f2[line])
-with open(f"{song}", "w+") as fin:
-    fin.write('\n'.join(fins))
-os.remove(f"{song}.txt")
+            f2.append(file[line])
+        if f2[0] == "":
+            f2.remove(f2[0])
+        for line in range(len(f2)):
+            try:
+                if len(f2[line]) == 0 and len(f2[line+1]) == 0:
+                    continue
+            except:
+                pass
+            fins.append(f2[line])
+    with open(f"{song}", "w+") as fin:
+        fin.write('\n'.join(fins))
+    os.remove(f"{song}.txt")

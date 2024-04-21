@@ -5,6 +5,7 @@ from pathlib import Path
 parser = argparse.ArgumentParser()
 parser.add_argument("-o", "--open", help="Open file", action=argparse.BooleanOptionalAction)
 parser.add_argument("-c", "--config", help="Open config file", action=argparse.BooleanOptionalAction)
+parser.add_argument("-ac", "--addconstant", help="Add constant add list", action=argparse.BooleanOptionalAction)
 parser.add_argument("-l", "--list", help="List entries", action=argparse.BooleanOptionalAction)
 parser.add_argument("-a", "--add", help="Add value", type=float)
 parser.add_argument("-k", "--key", help="Manipulate key", default=["Dług", "Publiczny"], nargs="*")
@@ -28,6 +29,63 @@ if data["currency"] == None:
     currency = "USD"
 else:
     currency = data["currency"]
+class error(Exception):
+    pass
+if args.addconstant == True:
+    print("Key:")
+    k = input()
+    print("Start date mm.dd.yyyy:")
+    d = None
+    ds = None
+    while type(ds) != type(1):
+        try:
+            d = input()
+            ds = d.split(".")[::-1]
+            ds = int("".join(ds))
+        except KeyboardInterrupt:
+            exit()
+        except:
+            pass
+    print("Loop:")
+    da = mo = ye = ""
+    try:
+        raise ValueError()
+    except ValueError:
+        while da == '' and mo == "" and ye == "":
+            try:
+                da = input("days: ")
+                mo = input("months: ")
+                ye = input("years: ")
+            except KeyboardInterrupt:
+                exit()
+        raise error()
+    except error:
+        if da == '':
+            da = None
+        else:
+            da = int(da)
+        if mo == '':
+            mo = None
+        else:
+            mo = int(mo)
+        if ye == '':
+            ye = None
+        else:
+            ye = int(ye)
+    val = None
+    print("Value:")
+    while type(val) != type(1):
+        try:
+            val = int(input())
+        except KeyboardInterrupt:
+            exit()
+        except:
+            pass
+    con = {k: {"date": d, "days": da, "months": mo, "years": ye, "value": val}}
+    print(con)
+    data["const"].update(con)
+    with open(f"{Path.home()}/.config/debt.yaml", "w") as f:
+        yaml.dump(data, f)
 try:
     dirc = subprocess.check_output(["xdg-user-dir", "DOCUMENTS"], universal_newlines=True).strip()
 except:
