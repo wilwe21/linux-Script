@@ -41,7 +41,7 @@ except:
     orlang = "en"
 if args.cont == None:
     args.cont = False
-mut = ' '
+mut = ''
 tran = None
 totalrandom = False
 voice = False
@@ -54,7 +54,7 @@ lista = False
 pathf = None
 stop = None
 if args.mute != None:
-    mut = ' -m '
+    mut = '-m'
 if args.voice != None:
     voice = True
 if  args.tvoice != None:
@@ -79,7 +79,8 @@ def getlyr():
     path = defpath
     if pathf != None:
         path = pathf
-    lis = os.popen('ls ' + path).readlines()
+    lis = subprocess.check_output(['ls', path]).decode("UTF-8")
+    lis = list(lis.split('\n'))
     if lista == True:
         if pathf != None:
             print(f"Path {path}")
@@ -89,7 +90,7 @@ def getlyr():
         print(' | '.join(lis).title())
         print(f"There's {len(lis)} files")
         return None
-    file = lis[random.randrange(len(lis))].strip('\n')
+    file = lis[random.randrange(len(lis))]
     if totalrandom:
         file1 = file
     else:
@@ -158,9 +159,9 @@ def getlyr():
         print(lin[next].strip('\n'))
         o2 = lin[next].strip('\n').replace('"', '')
         if voice and not tvoice:
-            os.popen(f'tts{mut}-l {orlang} -s "{o1}" && tts{mut}-l {orlang} -s "{o2}"')
+            subprocess.run(['tts', mut, '-l', orlang, '-s' f"{o1} {o2}"])
     elif voice and not tvoice and not totalrandom:
-            os.popen(f'tts{mut}-l {orlang} -s "{o1}"')
+            subprocess.run(['tts', mut, '-l', orlang, '-s', o1])
     if next >= len(lin) and not totalrandom:
         try:
             del o2
@@ -170,9 +171,9 @@ def getlyr():
         print(susy.strip('\n'))
         o2 = susy.strip('\n').replace('"', '')
         if voice and not tvoice:
-            os.popen(f'tts{mut}-l {orlang} -s "{o1}" && tts{mut}-l {orlang} -s "{o2}"')
+            subprocess.run(['tts', mut, '-l', orlang, '-s', f"{o1} {o2}"])
     elif voice and not tvoice and totalrandom:
-            os.popen(f'tts{mut}-l {orlang} -s "{o1}"')
+            subprocess.run(['tts' ,mut, '-l', orlang, '-s', o1])
     tran = None
     if language != None:
         tran = language
@@ -183,133 +184,133 @@ def trans(langfunc: str):
         print("")
         if decorator == True:
             print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37m{langfunc.title()}\033[0m\033[38;2;166;227;161m\033[0m')
-        t1 = os.popen(f"tpl -l {langfunc} -s " + '"' + o1 + '"').read().strip("\n")
+        t1 = subprocess.check_output(['tpl', '-l', langfunc, '-s', o1]).decode("UTF-8").strip("\n")
         print(t1)
         if args.fallbacklang != None:
             lang=args.fallbacklang
         else:
             lang=langfunc
         if next < len(lin) and not totalrandom:
-            t2 = os.popen(f"tpl -l {langfunc} -s " + '"' + o2 + '"').read().strip("\n")
+            t2 = subprocess.check_output(['tpl', '-l', langfunc, '-s', o2]).decode("UTF-8").strip("\n")
             print(t2)
             if tvoice and not voice:
-                os.popen(f'tts{mut}-l {lang} -s "{t1}" && tts{mut}-l {lang} -s "{t2}"')
+                subprocess.run(['tts', mut, '-l', lang, '-s', f"{t1} {t2}"])
         elif tvoice and not voice and not totalrandom:
-            os.popen(f'tts{mut}-l {lang} -s "{t1}"')
+            subprocess.run(['tts', mut, '-l', lang, '-s', t1])
         if totalrandom and next < len(lin2):
-            t2 = os.popen(f"tpl -l {langfunc} -s " + '"' + o2 + '"').read().strip("\n")
+            t2 = subprocess.check_output(['tpl', '-l', langfunc, '-s', o2]).decode("UTF-8").strip("\n")
             print(t2)
             if tvoice and not voice:
-                os.popen(f'tts{mut}-l {lang} -s "{t1}" && tts{mut}-l {lang} -s "{t2}"')
+                subprocess.run(['tts', mut, '-l', lang, '-s', f"{t1} {t2}"])
         elif tvoice and not voice and totalrandom:
-            os.popen(f'tts{mut}-l {lang} -s "{t1}"')
+            subprocess.run(['tts', mut, '-l', lang, '-s', t1])
     if voice and tvoice:
         if next < len(lin) and not totalrandom:
-            os.popen(f'tts{mut}-l {orlang} -s "{o1}" && tts{mut}-l {orlang} -s "{o2}" && tts{mut}-l {lang} -s "{t1}" && tts{mut}-l {lang} -s "{t2}"')
+            subprocess.run(['tts', mut, '-l', orlang, '-s', f"{o1} {o2}", "&&", "tts", mut, "-l", lang, "-s", f"{t1} {t2}"])
         elif not totalrandom:
-            os.popen(f'tts{mut}-l {orlang} -s "{o1}" && tts{mut}-l {lang} -s "{t1}""')
+            subprocess.run(['tts', mut, '-l', orlang, '-s', o1, "&&", "tts", mut, "-l", lang, "-s", t1])
         if totalrandom and next < len(lin2):
-            os.popen(f'tts{mut}-l {orlang} -s "{o1}" && tts{mut}-l {orlang} -s "{o2}" && tts{mut}-l {lang} -s "{t1}" && tts{mut}-l {lang} -s "{t2}"')
+            subprocess.run(['tts', mut, '-l', orlang, '-s', f"{o1} {o2}", '&&', 'tts', mut, '-l', lang, '-s', f"{t1} {t2}"])
         elif totalrandom:
-            os.popen(f'tts{mut}-l {orlang} -s "{o1}" && tts{mut}-l {lang} -s "{t1}""')
+            subprocess.run(['tts', mut, '-l', orlang, '-s', o1, "&&", "tts", mut, "-l", lang, "-s", t1])
     elif voice and tvoice:
         if next < len(lin) and not totalrandom:
-            os.popen(f'tts{mut}-l {orlang} -s "{o1}" && tts{mut}-l {orlang} -s "{o2}"')
+            subprocess.run([f'tts', mut, "-l", orlang, "-s", f"{o1} {o2}"])
         elif not totalrandom:
-            os.popen(f'tts{mut}-l {orlang} -s "{o1}"')
+            subprocess.run(['tts', mut, '-l', orlang, '-s', o1])
         if totalrandom and next < len(lin2):
-            os.popen(f'tts{mut}-l {orlang} -s "{o1}" && tts{mut}-l {orlang} -s "{o2}"')
+            subprocess.run(['tts', mut, '-l', orlang, '-s', f"{o1} {o2}"])
         elif totalrandom:
-            os.popen(f'tts{mut}-l {orlang} -s "{o1}"')
+            subprocess.run(['tts', mut, '-l', orlang, '-s', o1])
     if langfunc.lower() == "braill":
         print("")
         if decorator == True:
             print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mBraill\033[0m\033[38;2;166;227;161m\033[0m')
         t1 = o1.replace("'","")
-        t1 = os.popen(f"braill -s '{t1}'").read()
+        t1 = subprocess.check_output(["braill", '-s', t1]).decode("UTF-8")
         print(t1)
         if next < len(lin) and not totalrandom:
             t2 = o2.replace("'","")
-            t2 = os.popen(f"braill -s '{t2}'").read()
+            t2 = subprocess.check_output(["braill", "-s", t2]).decode("UTF-8")
             print(f"\033[1A{t2}")
         if totalrandom and next < len(lin2):
             t2 = o2.replace("'","")
-            t2 = os.popen(f"braill -s '{t2}'").read()
+            t2 = subprocess.check_output(["braill", '-s', t2]).decode("UTF-8")
             print(f"\033[1A{t2}")
     if langfunc.lower() == "enchant":
         print("")
         if decorator == True:
             print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mEnchanting Table\033[0m\033[38;2;166;227;161m\033[0m')
         t1 = o1.replace("'","¾")
-        t1 = os.popen(f"enchant -s '{t1}'").read().replace("¾","'")
+        t1 = subprocess.check_output(["enchant", '-s', t1]).decode("UTF-8").replace("¾","'")
         print(t1)
         if next < len(lin) and not totalrandom:
             t2 = o2.replace("'","")
-            t2 = os.popen(f"enchant -s '{t2}'").read().replace("¾","'")
+            t2 = subprocess.check_output(["enchant", '-s', t2]).decode("UTF-8").replace("¾","'")
             print(f"\033[1A{t2}")
         if totalrandom and next < len(lin2):
             t2 = o2.replace("'","")
-            t2 = os.popen(f"enchant -s '{t2}'").read().replace("¾","'")
+            t2 = subprocess.check_output(["enchant", '-s', t2]).decode("UTF-8").replace("¾","'")
             print(f"\033[1A{t2}")
     if langfunc.lower() == "illuminati":
         print("")
         if decorator == True:
             print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mIlluminaci\033[0m\033[38;2;166;227;161m\033[0m')
         t1 = o1.replace("'","¾")
-        t1 = os.popen(f"illuminati -s '{t1}'").read().replace("¾","'")
+        t1 = subprocess.check_output(["illuminati", '-s', t1]).decode("UTF-8").replace("¾","'")
         print(t1)
         if next < len(lin) and not totalrandom:
             t2 = o2.replace("'","¾")
-            t2 = os.popen(f"illuminati -s '{t2}'").read().replace("¾","'")
+            t2 = subprocess.check_output(["illuminati", '-s', t2]).decode("UTF-8").replace("¾","'")
             print(f"\033[1A{t2}")
         if totalrandom and next < len(lin2):
             t2 = o2.replace("'","¾")
-            t2 = os.popen(f"illuminati -s '{t2}'").read().replace("¾","'")
+            t2 = subprocess.check_output(["illuminati", '-s', t2]).decode("UTF-8").replace("¾","'")
             print(f"\033[1A{t2}")
     if langfunc.lower() == "morse":
         print("")
         if decorator == True:
             print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mMorsy\033[0m\033[38;2;166;227;161m\033[0m')
         t1 = o1.replace("'","")
-        t1 = os.popen(f"morse -s '{t1}'").read()
+        t1 = subprocess.check_output(["morse", '-s', t1]).decode("UTF-8")
         print(t1)
         if next < len(lin) and not totalrandom:
             t2 = o2.replace("'","¾")
-            t2 = os.popen(f"morse -s '{t2}'").read().replace("¾","'")
+            t2 = subprocess.check_output(["morse", '-s', t2]).decode("UTF-8").replace("¾","'")
             print(f"\033[1A{t2}")
         if totalrandom and next < len(lin2):
             t2 = o2.replace("'","¾")
-            t2 = os.popen(f"morse -s '{t2}'").read().replace("¾","'")
+            t2 = subprocess.check_output(["morse", '-s', t2]).decode("UTF-8").replace("¾","'")
             print(f"\033[1A{t2}")
     if langfunc.lower() == "spc":
         print("")
         if decorator == True:
             print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mSpc\033[0m\033[38;2;166;227;161m\033[0m')
         t1 = o1.replace("'","¾")
-        t1 = os.popen(f"spc -s '{t1}'").read().replace("¾","'0")
+        t1 = subprocess.check_output(["spc", '-s', t1]).decode("UTF-8").replace("¾","'0")
         print(t1)
         if next < len(lin) and not totalrandom:
             t2 = o2.replace("'","")
-            t2 = os.popen(f"spc -s '{t2}'").read().replace("¾","'0")
+            t2 = subprocess.check_output(["spc", '-s', t2]).decode("UTF-8").replace("¾","'0")
             print(f"\033[1A{t2}")
         if totalrandom and next < len(lin2):
             t2 = o2.replace("'","")
-            t2 = os.popen(f"spc -s '{t2}'").read().replace("¾","'0")
+            t2 = subprocess.check_output(["spc", '-s', t2]).decode("UTF-8").replace("¾","'0")
             print(f"\033[1A{t2}")
     if langfunc.lower() == "alien":
         print("")
         if decorator == True:
             print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mAliens\033[0m\033[38;2;166;227;161m\033[0m')
         t1 = o1.replace("'","¼")
-        t1 = os.popen(f"alien -s '{t1}'").read().replace("¼","'")
+        t1 = subprocess.check_output(["alien", '-s', t1]).decode("UTF-8").replace("¼","'")
         print(t1)
         if next < len(lin) and not totalrandom:
             t2 = o2.replace("'","")
-            t2 = os.popen(f"alien -s '{t2}'").read().replace("¾","'0")
+            t2 = subprocess.check_output(["alien", '-s', t2]).decode("UTF-8").replace("¾","'0")
             print(f"\033[1A{t2}")
         if totalrandom and next < len(lin2):
             t2 = o2.replace("'","")
-            t2 = os.popen(f"alien -s '{t2}'").read().replace("¾","'0")
+            t2 = subprocess.check_output(["alien", '-s', t2]).decode("UTF-8").replace("¾","'0")
             print(f"\033[1A{t2}")
 class Bio:
     def __init__(self) -> None:
@@ -432,10 +433,10 @@ while args.cont:
         else:
             tvoice = True
     if any(i in ["m", "mute", "-m", "--mute"]for i in a):
-        if mut == ' ':
-            mut = ' -m '
+        if mut == '':
+            mut = '-m'
         else:
-            mut = ' '
+            mut = ''
     if any(i in ["tr", "totalrandom", "-tr", "--totalrandom"]for i in a):
         if totalrandom == True:
             totalrandom = False
@@ -534,51 +535,51 @@ while args.cont:
                 trans(language)
             if voice == True:
                 try:
-                    os.popen(f'tts{mut}-l {orlang} -s "{o1}" && tts{mut}-l {orlang} -s "{o2}"')
+                    subprocess.run(['tts', mut, '-l', orlang, '-s', f"{o1} {o2}"])
                 except:
-                    os.popen(f'tts{mut}-l {orlang} -s "{o1}"')
+                    subprocess.run(['tts', mut, '-l', orlang, '-s', o1])
             if tvoice == True:
                 try:
-                    os.popen(f'tts{mut}-l {language} -s "{t1}" && tts{mut}-l {language} -s "{t2}"')
+                    subprocess.run(['tts', mut, '-l', language, '-s', f"{t1} {t2}"])
                 except:
-                    os.popen(f'tts{mut}-l {language} -s "{t1}"')
+                    subprocess.run(['tts', mut, '-l', language, '-s', t1])
         else:
             stop = None
     if any(i in ["ms", "messenger", "-ms", "--messenger"]for i in a):
         try:
             msg = f'{o1}\n{o2}'
             msgs = shorten(msg,60,False)
-            os.popen(f'wl-copy "{msgs}"')
+            subprocess.run(['wl-copy', msgs])
         except:
             msg = o1
             msgs = shorten(msg,60,False)
-            os.popen(f'wl-copy "{msgs}"')
+            subprocess.run(['wl-copy', msgs])
     if any(i in ["tms", "transmessenger", "-tms", "--transmessenger"]for i in a):
         try:
             msg = f'{t1}\n{t2}'
             msgs = shorten(msg,60,True)
-            os.popen(f'wl-copy "{msgs}"')
+            subprocess.run(['wl-copy', msgs])
         except:
             try:
                 msg = t1
                 msgs = shorten(msg,60,True)
-                os.popen(f'wl-copy "{msgs}"')
+                subprocess.run(['wl-copy', msgs])
             except:
                 print("Something's wrong")
                 msg = None
     if any(i in ["ms1", "messenger1", "-ms1", "--messenger1"]for i in a):
         msg = o1
         msgs = shorten(msg,60,False)
-        os.popen(f'wl-copy "{msg}"')
+        subprocess.run(['wl-copy', msg])
     if any(i in ["ms2", "messenger2", "-ms2", "--messenger2"]for i in a):
         msg = o2
         msgs = shorten(msg,60,False)
-        os.popen(f'wl-copy "{msg}"')
+        subprocess.run(['wl-copy', msg])
     if any(i in ["tms1", "transmessenger1", "-tms1", "--transmessenger1"]for i in a):
         try:
             msg = t1
             msgs = shorten(msg,60,True)
-            os.popen(f'wl-copy "{msgs}"')
+            subprocess.run(['wl-copy', msgs])
         except:
             print("Something's wrong")
             msg = None
@@ -586,53 +587,41 @@ while args.cont:
         try:
             msg = t2
             msgs = shorten(msg,60,True)
-            os.popen(f'wl-copy "{msgs}"')
+            subprocess.run(['wl-copy', msgs])
         except:
             print("Something's wrong")
             msg = None
     if any(i in ["cp", "copy", "-cp", "--cp"]for i in a):
         try:
-            cpv = str(o1.encode("ascii"))[2::][:-1]
-            cpx = str(o2.encode("ascii"))[2::][:-1]
-            cpz = f"{cpv}\n{cpx}"
-            os.popen(f'wl-copy "{cpz}"')
+            subprocess.run(['wl-copy', f"{o1}\n{o2}"])
         except:
             try:
-                cpv = str(o1.encode("ascii"))[2::][:-1]
-                os.popen(f'wl-copy "{cpv}"')
+                subprocess.run(['wl-copy', o1])
             except:
                 print("something's wrong")
     if any(i in ["tcp", "transcopy", "-tcp", "--transcopy"]for i in a):
         try:   
-            cpv = str(t1.encode("ascii"))[2::][:-1]
-            cpx = str(t2.encode("ascii"))[2::][:-1]
-            cpz = f"{cpv}\n{cpx}"
-            os.popen(f'wl-copy "{cpz}"')
+            subprocess.run(['wl-copy', f"{t1}\n{t2}"])
         except:
             try:
-                cpv = str(t1.encode("ascii"))[2::][:-1]
-                os.popen(f'wl-copy "{cpv}"')
+                subprocess.run(['wl-copy', t1])
             except:
                 print("something's wrong")
     if any(i in ["cp1", "copy1", "-cp1", "--cp1"]for i in a):
-        cpv = str(o1.encode("ascii"))[2::][:-1]
-        os.popen(f'wl-copy "{cpv}"')
+        subprocess.run(['wl-copy', o1])
     if any(i in ["tcp1", "transcopy1", "-tcp1", "--transcopy1"]for i in a):
         try:
-            cpv = str(o1.encode("ascii"))[2::][:-1]
-            os.popen(f'wl-copy "{cpv}"')
+            subprocess.run(['wl-copy', t1])
         except:
             print("something's wrong")
     if any(i in ["cp2", "copy2", "-cp2", "--cp2"]for i in a):
         try:
-            cpv = str(o2.encode("ascii"))[2::][:-1]
-            os.popen(f'wl-copy "{cpv}"')
+            subprocess.run(['wl-copy', o2])
         except:
             print("something's wrong")
     if any(i in ["tcp2", "transcopy2", "-tcp2", "--transcopy2"]for i in a):
         try:
-            cpv = str(t2.encode("ascii"))[2::][:-1]
-            os.popen(f'wl-copy {cpv}')
+            subprocess.run(['wl-copy', t2])
         except:
             print("something's wrong")
     if any(i in ["dc", "discord", "-dc", "--discord"]for i in a):
@@ -735,8 +724,9 @@ while args.cont:
         except:
             tit: str = file
         imgdown(tit, 5)
-        bglis = os.popen(f'ls "/home/wilwe/Obrazy/python/{tit}"').readlines()
-        bgf = bglis[random.randrange(len(bglis))].strip("\n")
+        bglis = subprocess.check_output(['ls', f"/home/wilwe/Obrazy/python/{tit}"]).decode("UTF-8")
+        bglis = list(bglis.split("\\n"))
+        bgf = bglis[random.randrange(len(bglis))]
         bg = f"/home/wilwe/Obrazy/python/{tit}/{bgf}"
         imgcreate(keywords, bg=bg,blur=20)
     if any(i in ["gbc", "generatebackgroundcolor", "-gbc", "--generatebackgroundcolor"]for i in a):
