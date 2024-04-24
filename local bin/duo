@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+import yaml, argparse, random, wonderwords
+def translate(word, side = "braill") -> str:
+    if side == "braill":
+        braill = {"a": "⠁","b": "⠃","c": "⠉","d": "⠙","e": "⠑","f": "⠋","g": "⠛","h": "⠓","i": "⠊","j": "⠚","k": "⠅","l": "⠇","m": "⠍","n": "⠝","o": "⠕","p": "⠏","q": "⠟","r": "⠗","s": "⠎","t": "⠞","u": "⠥","v": "⠧","w": "⠺","x": "⠭","y": "⠽","z": "⠵","ą":"⠡","ć":"⠩","ę":"⠱","ł":"⠣","ń":"⠹","ó":"⠬","ś":"⠪","ż":"⠯","ź":"⠮","0":"⠼⠚","1":"⠼⠁","2":"⠼⠃","3":"⠼⠉","4":"⠼⠙","5":"⠼⠑","6":"⠼⠋","7":"⠼⠛","8":"⠼⠓","9":"⠼⠊"}
+        return ''.join(braill.get(ch,ch) for ch in word)
+    if side == "normal":
+        normal = {"⠁":"a","⠃":"b","⠉":"c","⠙":"d","⠑":"e","⠋":"f","⠛":"g","⠓":"h","⠊":"i","⠚":"j","⠅":"k","⠇":"l","⠍":"m","⠝":"n","⠕":"o","⠏":"p","⠟":"q","⠗":"r","⠎":"s","⠞":"t","⠥":"u","⠧":"v","⠺":"w","⠭":"x","⠽":"y","⠵":"z","⠡":"ą","⠩":"ć","⠱":"ę","⠣":"ł","⠹":"ń","⠬":"ó","⠪":"ś","⠯":"ż","⠮":"ź"}
+        word = word.replace("⠼⠚", "0").replace("⠼⠁", "1").replace("⠼⠃", "2").replace("⠼⠉", "3").replace("⠼⠙", "4").replace("⠼⠑", "5").replace("⠼⠋", "6").replace("⠼⠛", "7").replace("⠼⠓", "8").replace("⠼⠊", "9")
+        return ''.join(normal.get(ch,ch) for ch in word)
+def qchoice() -> None:
+    wor = w.word()
+    print(f"{translate(wor)} means")
+    wors = w.random_words(4, word_min_length=len(wor), word_max_length=len(wor))
+    wors[random.randint(0,3)] = wor
+    wo = [f"{wors.index(wo)+1} {wo}" for wo in wors] 
+    print('\n'.join(wo))
+    ans = input("Which one: ")
+    anin = True
+    try:
+        ans = int(ans)
+    except:
+        anin = False
+    if ans == wor:
+        print("Great")
+    elif anin and wor == wors[ans-1]:
+        print("Great")
+    else:
+        print("brille or goodbay")
+def menu() -> None:
+    print("\033cWelcome to duolingo for blind")
+def main() -> None:
+    global w
+    w = wonderwords.RandomWord()
+    menu()
+    qchoice()
+
+
+
+
+
+if __name__ == "__main__":
+    main()
