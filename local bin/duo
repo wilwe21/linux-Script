@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-import yaml, argparse, random, wonderwords
+import yaml, argparse, random, wonderwords, datetime
+from dateutil.relativedelta import relativedelta
+from pathlib import Path
 def translate(word, side = "braill") -> str:
     if side == "braill":
         braill = {"a": "⠁","b": "⠃","c": "⠉","d": "⠙","e": "⠑","f": "⠋","g": "⠛","h": "⠓","i": "⠊","j": "⠚","k": "⠅","l": "⠇","m": "⠍","n": "⠝","o": "⠕","p": "⠏","q": "⠟","r": "⠗","s": "⠎","t": "⠞","u": "⠥","v": "⠧","w": "⠺","x": "⠭","y": "⠽","z": "⠵","ą":"⠡","ć":"⠩","ę":"⠱","ł":"⠣","ń":"⠹","ó":"⠬","ś":"⠪","ż":"⠯","ź":"⠮","0":"⠼⠚","1":"⠼⠁","2":"⠼⠃","3":"⠼⠉","4":"⠼⠙","5":"⠼⠑","6":"⠼⠋","7":"⠼⠛","8":"⠼⠓","9":"⠼⠊"}
@@ -26,18 +28,41 @@ def qchoice() -> None:
     elif anin and wor == wors[ans-1]:
         print("Great")
     else:
-        print("brille or goodbay")
+        print("Braille or you'll stay blank")
+        print(f"Correct answer is {wor}")
 def menu() -> None:
     print("\033cWelcome to duolingo for blind")
+    print(f"Your current streak: {streak}")
+    options = ["Play", "Options", "Exit"]
+    opts = [f"{options.index(op)+1} {op}" for op in options]
+    print("\n".join(opts))
+    try:
+        opt = input("Which to play: ").lower()
+    except KeyboardInterrupt:
+        exit()
+    if opt in ["play", "p", "1"]:
+        play()
+    if opt in ["options", "o", "2"]:
+        pass
+    if opt in ["exit", "e", ":q", "3"]:
+        exit()
+def play() -> None:
+    qchoice()
 def main() -> None:
-    global w
+    global w, streak, lives
+    time = datetime.datetime.now()
+    try:
+        with open(f"{Path.home()}/.config/duo.yaml", "r+") as f:
+            conf = yaml.load(f, Loader=yaml.FullLoader)
+    except:
+        with open(f"{Path.home()}/.config/duo.yaml", "w+") as f:
+            conf = {"streak": {"count": 0, "data": time.strftime("%d.%m.%Y")}, "lives": 5}
+            yaml.dump(conf, f)
+    streak = conf["streak"]["count"]
+    sdata = conf["streak"]["data"]
+    lives = conf["lives"]
     w = wonderwords.RandomWord()
     menu()
-    qchoice()
-
-
-
-
 
 if __name__ == "__main__":
     main()
