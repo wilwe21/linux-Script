@@ -12,6 +12,7 @@ loader.exec_module( backsen )
 parser = argparse.ArgumentParser()
 parser.add_argument("-r", "--reset", help="Reset", action=argparse.BooleanOptionalAction)
 parser.add_argument("-i", "--info", help="Show info", action=argparse.BooleanOptionalAction)
+parser.add_argument("-k", "--key", help="Key to edit", nargs="*")
 parser.add_argument("-a", "--add", help="Add value", action=argparse.BooleanOptionalAction)
 parser.add_argument("-gen", "--gendni", help="Generate dni image", action=argparse.BooleanOptionalAction)
 parser.add_argument("-v", "--value", help="Value to add", default=1)
@@ -22,6 +23,14 @@ try:
     with open(f"{Path.home()}/.config/dni.yaml", "r") as f:
         dat = yaml.load(f, Loader=yaml.FullLoader)
     path = dat["path"]
+    if args.key != None:
+        key = ' '.join(args.key)
+    else:
+        try:
+            key = dat["key"]
+        except:
+            print("No key defined")
+            exit()
 except Exception as e:
     print(e)
     print("No path or config file")
@@ -29,30 +38,40 @@ except Exception as e:
 try:
     with open(path, "r+") as f:
         dni = yaml.load(f, Loader=yaml.FullLoader)
+    if args.key != None:
+        try:
+            sus = dni[key]
+        except:
+            dni = dni | {key: {"dzień": 0, "data": td.strip()}}
     if args.info != None:
-        if dni["data"] != td.strip():
-            print(f"Nie było dni teraz dzień {dni['dzień'] + 1}")
+        if args.key != None:
+            if dni[key]["data"] != td.strip():
+                print(f"Nie było dni teraz dzień {dni[key]['dzień'] + 1}")
+            else:
+                print(f"Był dzień {dni[key]['dzień']}")
         else:
-            print(f"Był dzień {dni['dzień']}")
+            for key, value in dni.items():
+                print(f"{key}: Dzień {value['dzień']} Data {value['data']}")
     if args.add != None:
-        sav = {"dzień": dni["dzień"]+int(args.value), "data": td.strip()}
+        dni.update({key: {"dzień": dni[key]["dzień"]+int(args.value), "data": td.strip()}})
         with open(path, "w") as f:
-            yaml.dump(sav, f, sort_keys=False, allow_unicode=True)
-        print(sav)
+            yaml.dump(dni, f, sort_keys=False, allow_unicode=True)
+        print(dni)
     if args.reset != None:
+        dni.update({key: {"dzień": 0, "data": td.strip()}})
         with open(path, "w") as f:
-            yaml.dump({"dzień": 0,"data": td.strip()}, f)
+            yaml.dump(dni, f)
     if args.gendni != None:
         imas = ["cursed images", "creepy images", "cute images", "fucked images", "hardcore images", "intresting images", "???", "creepy past images", "gore images", "i forgore", "going crazy", "blood images", "genoside images", "vore images", "dump images", "memes", "decapitated images", "messed up images", "canibalizm images", "dupa"]
-        pat = f"{dni['dzień']+1} My little pony {imas[random.randrange(len(imas))]}"
-        if pat == f"{dni['dzień']+1} My little pony fucked images":
+        pat = f"{dni[key]['dzień']+1} My little pony {imas[random.randrange(len(imas))]}"
+        if pat == f"{dni[key]['dzień']+1} My little pony fucked images":
             backsen.imgdown(pat, unsafe=False)
         else:
             backsen.imgdown(pat, unsafe=True)
         bglis = os.popen(f'ls "/home/wilwe/Obrazy/python/{pat}"').readlines()
         bgf = bglis[random.randrange(len(bglis))].strip()
         bg = f"/home/wilwe/Obrazy/python/{pat}/{bgf}"
-        backsen.imgcreate(f"{dni['dzień']+1} dzień czekania aż @maciekpro2137 nagra recenzje my little pony", bg=bg, blur=5)
+        backsen.imgcreate(f"{dni[key]['dzień']+1} dzień czekania aż @maciekpro2137 nagra recenzje my little pony", bg=bg, blur=5)
 except Exception as e:
     print(e)
     pass
