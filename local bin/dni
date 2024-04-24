@@ -56,7 +56,7 @@ try:
         dni.update({key: {"dzień": dni[key]["dzień"]+int(args.value), "data": td.strip()}})
         with open(path, "w") as f:
             yaml.dump(dni, f, sort_keys=False, allow_unicode=True)
-        print(dni)
+        print(f"Updated\n{key}: Dzień: {dni[key]['dzień']}")
     if args.reset != None:
         dni.update({key: {"dzień": 0, "data": td.strip()}})
         with open(path, "w") as f:
