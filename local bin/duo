@@ -17,7 +17,10 @@ def qchoice() -> None:
     wors[random.randint(0,3)] = wor
     wo = [f"{wors.index(wo)+1} {wo}" for wo in wors] 
     print('\n'.join(wo))
-    ans = input("Which one: ")
+    try:
+        ans = input("Which one: ")
+    except KeyboardInterrupt:
+        exit()
     anin = True
     try:
         ans = int(ans)
@@ -37,7 +40,10 @@ def qchar() -> None:
     les[random.randint(0,3)] = le
     woles = [f"{les.index(lo)+1} {lo}" for lo in les]
     print('\n'.join(woles))
-    ans = input("Which one: ").lower()
+    try:
+        ans = input("Which one: ").lower()
+    except KeyboardInterrupt:
+        exit()
     anin = True
     try:
         ans = int(ans)
@@ -68,27 +74,36 @@ def menu() -> None:
         exit()
 def play() -> None:
     playmodes = ["char", "choice"]
-    try:
-        play = random.choice(playmodes)
-        if play == "char":
-            qchar()
-        elif play == "choice":
-            qchoice()
-    except Exception as e:
-        print(e)
+    if lives =< 0:
+        print("You don't have lives")
+    else:
+        for i in range(lessonLength):
+            if lives > 0:
+                try:
+                    play = random.choice(playmodes)
+                    if play == "char":
+                        qchar()
+                    elif play == "choice":
+                        qchoice()
+                except Exception as e:
+                    print(e)
+            else:
+                print("Your lives are gone")
+        print("Congrats you compleat a lesson")
 def main() -> None:
-    global w, streak, lives
+    global w, streak, lives, lessonLength
     time = datetime.datetime.now()
     try:
         with open(f"{Path.home()}/.config/duo.yaml", "r+") as f:
             conf = yaml.load(f, Loader=yaml.FullLoader)
     except:
         with open(f"{Path.home()}/.config/duo.yaml", "w+") as f:
-            conf = {"streak": {"count": 0, "data": time.strftime("%d.%m.%Y")}, "lives": 5}
+            conf = {"streak": {"count": 0, "data": time.strftime("%d.%m.%Y")}, "lives": 5, "length": 5}
             yaml.dump(conf, f)
     streak = conf["streak"]["count"]
     sdata = conf["streak"]["data"]
     lives = conf["lives"]
+    lessonLength = conf["length"]
     w = wonderwords.RandomWord()
     menu()
 
