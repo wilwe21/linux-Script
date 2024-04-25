@@ -58,6 +58,7 @@ def qchar() -> None:
         raise ValueError("Braille or you'll stay blank")
 def menu() -> None:
     print("\033cWelcome to duolingo for blind")
+    streakf(check = True)
     print(f"Your current streak: {streak}")
     print(f"Lives: {lives}")
     options = ["Play", "Options", "Exit"]
@@ -75,7 +76,7 @@ def menu() -> None:
         exit()
 def option() -> None:
     print("\033cOptions")
-    options = ["reset strek","add streak"]
+    options = ["reset strek","add streak","check"]
     opts = [f"{options.index(i)+1} {i}" for i in options]
     print('\n'.join(opts))
     try:
@@ -86,6 +87,8 @@ def option() -> None:
         streakf(True)
     if ans in ["add streak", "2"]:
         streakf()
+    if ans in ["check", "3"]:
+        streakf(check=True)
 def play() -> None:
     global lives
     playmodes = ["char", "choice"]
@@ -110,23 +113,35 @@ def play() -> None:
                 break
         if lives > 0:
             print("Congrats you compleat a lesson")
-def streakf(rest: bool = False) -> None:
+def streakf(rest: bool = False, check: bool = False) -> None:
+    global streak
     up = False
-    if rest:
-        conf.update({"streak": {"count": 0, "data": (time - relativedelta(days=1)).strftime("%Y.%m.%d")}})
-        up = True
-    else:
-        nex = sdata + relativedelta(days=1)
-        if sdata < time:
-            conf.update({"streak": {"count": streak+1, "data": (time + relativedelta(days=1)).strftime("%Y.%m.%d") }})
+    if check:
+        ness = sdata + relativedelta(days=1)
+        if ness < time:
+            print("Your streak gone")
+            print("I'm at your door now")
+            conf.update({"streak": {"count": 0, "data": (time - relativedelta(days=1)).strftime("%Y.%m.%d")}})
+            streak = 0
             up = True
-            print(f"Your streak raise: {streak+1}")
+    else:
+        if rest:
+            conf.update({"streak": {"count": 0, "data": (time - relativedelta(days=1)).strftime("%Y.%m.%d")}})
+            streak = 0
+            up = True
+        else:
+            nex = sdata + relativedelta(days=1)
+            if sdata < time:
+                conf.update({"streak": {"count": streak+1, "data": (time + relativedelta(days=1)).strftime("%Y.%m.%d") }})
+                streak += 1
+                up = True
+                print(f"Your streak raise: {streak+1}")
     if up:
         with open(f"{Path.home()}/.config/duo.yaml", "r+") as f:
             yaml.dump(conf,f)
 def main() -> None:
     global time, w, streak, sdata, lives, lessonLength, conf
-    time = datetime.datetime.now()
+    time = datetime.datetime.strptime(datetime.datetime.now().strftime("%Y.%m.%d"), "%Y.%m.%d")
     try:
         with open(f"{Path.home()}/.config/duo.yaml", "r+") as f:
             conf = yaml.load(f, Loader=yaml.FullLoader)
