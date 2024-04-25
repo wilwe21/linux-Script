@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import yaml, argparse, random, wonderwords, datetime
+import yaml, argparse, random, wonderwords, datetime, string
 from dateutil.relativedelta import relativedelta
 from pathlib import Path
 def translate(word, side = "braill") -> str:
@@ -28,8 +28,28 @@ def qchoice() -> None:
     elif anin and wor == wors[ans-1]:
         print("Great")
     else:
-        print("Braille or you'll stay blank")
         print(f"Correct answer is {wor}")
+        raise ValueError("Braille or you'll stay blank")
+def qchar() -> None:
+    le = random.choice(string.ascii_lowercase)
+    print(f"{translate(le)} is")
+    les = [random.choice(string.ascii_lowercase) for i in range(4)]
+    les[random.randint(0,3)] = le
+    woles = [f"{les.index(lo)+1} {lo}" for lo in les]
+    print('\n'.join(woles))
+    ans = input("Which one: ").lower()
+    anin = True
+    try:
+        ans = int(ans)
+    except:
+        anin = False
+    if ans == le:
+        print("Great")
+    elif anin and le == les[ans-1]:
+        print("Great")
+    else:
+        print(f"Correct asnwer is {le}")
+        raise ValueError("Braille or you'll stay blank")
 def menu() -> None:
     print("\033cWelcome to duolingo for blind")
     print(f"Your current streak: {streak}")
@@ -47,7 +67,15 @@ def menu() -> None:
     if opt in ["exit", "e", ":q", "3"]:
         exit()
 def play() -> None:
-    qchoice()
+    playmodes = ["char", "choice"]
+    try:
+        play = random.choice(playmodes)
+        if play == "char":
+            qchar()
+        elif play == "choice":
+            qchoice()
+    except Exception as e:
+        print(e)
 def main() -> None:
     global w, streak, lives
     time = datetime.datetime.now()
