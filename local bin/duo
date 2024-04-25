@@ -59,6 +59,7 @@ def qchar() -> None:
 def menu() -> None:
     print("\033cWelcome to duolingo for blind")
     print(f"Your current streak: {streak}")
+    print(f"Lives: {lives}")
     options = ["Play", "Options", "Exit"]
     opts = [f"{options.index(op)+1} {op}" for op in options]
     print("\n".join(opts))
@@ -69,12 +70,26 @@ def menu() -> None:
     if opt in ["play", "p", "1"]:
         play()
     if opt in ["options", "o", "2"]:
-        pass
+        option()
     if opt in ["exit", "e", ":q", "3"]:
         exit()
+def option() -> None:
+    print("\033cOptions")
+    options = ["reset strek","add streak"]
+    opts = [f"{options.index(i)+1} {i}" for i in options]
+    print('\n'.join(opts))
+    try:
+        ans = input("Which one: ").lower()
+    except KeyboardInterrupt:
+        exit()
+    if ans in ["reset streak", "1"]:
+        streakf(True)
+    if ans in ["add streak", "2"]:
+        streakf()
 def play() -> None:
+    global lives
     playmodes = ["char", "choice"]
-    if lives =< 0:
+    if lives == 0:
         print("You don't have lives")
     else:
         for i in range(lessonLength):
@@ -85,20 +100,47 @@ def play() -> None:
                         qchar()
                     elif play == "choice":
                         qchoice()
-                except Exception as e:
-                    print(e)
+                except ValueError:
+                    lives -= 1
+                    conf.update({"lives": lives})
+                    with open(f"{Path.home()}/.config/duo.yaml", "r+") as f:
+                        yaml.dump(conf,f)
             else:
                 print("Your lives are gone")
-        print("Congrats you compleat a lesson")
+                break
+        if lives > 0:
+            print("Congrats you compleat a lesson")
+def streakf(rest: bool = False) -> None:
+    up = False
+    if rest:
+        conf.update({"streak": {"count": 0, "data": 0}})
+        up = True
+    else:
+        last = sdata.split('.')
+        try:
+            last = int(datetime.date(int(last[0]), int(last[1]), int(last[2])+1).strftime("%Y%m%d"))
+        except ValueError as e:
+            if str(e) == "day is out of range for month":
+                try:
+                    last = int(datetime.date(int(last[0]), int(last[1])+1, 1).strftime("%Y%m%d"))
+                except ValueError as e:
+                    if str(e) == "month must be in 1..12":
+                        last = int(datetime.date(int(last[0])+1, 1, 1).strftime("%Y%m%d"))
+        print(last)
+        today = int(time.strftime("%Y%m%d"))
+        conf.update({"streak": {"count": streak+1, "data": time.strftime("%Y.%m.%d")}})
+    if up:
+        with open(f"{Path.home()}/.config/duo.yaml", "r+") as f:
+            yaml.dump(conf,f)
 def main() -> None:
-    global w, streak, lives, lessonLength
+    global time, w, streak, sdata, lives, lessonLength, conf
     time = datetime.datetime.now()
     try:
         with open(f"{Path.home()}/.config/duo.yaml", "r+") as f:
             conf = yaml.load(f, Loader=yaml.FullLoader)
     except:
         with open(f"{Path.home()}/.config/duo.yaml", "w+") as f:
-            conf = {"streak": {"count": 0, "data": time.strftime("%d.%m.%Y")}, "lives": 5, "length": 5}
+            conf = {"streak": {"count": 0, "data": 0}, "lives": 5, "length": 5}
             yaml.dump(conf, f)
     streak = conf["streak"]["count"]
     sdata = conf["streak"]["data"]
