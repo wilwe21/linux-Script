@@ -113,22 +113,14 @@ def play() -> None:
 def streakf(rest: bool = False) -> None:
     up = False
     if rest:
-        conf.update({"streak": {"count": 0, "data": 0}})
+        conf.update({"streak": {"count": 0, "data": (time - relativedelta(days=1)).strftime("%Y.%m.%d")}})
         up = True
     else:
-        last = sdata.split('.')
-        try:
-            last = int(datetime.date(int(last[0]), int(last[1]), int(last[2])+1).strftime("%Y%m%d"))
-        except ValueError as e:
-            if str(e) == "day is out of range for month":
-                try:
-                    last = int(datetime.date(int(last[0]), int(last[1])+1, 1).strftime("%Y%m%d"))
-                except ValueError as e:
-                    if str(e) == "month must be in 1..12":
-                        last = int(datetime.date(int(last[0])+1, 1, 1).strftime("%Y%m%d"))
-        print(last)
-        today = int(time.strftime("%Y%m%d"))
-        conf.update({"streak": {"count": streak+1, "data": time.strftime("%Y.%m.%d")}})
+        nex = sdata + relativedelta(days=1)
+        if sdata < time:
+            conf.update({"streak": {"count": streak+1, "data": (time + relativedelta(days=1)).strftime("%Y.%m.%d") }})
+            up = True
+            print(f"Your streak raise: {streak+1}")
     if up:
         with open(f"{Path.home()}/.config/duo.yaml", "r+") as f:
             yaml.dump(conf,f)
@@ -139,11 +131,12 @@ def main() -> None:
         with open(f"{Path.home()}/.config/duo.yaml", "r+") as f:
             conf = yaml.load(f, Loader=yaml.FullLoader)
     except:
+        dat = time - relativedelta(day=1)
         with open(f"{Path.home()}/.config/duo.yaml", "w+") as f:
-            conf = {"streak": {"count": 0, "data": 0}, "lives": 5, "length": 5}
+            conf = {"streak": {"count": 0, "data": dat.strftime("%Y.%m.%d")}, "lives": 5, "length": 5}
             yaml.dump(conf, f)
     streak = conf["streak"]["count"]
-    sdata = conf["streak"]["data"]
+    sdata = datetime.datetime.strptime(conf["streak"]["data"], "%Y.%m.%d")
     lives = conf["lives"]
     lessonLength = conf["length"]
     w = wonderwords.RandomWord()
