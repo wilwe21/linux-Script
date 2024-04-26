@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
+# profiles, lvls, more lessons, more challenge, challenges, and more
 import yaml, argparse, random, wonderwords, datetime, string
 from dateutil.relativedelta import relativedelta
 from pathlib import Path
-def translate(word, side = "braill") -> str:
-    if side == "braill":
-        braill = {"a": "⠁","b": "⠃","c": "⠉","d": "⠙","e": "⠑","f": "⠋","g": "⠛","h": "⠓","i": "⠊","j": "⠚","k": "⠅","l": "⠇","m": "⠍","n": "⠝","o": "⠕","p": "⠏","q": "⠟","r": "⠗","s": "⠎","t": "⠞","u": "⠥","v": "⠧","w": "⠺","x": "⠭","y": "⠽","z": "⠵","ą":"⠡","ć":"⠩","ę":"⠱","ł":"⠣","ń":"⠹","ó":"⠬","ś":"⠪","ż":"⠯","ź":"⠮","0":"⠼⠚","1":"⠼⠁","2":"⠼⠃","3":"⠼⠉","4":"⠼⠙","5":"⠼⠑","6":"⠼⠋","7":"⠼⠛","8":"⠼⠓","9":"⠼⠊","-": "⠒",".": "⠲","'": "⡀",",": "⠂"}
-        return ''.join(braill.get(ch,ch) for ch in word)
+def translate(word, side = "lern") -> str:
+    if side == "lern":
+        return ''.join(lern.get(ch,ch) for ch in word)
     if side == "normal":
-        normal = {"⠁":"a","⠃":"b","⠉":"c","⠙":"d","⠑":"e","⠋":"f","⠛":"g","⠓":"h","⠊":"i","⠚":"j","⠅":"k","⠇":"l","⠍":"m","⠝":"n","⠕":"o","⠏":"p","⠟":"q","⠗":"r","⠎":"s","⠞":"t","⠥":"u","⠧":"v","⠺":"w","⠭":"x","⠽":"y","⠵":"z","⠡":"ą","⠩":"ć","⠱":"ę","⠣":"ł","⠹":"ń","⠬":"ó","⠪":"ś","⠯":"ż","⠮":"ź","-": "⠒",".":"⠲","'": "⡀",",":"⠂"}
-        word = word.replace("⠼⠚", "0").replace("⠼⠁", "1").replace("⠼⠃", "2").replace("⠼⠉", "3").replace("⠼⠙", "4").replace("⠼⠑", "5").replace("⠼⠋", "6").replace("⠼⠛", "7").replace("⠼⠓", "8").replace("⠼⠊", "9")
-        return ''.join(normal.get(ch,ch) for ch in word)
+        for key, value in normdub.items():
+            word = word.replace(key, value)
+        return ''.join(normsing.get(ch,ch) for ch in word)
 def qchoice() -> None:
     wor = w.word()
     print(f"{translate(wor)} means")
@@ -78,7 +78,7 @@ def menu() -> None:
         exit()
 def option() -> None:
     print("\033cOptions")
-    options = ["reset strek","check lives","check"]
+    options = ["reset strek","check lives","Show alphabet"]
     opts = [f"{options.index(i)+1} {i}" for i in options]
     print('\n'.join(opts))
     try:
@@ -89,8 +89,8 @@ def option() -> None:
         streakf(True)
     if ans in ["check lives", "2"]:
         livs(ver=True)
-    if ans in ["check", "3"]:
-        streakf(check=True)
+    if ans in ["show alpthabet", "3"]:
+        alpha()
 def play() -> None:
     global lives, ldat
     playmodes = ["char", "choice"]
@@ -120,6 +120,7 @@ def play() -> None:
                 break
         if lives > 0:
             print("Congrats you compleat a lesson")
+            lvlup()
             streakf()
 def streakf(rest: bool = False, check: bool = False) -> None:
     global streak
@@ -166,8 +167,16 @@ def livs(ver: bool = False) -> None:
     elif lives == maxlive and ver:
         print("You have maximum amount of lives")
         print(f"You have {lives} lives")
+def lvlup(count: int = 1) -> None:
+    global lvl
+    lvl += count
+def alpha() -> None:
+    end = ""
+    for key, value in lern.items():
+        end = end + f"{key}:{value} "
+    print(end)
 def main() -> None:
-    global time, ftime, w, streak, sdata, lives, ldat, maxlive, lessonLength, conf, first
+    global time, ftime, w, streak, sdata, lives, lvl, ldat, maxlive, lessonLength, conf, first, lern, normsing, normdub
     time = datetime.datetime.strptime(datetime.datetime.now().strftime("%Y.%m.%d"), "%Y.%m.%d")
     ftime = datetime.datetime.now()
     first = False
@@ -178,14 +187,27 @@ def main() -> None:
         first = True
         dat = time - relativedelta(days=1)
         with open(f"{Path.home()}/.config/duo.yaml", "w+") as f:
-            conf = {"streak": {"count": 0, "data": dat.strftime("%Y.%m.%d")}, "lives": 5, "maxlives": 5, "ldat": ftime, "length": 5}
-            yaml.dump(conf, f)
+            conf = {"streak": {"count": 0, "data": dat.strftime("%Y.%m.%d")}, "lvl": 0, "lives": 5, "maxlives": 5, "ldat": ftime, "length": 5, "lern": {"a": "⠁","b": "⠃","c": "⠉","d": "⠙","e": "⠑","f": "⠋","g": "⠛","h": "⠓","i": "⠊","j": "⠚","k": "⠅","l": "⠇","m": "⠍","n": "⠝","o": "⠕","p": "⠏","q": "⠟","r": "⠗","s": "⠎","t": "⠞","u": "⠥","v": "⠧","w": "⠺","x": "⠭","y": "⠽","z": "⠵","ą":"⠡","ć":"⠩","ę":"⠱","ł":"⠣","ń":"⠹","ó":"⠬","ś":"⠪","ż":"⠯","ź":"⠮","0":"⠼⠚","1":"⠼⠁","2":"⠼⠃","3":"⠼⠉","4":"⠼⠙","5":"⠼⠑","6":"⠼⠋","7":"⠼⠛","8":"⠼⠓","9":"⠼⠊","-": "⠒",".": "⠲","'": "⡀",",": "⠂"},"normal": { "single": {"⠁":"a","⠃":"b","⠉":"c","⠙":"d","⠑":"e","⠋":"f","⠛":"g","⠓":"h","⠊":"i","⠚":"j","⠅":"k","⠇":"l","⠍":"m","⠝":"n","⠕":"o","⠏":"p","⠟":"q","⠗":"r","⠎":"s","⠞":"t","⠥":"u","⠧":"v","⠺":"w","⠭":"x","⠽":"y","⠵":"z","⠡":"ą","⠩":"ć","⠱":"ę","⠣":"ł","⠹":"ń","⠬":"ó","⠪":"ś","⠯":"ż","⠮":"ź","-": "⠒",".":"⠲","'": "⡀",",":"⠂"}, "doubles": {"⠼⠚": "0","⠼⠁": "1", "⠼⠃": "2","⠼⠉": "3","⠼⠙": "4","⠼⠑": "5","⠼⠋": "6","⠼⠛": "7","⠼⠓": "8","⠼⠊": "9"}}}
+            yaml.dump(conf, f, allow_unicode=True, sort_keys=False)
     streak = conf["streak"]["count"]
     sdata = datetime.datetime.strptime(conf["streak"]["data"], "%Y.%m.%d")
+    lvl = conf["lvl"]
     lives = conf["lives"]
     ldat = conf["ldat"]
     maxlive = conf["maxlives"]
     lessonLength = conf["length"]
+    try:
+        lern = conf["lern"]
+    except:
+        raise ValueError("Lern characters cant be empty")
+    try:
+        normsing = conf["normal"]["single"]
+    except:
+        normsing = None
+    try:
+        normdub = conf["normal"]["dubles"]
+    except:
+        normdub = None
     w = wonderwords.RandomWord()
     menu()
 
