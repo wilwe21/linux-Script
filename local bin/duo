@@ -95,7 +95,7 @@ def option() -> None:
             livs(ver=True)
         if ans in ["show alpthabet", "3"]:
             alpha()
-        if ans in ["back", "4"]:
+        if ans in ["back", "4", ":q"]:
             loop = False
             menu()
 def play() -> None:
@@ -115,7 +115,7 @@ def play() -> None:
                         qchoice()
                 except ValueError:
                     lives -= 1
-                    if lives != maxlive:
+                    if lives+1 == maxlive:
                         ldat = ftime + datetime.timedelta(minutes=30) 
                         conf.update({"lives": lives, "ldat": ldat})
                     else:
@@ -169,7 +169,7 @@ def livs(ver: bool = False) -> None:
             yaml.dump(conf,f, allow_unicode=True, sort_keys=False)
     elif lives != maxlive and ver:
         print("No time for new lives")
-        print(f"Next lives come {ldat.strftime('%Y.%m.%d %H:%m:%S')}")
+        print(f"Next lives come {ldat.strftime('%Y.%m.%d %H:%M:%S')}")
         print(f"You have {lives} lives")
     elif lives == maxlive and ver:
         print("You have maximum amount of lives")
