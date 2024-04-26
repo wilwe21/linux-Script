@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# profiles, lvls, more lessons, more challenge, challenges, and more
+# lvls, more lessons, more challenge, challenges, and more
 import yaml, argparse, random, wonderwords, datetime, string
 from dateutil.relativedelta import relativedelta
 from pathlib import Path
@@ -65,32 +65,39 @@ def menu() -> None:
     print(f"Lives: {lives}")
     options = ["Play", "Options", "Exit"]
     opts = [f"{options.index(op)+1} {op}" for op in options]
-    print("\n".join(opts))
-    try:
-        opt = input("Which to play: ").lower()
-    except KeyboardInterrupt:
-        exit()
-    if opt in ["play", "p", "1"]:
-        play()
-    if opt in ["options", "o", "2"]:
-        option()
-    if opt in ["exit", "e", ":q", "3"]:
-        exit()
+    loop = True
+    while loop:
+        print("\n".join(opts))
+        try:
+            opt = input("Which to play: ").lower()
+        except KeyboardInterrupt:
+            exit()
+        if opt in ["play", "p", "1"]:
+            play()
+        if opt in ["options", "o", "2"]:
+            option()
+        if opt in ["exit", "e", ":q", "3"]:
+            exit()
 def option() -> None:
     print("\033cOptions")
-    options = ["reset strek","check lives","Show alphabet"]
+    options = ["reset strek","check lives","Show alphabet","Back"]
     opts = [f"{options.index(i)+1} {i}" for i in options]
     print('\n'.join(opts))
-    try:
-        ans = input("Which one: ").lower()
-    except KeyboardInterrupt:
-        exit()
-    if ans in ["reset streak", "1"]:
-        streakf(True)
-    if ans in ["check lives", "2"]:
-        livs(ver=True)
-    if ans in ["show alpthabet", "3"]:
-        alpha()
+    loop = True
+    while loop:
+        try:
+            ans = input("Which one: ").lower()
+        except KeyboardInterrupt:
+            exit()
+        if ans in ["reset streak", "1"]:
+            streakf(True)
+        if ans in ["check lives", "2"]:
+            livs(ver=True)
+        if ans in ["show alpthabet", "3"]:
+            alpha()
+        if ans in ["back", "4"]:
+            loop = False
+            menu()
 def play() -> None:
     global lives, ldat
     playmodes = ["char", "choice"]
