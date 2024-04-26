@@ -114,7 +114,7 @@ def play() -> None:
                     else:
                         conf.update({"lives": lives})
                     with open(f"{Path.home()}/.config/duo.yaml", "r+") as f:
-                        yaml.dump(conf,f)
+                        yaml.dump(conf,f, allow_unicode=True, sort_keys=False)
             else:
                 print("Your lives are gone")
                 break
@@ -147,7 +147,7 @@ def streakf(rest: bool = False, check: bool = False) -> None:
                 print(f"Your streak raise: {streak}")
     if up:
         with open(f"{Path.home()}/.config/duo.yaml", "r+") as f:
-            yaml.dump(conf,f)
+            yaml.dump(conf,f, allow_unicode=True, sort_keys=False)
 def livs(ver: bool = False) -> None:
     global lives, ldat
     if lives != maxlive and ftime > ldat:
@@ -159,7 +159,7 @@ def livs(ver: bool = False) -> None:
             conf.update({"lives": lives, "ldat": ldat})
             livs()
         with open(f"{Path.home()}/.config/duo.yaml", "r+") as f:
-            yaml.dump(conf,f)
+            yaml.dump(conf,f, allow_unicode=True, sort_keys=False)
     elif lives != maxlive and ver:
         print("No time for new lives")
         print(f"Next lives come {ldat.strftime('%Y.%m.%d %H:%m:%S')}")
