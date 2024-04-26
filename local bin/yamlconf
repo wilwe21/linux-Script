@@ -1,0 +1,11 @@
+#!/usr/bin/env python3
+import yaml, argparse, ast
+parser = argparse.ArgumentParser()
+parser.add_argument("-d", "--dict", help="define dictionary", nargs="*")
+args = parser.parse_args()
+if args.dict == None:
+    args.dict = input("Input dictionary")
+else:
+    args.dict = ' '.join(args.dict)
+f = open("dump.yaml", "w+")
+yaml.dump(ast.literal_eval(args.dict), f, allow_unicode=True)
