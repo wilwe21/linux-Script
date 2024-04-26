@@ -58,7 +58,9 @@ def qchar() -> None:
         raise ValueError("Braille or you'll stay blank")
 def menu() -> None:
     print("\033cWelcome to duolingo for blind")
-    streakf(check = True)
+    if not first:
+        streakf(check = True)
+    livs()
     print(f"Your current streak: {streak}")
     print(f"Lives: {lives}")
     options = ["Play", "Options", "Exit"]
@@ -76,7 +78,7 @@ def menu() -> None:
         exit()
 def option() -> None:
     print("\033cOptions")
-    options = ["reset strek","add streak","check"]
+    options = ["reset strek","check lives","check"]
     opts = [f"{options.index(i)+1} {i}" for i in options]
     print('\n'.join(opts))
     try:
@@ -85,18 +87,19 @@ def option() -> None:
         exit()
     if ans in ["reset streak", "1"]:
         streakf(True)
-    if ans in ["add streak", "2"]:
-        streakf()
+    if ans in ["check lives", "2"]:
+        livs(ver=True)
     if ans in ["check", "3"]:
         streakf(check=True)
 def play() -> None:
-    global lives
+    global lives, ldat
     playmodes = ["char", "choice"]
     if lives == 0:
         print("You don't have lives")
     else:
         for i in range(lessonLength):
             if lives > 0:
+                livs()
                 try:
                     play = random.choice(playmodes)
                     if play == "char":
@@ -105,7 +108,11 @@ def play() -> None:
                         qchoice()
                 except ValueError:
                     lives -= 1
-                    conf.update({"lives": lives})
+                    if lives != maxlive:
+                        ldat = ftime + datetime.timedelta(minutes=30) 
+                        conf.update({"lives": lives, "ldat": ldat})
+                    else:
+                        conf.update({"lives": lives})
                     with open(f"{Path.home()}/.config/duo.yaml", "r+") as f:
                         yaml.dump(conf,f)
             else:
@@ -113,17 +120,18 @@ def play() -> None:
                 break
         if lives > 0:
             print("Congrats you compleat a lesson")
+            streakf()
 def streakf(rest: bool = False, check: bool = False) -> None:
     global streak
     up = False
     if check:
-        ness = sdata + relativedelta(days=1)
+        ness = datetime.datetime.strptime((sdata + relativedelta(days=1)).strftime("%Y.%m.%d"), "%Y.%m.%d")
         if ness < time:
             print("Your streak gone")
             print("I'm at your door now")
-            conf.update({"streak": {"count": 0, "data": (time - relativedelta(days=1)).strftime("%Y.%m.%d")}})
+            conf.update({"streak": {"count": 0}})
             streak = 0
-            up = True
+            up = True 
     else:
         if rest:
             conf.update({"streak": {"count": 0, "data": (time - relativedelta(days=1)).strftime("%Y.%m.%d")}})
@@ -139,20 +147,44 @@ def streakf(rest: bool = False, check: bool = False) -> None:
     if up:
         with open(f"{Path.home()}/.config/duo.yaml", "r+") as f:
             yaml.dump(conf,f)
+def livs(ver: bool = False) -> None:
+    global lives, ldat
+    if lives != maxlive and ftime > ldat:
+        lives += 1
+        ldat = ldat + datetime.timedelta(minutes=30)
+        if lives == maxlive:
+            conf.update({"lives": lives, "ldat": None})
+        else:
+            conf.update({"lives": lives, "ldat": ldat})
+            livs()
+        with open(f"{Path.home()}/.config/duo.yaml", "r+") as f:
+            yaml.dump(conf,f)
+    elif lives != maxlive and ver:
+        print("No time for new lives")
+        print(f"Next lives come {ldat.strftime('%Y.%m.%d %H:%m:%S')}")
+        print(f"You have {lives} lives")
+    elif lives == maxlive and ver:
+        print("You have maximum amount of lives")
+        print(f"You have {lives} lives")
 def main() -> None:
-    global time, w, streak, sdata, lives, lessonLength, conf
+    global time, ftime, w, streak, sdata, lives, ldat, maxlive, lessonLength, conf, first
     time = datetime.datetime.strptime(datetime.datetime.now().strftime("%Y.%m.%d"), "%Y.%m.%d")
+    ftime = datetime.datetime.now()
+    first = False
     try:
         with open(f"{Path.home()}/.config/duo.yaml", "r+") as f:
             conf = yaml.load(f, Loader=yaml.FullLoader)
     except:
-        dat = time - relativedelta(day=1)
+        first = True
+        dat = time - relativedelta(days=1)
         with open(f"{Path.home()}/.config/duo.yaml", "w+") as f:
-            conf = {"streak": {"count": 0, "data": dat.strftime("%Y.%m.%d")}, "lives": 5, "length": 5}
+            conf = {"streak": {"count": 0, "data": dat.strftime("%Y.%m.%d")}, "lives": 5, "maxlives": 5, "ldat": ftime, "length": 5}
             yaml.dump(conf, f)
     streak = conf["streak"]["count"]
     sdata = datetime.datetime.strptime(conf["streak"]["data"], "%Y.%m.%d")
     lives = conf["lives"]
+    ldat = conf["ldat"]
+    maxlive = conf["maxlives"]
     lessonLength = conf["length"]
     w = wonderwords.RandomWord()
     menu()
