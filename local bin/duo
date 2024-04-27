@@ -192,16 +192,16 @@ def main(prof: str = None) -> None:
         path = f"{Path.home()}/.config/duo.yaml"
     else:
         path = f"{Path.home()}/.config/duo{prof}.yaml"
-    try:
-        with open(path, "r+") as f:
-            conf = yaml.load(f, Loader=yaml.FullLoader)
-    except:
-        print("Creating new profile")
-        first = True
-        with open(path, "w+") as f:
-            conf = {"streak": {"count": 0, "data": time.strftime("%Y.%m.%d")}, "lvl": 0, "lives": 5, "maxlives": 5, "ldat": ftime, "length": 5}
-            yaml.dump(conf, f, allow_unicode=True, sort_keys=False)
-        sleep(2)
+    #try:
+    with open(path, "r+") as f:
+        conf = yaml.load(f, Loader=yaml.FullLoader)
+    #except:
+    #    print("Creating new profile")
+    #    sleep(2)
+    #    first = True
+    #    with open(path, "w+") as f:
+    #        conf = {"streak": {"count": 0, "data": time.strftime("%Y.%m.%d")}, "lvl": 0, "lives": 5, "maxlives": 5, "ldat": ftime, "length": 5}
+    #        yaml.dump(conf, f, allow_unicode=True, sort_keys=False)
     streak = conf["streak"]["count"]
     sdata = datetime.datetime.strptime(conf["streak"]["data"], "%Y.%m.%d")
     lvl = conf["lvl"]
