@@ -142,12 +142,13 @@ def streakf(rest: bool = False, check: bool = False) -> None:
             up = True 
     else:
         if rest:
+            print("Streak reset")
             conf.update({"streak": {"count": 0, "data": (time - relativedelta(days=1)).strftime("%Y.%m.%d")}})
             streak = 0
             up = True
         else:
             nex = sdata + relativedelta(days=1)
-            if sdata < time:
+            if sdata <= time:
                 conf.update({"streak": {"count": streak+1, "data": (time + relativedelta(days=1)).strftime("%Y.%m.%d") }})
                 streak += 1
                 up = True
