@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # lvls, more lessons, more challenge, challenges, and more
-import yaml, argparse, random, wonderwords, datetime, string
+import yaml, argparse, random, wonderwords, datetime, string 
+from time import sleep
 from dateutil.relativedelta import relativedelta
 from pathlib import Path
 def translate(word, side = "lern") -> str:
@@ -133,8 +134,7 @@ def streakf(rest: bool = False, check: bool = False) -> None:
     global streak
     up = False
     if check:
-        ness = datetime.datetime.strptime((sdata + relativedelta(days=1)).strftime("%Y.%m.%d"), "%Y.%m.%d")
-        if ness < time:
+        if sdata < time:
             print("Your streak gone")
             print("I'm at your door now")
             conf.update({"streak": {"count": 0}})
@@ -196,11 +196,12 @@ def main(prof: str = None) -> None:
         with open(path, "r+") as f:
             conf = yaml.load(f, Loader=yaml.FullLoader)
     except:
+        print("Creating new profile")
         first = True
-        dat = time - relativedelta(days=1)
         with open(path, "w+") as f:
-            conf = {"streak": {"count": 0, "data": dat.strftime("%Y.%m.%d")}, "lvl": 0, "lives": 5, "maxlives": 5, "ldat": ftime, "length": 5, "lern": {"a": "⠁","b": "⠃","c": "⠉","d": "⠙","e": "⠑","f": "⠋","g": "⠛","h": "⠓","i": "⠊","j": "⠚","k": "⠅","l": "⠇","m": "⠍","n": "⠝","o": "⠕","p": "⠏","q": "⠟","r": "⠗","s": "⠎","t": "⠞","u": "⠥","v": "⠧","w": "⠺","x": "⠭","y": "⠽","z": "⠵","ą":"⠡","ć":"⠩","ę":"⠱","ł":"⠣","ń":"⠹","ó":"⠬","ś":"⠪","ż":"⠯","ź":"⠮","0":"⠼⠚","1":"⠼⠁","2":"⠼⠃","3":"⠼⠉","4":"⠼⠙","5":"⠼⠑","6":"⠼⠋","7":"⠼⠛","8":"⠼⠓","9":"⠼⠊","-": "⠒",".": "⠲","'": "⡀",",": "⠂"},"normal": { "single": {"⠁":"a","⠃":"b","⠉":"c","⠙":"d","⠑":"e","⠋":"f","⠛":"g","⠓":"h","⠊":"i","⠚":"j","⠅":"k","⠇":"l","⠍":"m","⠝":"n","⠕":"o","⠏":"p","⠟":"q","⠗":"r","⠎":"s","⠞":"t","⠥":"u","⠧":"v","⠺":"w","⠭":"x","⠽":"y","⠵":"z","⠡":"ą","⠩":"ć","⠱":"ę","⠣":"ł","⠹":"ń","⠬":"ó","⠪":"ś","⠯":"ż","⠮":"ź","-": "⠒",".":"⠲","'": "⡀",",":"⠂"}, "doubles": {"⠼⠚": "0","⠼⠁": "1", "⠼⠃": "2","⠼⠉": "3","⠼⠙": "4","⠼⠑": "5","⠼⠋": "6","⠼⠛": "7","⠼⠓": "8","⠼⠊": "9"}}}
+            conf = {"streak": {"count": 0, "data": time.strftime("%Y.%m.%d")}, "lvl": 0, "lives": 5, "maxlives": 5, "ldat": ftime, "length": 5}
             yaml.dump(conf, f, allow_unicode=True, sort_keys=False)
+        sleep(2)
     streak = conf["streak"]["count"]
     sdata = datetime.datetime.strptime(conf["streak"]["data"], "%Y.%m.%d")
     lvl = conf["lvl"]
@@ -211,15 +212,16 @@ def main(prof: str = None) -> None:
     try:
         lern = conf["lern"]
     except:
-        raise ValueError("Lern characters cant be empty")
+        lern = {"a": "⠁","b": "⠃","c": "⠉","d": "⠙","e": "⠑","f": "⠋","g": "⠛","h": "⠓","i": "⠊","j": "⠚","k": "⠅","l": "⠇","m": "⠍","n": "⠝","o": "⠕","p": "⠏","q": "⠟","r": "⠗","s": "⠎","t": "⠞","u": "⠥","v": "⠧","w": "⠺","x": "⠭","y": "⠽","z": "⠵","ą":"⠡","ć":"⠩","ę":"⠱","ł":"⠣","ń":"⠹","ó":"⠬","ś":"⠪","ż":"⠯","ź":"⠮","0":"⠼⠚","1":"⠼⠁","2":"⠼⠃","3":"⠼⠉","4":"⠼⠙","5":"⠼⠑","6":"⠼⠋","7":"⠼⠛","8":"⠼⠓","9":"⠼⠊","-": "⠒",".": "⠲","'": "⡀",",": "⠂"}
     try:
         normsing = conf["normal"]["single"]
+
     except:
-        normsing = None
+        normsing = {"⠁":"a","⠃":"b","⠉":"c","⠙":"d","⠑":"e","⠋":"f","⠛":"g","⠓":"h","⠊":"i","⠚":"j","⠅":"k","⠇":"l","⠍":"m","⠝":"n","⠕":"o","⠏":"p","⠟":"q","⠗":"r","⠎":"s","⠞":"t","⠥":"u","⠧":"v","⠺":"w","⠭":"x","⠽":"y","⠵":"z","⠡":"ą","⠩":"ć","⠱":"ę","⠣":"ł","⠹":"ń","⠬":"ó","⠪":"ś","⠯":"ż","⠮":"ź","-": "⠒",".":"⠲","'": "⡀",",":"⠂"}
     try:
         normdub = conf["normal"]["dubles"]
     except:
-        normdub = None
+        normdub = {"⠼⠚": "0","⠼⠁": "1", "⠼⠃": "2","⠼⠉": "3","⠼⠙": "4","⠼⠑": "5","⠼⠋": "6","⠼⠛": "7","⠼⠓": "8","⠼⠊": "9"}
     w = wonderwords.RandomWord()
     menu()
 
