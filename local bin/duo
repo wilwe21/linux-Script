@@ -136,13 +136,17 @@ def sll() -> None:
     global lessonLength
     print(f"Current lesson length {lessonLength}")
     try:
-        val = int(input("Set length: "))
+        val = int(input("Set length(length >= 5): "))
+        if val < 5:
+            raise ValueError()
         loop = False
     except ValueError:
         loop = True
     while loop:
         try:
-            val = int(input("Length need to be a number: "))
+            val = int(input("Length need to be a number >=5: "))
+            if val < 5:
+                raise ValueError()
             loop = False
         except ValueError:
             loop = True
@@ -179,7 +183,7 @@ def play() -> None:
                         conf.update({"lives": lives, "ldat": ldat})
                     else:
                         conf.update({"lives": lives})
-                    with open(path, "r+") as f:
+                    with open(path, "w") as f:
                         yaml.dump(conf,f, allow_unicode=True, sort_keys=False)
             else:
                 print("Your lifes are gone")
@@ -217,7 +221,7 @@ def streakf(rest: bool = False, check: bool = False) -> None:
                 up = True
                 print(f"Your streak raise: {streak}")
     if up:
-        with open(path, "r+") as f:
+        with open(path, "w") as f:
             yaml.dump(conf,f, allow_unicode=True, sort_keys=False)
 def livs(ver: bool = False) -> None:
     global lives, ldat
@@ -229,7 +233,7 @@ def livs(ver: bool = False) -> None:
         else:
             conf.update({"lives": lives, "ldat": ldat})
             livs()
-        with open(path, "r+") as f:
+        with open(path, "w") as f:
             yaml.dump(conf,f, allow_unicode=True, sort_keys=False)
     elif lives != maxlive and ver:
         print(f"Next lifes come {ldat.strftime('%Y.%m.%d %H:%M:%S')}")
@@ -255,7 +259,7 @@ def main(prof: str = None) -> None:
     else:
         path = f"{Path.home()}/.config/duo{prof}.yaml"
     #try:
-    with open(path, "r+") as f:
+    with open(path, "r") as f:
         conf = yaml.load(f, Loader=yaml.FullLoader)
     #except:
     #    print("Creating new profile")
