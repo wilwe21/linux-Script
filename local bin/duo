@@ -105,7 +105,7 @@ def menu() -> None:
             exit()
 def option() -> None:
     print("\033cOptions")
-    options = ["reset strek","check lifes","Show alphabet", "Hard Mode","Back"]
+    options = ["reset strek","check lifes","Show alphabet", "set lesson length", "Hard Mode","Back"]
     opts = [f"{options.index(i)+1} {i}" for i in options]
     print('\n'.join(opts))
     loop = True
@@ -118,18 +118,38 @@ def option() -> None:
             streakf(True)
         if ans in ["check lifes", "2"]:
             livs(ver=True)
-        if ans in ["show alpthabet", "3"]:
+        if ans in ["show alpthabet", "3", "show", "alptha"]:
             alpha()
-        if ans in ["hard mode", "4", "hard", "hardmode"]:
+        if ans in ["set lesson length", "4", "len", "set len"]:
+            sll()
+        if ans in ["hard mode", "5", "hard", "hardmode"]:
             if not conf["hard"]:
                 conf.update({"hard": True})
             else:
                 conf.update({"hard": False})
             with open(path, "w") as f:
                 yaml.dump(conf,f,sort_keys=False,allow_unicode=True)
-        if ans in ["back", "5", ":q"]:
+        if ans in ["back", "6", ":q"]:
             loop = False
             menu()
+def sll() -> None:
+    global lessonLength
+    print(f"Current lesson length {lessonLength}")
+    try:
+        val = int(input("Set length: "))
+        loop = False
+    except ValueError:
+        loop = True
+    while loop:
+        try:
+            val = int(input("Length need to be a number: "))
+            loop = False
+        except ValueError:
+            loop = True
+    lessonLength = val
+    conf.update({"length": val})
+    with open(path, "w") as f:
+        yaml.dump(conf,f,allow_unicode=True,sort_keys=False)
 def play() -> None:
     global lives, ldat
     playmodes = ["char", "choice"]
@@ -141,6 +161,7 @@ def play() -> None:
                 livs()
                 try:
                     play = random.choice(playmodes)
+                    print(f"Exercise {i+1}/{lessonLength}")
                     if play == "char":
                         if not hard:
                             qchar()
@@ -162,6 +183,7 @@ def play() -> None:
                         yaml.dump(conf,f, allow_unicode=True, sort_keys=False)
             else:
                 print("Your lifes are gone")
+                print(f"You lose on lesson {i+1}/{lessonLength}")
                 break
         if lives > 0:
             if not hard:
