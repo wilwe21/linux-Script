@@ -104,6 +104,7 @@ def menu() -> None:
         if opt in ["exit", "e", ":q", "3"]:
             exit()
 def option() -> None:
+    global hard
     print("\033cOptions")
     options = ["reset strek","check lifes","Show alphabet", "set lesson length", "Hard Mode","Back"]
     opts = [f"{options.index(i)+1} {i}" for i in options]
@@ -124,8 +125,10 @@ def option() -> None:
             sll()
         if ans in ["hard mode", "5", "hard", "hardmode"]:
             if not conf["hard"]:
+                hard = True
                 conf.update({"hard": True})
             else:
+                hard = False
                 conf.update({"hard": False})
             with open(path, "w") as f:
                 yaml.dump(conf,f,sort_keys=False,allow_unicode=True)
