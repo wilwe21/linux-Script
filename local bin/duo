@@ -344,12 +344,9 @@ def alpha(key: bool = False) -> None:
         for key, value in lern.items():
             values.append(value)
         random.shuffle(values)
-        for value in values:
-            if len(end) >= 240:
-                sus.append(end)
-                end = ""
-            end = end + f"\033[47m\033[30m{value}\033[0m|"
-        end = '\n'.join(sus)
+        values = [f"\033[47m\033[30m{value}\033[0m|" for value in values]
+        vals = [''.join(values[i:i+10]) for i in range(0,len(values)+1,10)]
+        end = '\n'.join(vals)
     print(end)
 def main(prof: str = None) -> None:
     global time, logo, smem, path, ftime, w, streak, sdata, lives, lvl, ldat, maxlive, lessonLength, conf, first, lern, normsing, normdub, hard
