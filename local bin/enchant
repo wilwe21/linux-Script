@@ -4,8 +4,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-e", "--enchant", help="From enchant?", action=argparse.BooleanOptionalAction)
 parser.add_argument("-s", "--single", help="single")
 args = parser.parse_args()
-ench = {"a":"ᔑ","b":"ʖ","c":"ᓵ","d":"↸","e":"ᒷ","f":"⎓","g":"⊣","h":"⍑","i":"╎","j":"⋮","k":"ꖌ","l":"ꖎ","m":"ᒲ","n":"リ","o":"𝙹","p":"!¡","q":"ᑑ","r":"∷","s":"ᓭ","t":"ℸ ̣","u":"⚍","v":"⍊","w":"∴","x":" ̇/","y":"||","z":"⨅"}
-normal = {"ᔑ":"a","ʖ":"b","ᓵ":"c","↸":"d","ᒷ":"e","⎓":"f","⊣":"g","⍑":"h","╎":"i","⋮":"j","ꖌ":"k","ꖎ":"l","ᒲ":"m","リ":"n","𝙹":"o","ᑑ":"q","∷":"r","ᓭ":"s","⚍":"u","⍊":"v","∴":"w","⨅":"z"}
+ench = {"a":"ᔑ","b":"ʖ","c":"ᓵ","d":"↸","e":"ᒷ","f":"⎓","g":"⊣","h":"⍑","i":"╎","j":"⋮","k":"ꖌ","l":"ꖎ","m":"ᒲ","n":"リ","o":"𝙹","p":"!¡","q":"ᑑ","r":"∷","s":"ᓭ","t":"ℸ","u":"⚍","v":"⍊","w":"∴","x":" ̇/","y":"||","z":"⨅"}
+normal = {"ᔑ":"a","ʖ":"b","ᓵ":"c","↸":"d","ᒷ":"e","⎓":"f","⊣":"g","⍑":"h","╎":"i","⋮":"j","ꖌ":"k","ꖎ":"l","ᒲ":"m","リ":"n","𝙹":"o","ᑑ":"q","∷":"r","ᓭ":"s","ℸ":"t","⚍":"u","⍊":"v","∴":"w","⨅":"z"}
 
 while not args.enchant and args.single == None:
     print("\033[38;2;203;166;247m\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37mYou\033[0m\033[38;2;203;166;247m\033[0m")
@@ -31,7 +31,7 @@ while args.enchant and args.single == None:
         break
     print("")
     print("\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mUnEnchanting Table\033[0m\033[38;2;166;227;161m\033[0m")
-    a = a.replace("!¡", "p").replace("ℸ ̣", "t").replace(" ̇/","x").replace("||","y")
+    a = a.replace("!¡", "p").replace("˙/","x").replace("||","y")
     print(''.join(normal.get(ch,ch) for ch in a))
     print("")
     print("\033[91;1m———————————————————————\033[0m")
@@ -40,5 +40,5 @@ if args.single != None:
     if not args.enchant:
         print(''.join(ench.get(ch,ch) for ch in args.single.lower()))
     elif args.enchant:
-        a = args.single.lower().replace("!¡", "p").replace("ℸ ̣", "t").replace(" ̇/","x").replace("||","y")
+        a = args.single.lower().replace("!¡", "p").replace("˙/","x").replace("||","y")
         print(''.join(normal.get(ch,ch) for ch in a))
