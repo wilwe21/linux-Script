@@ -51,7 +51,7 @@ def qrevchoice() -> None:
     print(f"{wor} means")
     wors = w.random_words(4, word_min_length=len(wor), word_max_length=len(wor))
     wors = [translate(asd) for asd in wors]
-    wors[random.randint(0,3)] = wor
+    wors[random.randint(0,3)] = translate(wor)
     wo = [f"{wors.index(wo)+1} {wo}" for wo in wors] 
     print('\n'.join(wo))
     alpha(True)
@@ -124,7 +124,7 @@ def qrevchar() -> None:
     print(f"{le} is")
     les = [random.choice(string.ascii_lowercase) for i in range(4)]
     les = [translate(asd) for asd in les]
-    les[random.randint(0,3)] = le
+    les[random.randint(0,3)] = translate(le)
     woles = [f"{les.index(lo)+1} {lo}" for lo in les]
     print('\n'.join(woles))
     alpha(True)
@@ -158,7 +158,7 @@ def qrevcharhard() -> None:
         print(f"Correct asnwer is {translate(le)}")
         raise ValueError("Braille or you'll stay blank")
 def menu() -> None:
-    print("\033cWelcome to duolingo for blind")
+    print(f"\033c{logo}")
     if not first:
         streakf(check = True)
     livs()
@@ -291,7 +291,7 @@ def streakf(rest: bool = False, check: bool = False) -> None:
     up = False
     if check:
         if sdata < time:
-            print("Your streak gone")
+            print(smem)
             print("I'm at your door now")
             conf.update({"streak": {"count": 0, "data": time}})
             streak = 0
@@ -352,7 +352,7 @@ def alpha(key: bool = False) -> None:
         end = '\n'.join(sus)
     print(end)
 def main(prof: str = None) -> None:
-    global time, path, ftime, w, streak, sdata, lives, lvl, ldat, maxlive, lessonLength, conf, first, lern, normsing, normdub, hard
+    global time, logo, smem, path, ftime, w, streak, sdata, lives, lvl, ldat, maxlive, lessonLength, conf, first, lern, normsing, normdub, hard
     time = datetime.datetime.strptime(datetime.datetime.now().strftime("%Y.%m.%d"), "%Y.%m.%d")
     ftime = datetime.datetime.now()
     first = False
@@ -360,16 +360,24 @@ def main(prof: str = None) -> None:
         path = f"{Path.home()}/.config/duo.yaml"
     else:
         path = f"{Path.home()}/.config/duo{prof}.yaml"
-    #try:
-    with open(path, "r") as f:
-        conf = yaml.load(f, Loader=yaml.FullLoader)
-    #except:
-    #    print("Creating new profile")
-    #    sleep(2)
-    #    first = True
-    #    with open(path, "w+") as f:
-    #        conf = {"streak": {"count": 0, "data": time.strftime("%Y.%m.%d")}, "lvl": 0, "hard": False, "lives": 5, "maxlives": 5, "ldat": ftime, "length": 5}
-    #        yaml.dump(conf, f, allow_unicode=True, sort_keys=False)
+    try:
+        with open(path, "r") as f:
+            conf = yaml.load(f, Loader=yaml.FullLoader)
+    except FileNotFoundError:
+        print("Creating new profile")
+        sleep(2)
+        first = True
+        with open(path, "w+") as f:
+            conf = {"logo": "Welcome to duolingo for blind", "smem": "Your streak gone","streak": {"count": 0, "data": time.strftime("%Y.%m.%d")}, "lvl": 0, "hard": False, "lives": 5, "maxlives": 5, "ldat": ftime, "length": 5}
+            yaml.dump(conf, f, allow_unicode=True, sort_keys=False)
+    try:
+        logo = conf["logo"]
+    except:
+        logo = "Welcome to duolingo"
+    try:
+        smem = conf["smem"]
+    except:
+        smem = "Your streak gone"
     streak = conf["streak"]["count"]
     sdata = datetime.datetime.strptime(conf["streak"]["data"], "%Y.%m.%d")
     lvl = conf["lvl"]
