@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# lvls, more lessons, more challenge, challenges, and more
+# lvls, challenges, and more
 import yaml, argparse, random, wonderwords, datetime, string 
 from time import sleep
 from dateutil.relativedelta import relativedelta
@@ -46,6 +46,44 @@ def qchoicehard() -> None:
     else:
         print(f"Correct answer is {wor}")
         raise ValueError("Braille or you'll stay blank")
+def qrevchoice() -> None:
+    wor = w.word()
+    print(f"{wor} means")
+    wors = w.random_words(4, word_min_length=len(wor), word_max_length=len(wor))
+    wors = [translate(asd) for asd in wors]
+    wors[random.randint(0,3)] = wor
+    wo = [f"{wors.index(wo)+1} {wo}" for wo in wors] 
+    print('\n'.join(wo))
+    alpha(True)
+    try:
+        ans = input("Which one: ")
+    except KeyboardInterrupt:
+        exit()
+    anin = True
+    try:
+        ans = int(ans)
+    except:
+        anin = False
+    if ans == translate(wor):
+        print("Great")
+    elif anin and translate(wor) == wors[ans-1]:
+        print("Great")
+    else:
+        print(f"Correct answer is {translate(wor)}")
+        raise ValueError("Braille or you'll stay blank")
+def qrevchoicehard() -> None:
+    wor = w.word()
+    print(f"{wor} means")
+    alpha(True)
+    try:
+        ans = input("")
+    except KeyboardInterrupt:
+        exit()
+    if ans == translate(wor):
+        print("Great")
+    else:
+        print(f"Correct answer is {translate(wor)}")
+        raise ValueError("Braille or you'll stay blank")
 def qchar() -> None:
     le = random.choice(string.ascii_lowercase)
     print(f"{translate(le)} is")
@@ -80,6 +118,44 @@ def qcharhard() -> None:
         print("Great")
     else:
         print(f"Correct asnwer is {le}")
+        raise ValueError("Braille or you'll stay blank")
+def qrevchar() -> None:
+    le = random.choice(string.ascii_lowercase)
+    print(f"{le} is")
+    les = [random.choice(string.ascii_lowercase) for i in range(4)]
+    les = [translate(asd) for asd in les]
+    les[random.randint(0,3)] = le
+    woles = [f"{les.index(lo)+1} {lo}" for lo in les]
+    print('\n'.join(woles))
+    alpha(True)
+    try:
+        ans = input("Which one: ").lower()
+    except KeyboardInterrupt:
+        exit()
+    anin = True
+    try:
+        ans = int(ans)
+    except:
+        anin = False
+    if ans == translate(le):
+        print("Great")
+    elif anin and translate(le) == les[ans-1]:
+        print("Great")
+    else:
+        print(f"Correct asnwer is {translate(le)}")
+        raise ValueError("Braille or you'll stay blank")
+def qrevcharhard() -> None:
+    le = random.choice(string.ascii_lowercase)
+    print(f"{le} is")
+    alpha(True)
+    try:
+        ans = input("").lower()
+    except KeyboardInterrupt:
+        exit()
+    if ans == translate(le):
+        print("Great")
+    else:
+        print(f"Correct asnwer is {translate(le)}")
         raise ValueError("Braille or you'll stay blank")
 def menu() -> None:
     print("\033cWelcome to duolingo for blind")
@@ -119,7 +195,7 @@ def option() -> None:
             streakf(True)
         if ans in ["check lifes", "2"]:
             livs(ver=True)
-        if ans in ["show alpthabet", "3", "show", "alptha"]:
+        if ans in ["show alphabet", "3", "show", "alpha"]:
             alpha()
         if ans in ["set lesson length", "4", "len", "set len"]:
             sll()
@@ -159,7 +235,7 @@ def sll() -> None:
         yaml.dump(conf,f,allow_unicode=True,sort_keys=False)
 def play() -> None:
     global lives, ldat
-    playmodes = ["char", "choice"]
+    playmodes = ["char", "revchar", "choice", "revchoice"]
     if lives == 0:
         print("You don't have lifes")
     else:
@@ -179,6 +255,16 @@ def play() -> None:
                             qchoice()
                         else:
                             qchoicehard()
+                    if play == "revchar":
+                        if not hard:
+                            qrevchar()
+                        else:
+                            qrevcharhard()
+                    elif play == "revchoice":
+                        if not hard:
+                            qrevchoice()
+                        else:
+                            qrevchoicehard()
                 except ValueError:
                     lives -= 1
                     if lives+1 == maxlive:
@@ -247,10 +333,23 @@ def livs(ver: bool = False) -> None:
 def lvlup(count: int = 1) -> None:
     global lvl
     lvl += count
-def alpha() -> None:
+def alpha(key: bool = False) -> None:
     end = ""
-    for key, value in lern.items():
-        end = end + f"{key}:{value} "
+    if not key:
+        for key, value in lern.items():
+            end = end + f"{key}:{value} "
+    else:
+        sus = []
+        values = []
+        for key, value in lern.items():
+            values.append(value)
+        random.shuffle(values)
+        for value in values:
+            if len(end) >= 240:
+                sus.append(end)
+                end = ""
+            end = end + f"\033[47m\033[30m{value}\033[0m|"
+        end = '\n'.join(sus)
     print(end)
 def main(prof: str = None) -> None:
     global time, path, ftime, w, streak, sdata, lives, lvl, ldat, maxlive, lessonLength, conf, first, lern, normsing, normdub, hard
