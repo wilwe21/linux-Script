@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 from bing_image_downloader import downloader
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageFilter
-from instagram_web_api import Client, ClientCompatPatch, ClientError, ClientLoginError
 from pathlib import Path
 import random, sys, os, argparse, requests, yaml, textwrap, hashlib, subprocess
 parser = argparse.ArgumentParser()
@@ -393,18 +392,6 @@ def imgcreate(koks: str = None,bg: str = None, width: int = 1920, height: int = 
             offset += font.size
     lineindex = 0
     image.save(f'/home/wilwe/Obrazy/python/end/{koks}.png')
-#def instpost(img: str,cap: str):
-#    with open("/home/wilwe/.config/lyr.yaml", encoding='utf-8', errors='ignore') as f:
-#        data = yaml.safe_load(f)
-#    usern = data["inst_username"]
-#    passwd = data["inst_passwd"]
-#    image = img
-#    def extract_rhx_gis(html):
-#        tmp_str = ':{"id":"'+f'{random.randint(10000000,99999999)}'+'"}'
-#        return hashlib.md5(b'tmp_str')
-#    web_api = Client(rhx_gis = extract_rhx_gis('https://www.instagram.com/accounts/login'),auto_patch=True, authenticate=True,username=usern,password=passwd)
-#    web_api.login()
-#    web_api.post_photo(photo_data=img,caption=cap)
 while args.cont:
     if stop == None:
         getlyr()
@@ -741,7 +728,6 @@ while args.cont:
         except:
             tit: str = file
         imgcreate(keywords)
-        #instpost(f'/home/wilwe/Obrazy/python/end/{tit}',cap)
     if any(i in ["i", "index", "-i", "--index"]for i in a):
         try:
             index1 = lis.index(file1+'\n')

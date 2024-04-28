@@ -34,6 +34,18 @@ def qchoice() -> None:
     else:
         print(f"Correct answer is {wor}")
         raise ValueError("Braille or you'll stay blank")
+def qchoicehard() -> None:
+    wor = w.word()
+    print(f"{translate(wor)} means")
+    try:
+        ans = input("")
+    except KeyboardInterrupt:
+        exit()
+    if ans == wor:
+        print("Great")
+    else:
+        print(f"Correct answer is {wor}")
+        raise ValueError("Braille or you'll stay blank")
 def qchar() -> None:
     le = random.choice(string.ascii_lowercase)
     print(f"{translate(le)} is")
@@ -57,13 +69,25 @@ def qchar() -> None:
     else:
         print(f"Correct asnwer is {le}")
         raise ValueError("Braille or you'll stay blank")
+def qcharhard() -> None:
+    le = random.choice(string.ascii_lowercase)
+    print(f"{translate(le)} is")
+    try:
+        ans = input("").lower()
+    except KeyboardInterrupt:
+        exit()
+    if ans == le:
+        print("Great")
+    else:
+        print(f"Correct asnwer is {le}")
+        raise ValueError("Braille or you'll stay blank")
 def menu() -> None:
     print("\033cWelcome to duolingo for blind")
     if not first:
         streakf(check = True)
     livs()
     print(f"Your current streak: {streak}")
-    print(f"Lives: {lives}")
+    print(f"Lifes: {lives}")
     options = ["Play", "Options", "Exit"]
     opts = [f"{options.index(op)+1} {op}" for op in options]
     loop = True
@@ -81,7 +105,7 @@ def menu() -> None:
             exit()
 def option() -> None:
     print("\033cOptions")
-    options = ["reset strek","check lives","Show alphabet","Back"]
+    options = ["reset strek","check lifes","Show alphabet", "Hard Mode","Back"]
     opts = [f"{options.index(i)+1} {i}" for i in options]
     print('\n'.join(opts))
     loop = True
@@ -92,18 +116,25 @@ def option() -> None:
             exit()
         if ans in ["reset streak", "1"]:
             streakf(True)
-        if ans in ["check lives", "2"]:
+        if ans in ["check lifes", "2"]:
             livs(ver=True)
         if ans in ["show alpthabet", "3"]:
             alpha()
-        if ans in ["back", "4", ":q"]:
+        if ans in ["hard mode", "4", "hard", "hardmode"]:
+            if not conf["hard"]:
+                conf.update({"hard": True})
+            else:
+                conf.update({"hard": False})
+            with open(path, "w") as f:
+                yaml.dump(conf,f,sort_keys=False,allow_unicode=True)
+        if ans in ["back", "5", ":q"]:
             loop = False
             menu()
 def play() -> None:
     global lives, ldat
     playmodes = ["char", "choice"]
     if lives == 0:
-        print("You don't have lives")
+        print("You don't have lifes")
     else:
         for i in range(lessonLength):
             if lives > 0:
@@ -111,9 +142,15 @@ def play() -> None:
                 try:
                     play = random.choice(playmodes)
                     if play == "char":
-                        qchar()
+                        if not hard:
+                            qchar()
+                        else:
+                            qcharhard()
                     elif play == "choice":
-                        qchoice()
+                        if not hard:
+                            qchoice()
+                        else:
+                            qchoicehard()
                 except ValueError:
                     lives -= 1
                     if lives+1 == maxlive:
@@ -124,11 +161,15 @@ def play() -> None:
                     with open(path, "r+") as f:
                         yaml.dump(conf,f, allow_unicode=True, sort_keys=False)
             else:
-                print("Your lives are gone")
+                print("Your lifes are gone")
                 break
         if lives > 0:
-            print("Congrats you compleat a lesson")
-            lvlup()
+            if not hard:
+                print("Congrats you compleat a lesson")
+                lvlup()
+            else:
+                print("Congrats you compleat hard lesson")
+                lvlup(2)
             streakf()
 def streakf(rest: bool = False, check: bool = False) -> None:
     global streak
@@ -137,7 +178,7 @@ def streakf(rest: bool = False, check: bool = False) -> None:
         if sdata < time:
             print("Your streak gone")
             print("I'm at your door now")
-            conf.update({"streak": {"count": 0}})
+            conf.update({"streak": {"count": 0, "data": time}})
             streak = 0
             up = True 
     else:
@@ -148,7 +189,7 @@ def streakf(rest: bool = False, check: bool = False) -> None:
             up = True
         else:
             nex = sdata + relativedelta(days=1)
-            if sdata <= time:
+            if sdata <= ftime:
                 conf.update({"streak": {"count": streak+1, "data": (time + relativedelta(days=1)).strftime("%Y.%m.%d") }})
                 streak += 1
                 up = True
@@ -169,12 +210,11 @@ def livs(ver: bool = False) -> None:
         with open(path, "r+") as f:
             yaml.dump(conf,f, allow_unicode=True, sort_keys=False)
     elif lives != maxlive and ver:
-        print("No time for new lives")
-        print(f"Next lives come {ldat.strftime('%Y.%m.%d %H:%M:%S')}")
-        print(f"You have {lives} lives")
+        print(f"Next lifes come {ldat.strftime('%Y.%m.%d %H:%M:%S')}")
+        print(f"You have {lives} lifes")
     elif lives == maxlive and ver:
-        print("You have maximum amount of lives")
-        print(f"You have {lives} lives")
+        print("You have maximum amount of lifes")
+        print(f"You have {lives} lifes")
 def lvlup(count: int = 1) -> None:
     global lvl
     lvl += count
@@ -184,7 +224,7 @@ def alpha() -> None:
         end = end + f"{key}:{value} "
     print(end)
 def main(prof: str = None) -> None:
-    global time, path, ftime, w, streak, sdata, lives, lvl, ldat, maxlive, lessonLength, conf, first, lern, normsing, normdub
+    global time, path, ftime, w, streak, sdata, lives, lvl, ldat, maxlive, lessonLength, conf, first, lern, normsing, normdub, hard
     time = datetime.datetime.strptime(datetime.datetime.now().strftime("%Y.%m.%d"), "%Y.%m.%d")
     ftime = datetime.datetime.now()
     first = False
@@ -200,7 +240,7 @@ def main(prof: str = None) -> None:
     #    sleep(2)
     #    first = True
     #    with open(path, "w+") as f:
-    #        conf = {"streak": {"count": 0, "data": time.strftime("%Y.%m.%d")}, "lvl": 0, "lives": 5, "maxlives": 5, "ldat": ftime, "length": 5}
+    #        conf = {"streak": {"count": 0, "data": time.strftime("%Y.%m.%d")}, "lvl": 0, "hard": False, "lives": 5, "maxlives": 5, "ldat": ftime, "length": 5}
     #        yaml.dump(conf, f, allow_unicode=True, sort_keys=False)
     streak = conf["streak"]["count"]
     sdata = datetime.datetime.strptime(conf["streak"]["data"], "%Y.%m.%d")
@@ -209,6 +249,7 @@ def main(prof: str = None) -> None:
     ldat = conf["ldat"]
     maxlive = conf["maxlives"]
     lessonLength = conf["length"]
+    hard = conf["hard"]
     try:
         lern = conf["lern"]
     except:
