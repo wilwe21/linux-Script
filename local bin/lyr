@@ -536,7 +536,8 @@ while args.cont:
         try:
             msg = f'{o1}\n{o2}'
             msgs = shorten(msg,60,False)
-            subprocess.run(['wl-copy', msgs])
+            if msgs != None:
+                subprocess.run(['wl-copy', msgs])
         except:
             msg = o1
             msgs = shorten(msg,60,False)
