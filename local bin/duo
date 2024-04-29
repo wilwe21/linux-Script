@@ -158,11 +158,13 @@ def qrevcharhard() -> None:
         print(f"Correct asnwer is {translate(le)}")
         raise ValueError("Braille or you'll stay blank")
 def menu() -> None:
+    global fire
     print(f"\033c{logo}")
+    fire = "\033[90m󰈸\033[0m"
     if not first:
         streakf(check = True)
     livs()
-    print(f"Your current streak: {streak}")
+    print(f"Your current streak: {streak} {fire}")
     print(f"Lifes: {lives}")
     options = ["Play", "Options", "Exit"]
     opts = [f"{options.index(op)+1} {op}" for op in options]
@@ -287,7 +289,7 @@ def play() -> None:
                 lvlup(2)
             streakf()
 def streakf(rest: bool = False, check: bool = False) -> None:
-    global streak
+    global streak, fire
     up = False
     if check:
         if sdata < time:
@@ -296,6 +298,10 @@ def streakf(rest: bool = False, check: bool = False) -> None:
             conf.update({"streak": {"count": 0, "data": time}})
             streak = 0
             up = True 
+        elif sdata == time:
+            fire = "\033[90m󰈸\033[0m"
+        elif sdata > time:
+            fire = "\033[93m󰈸\033[0m"
     else:
         if rest:
             print("Streak reset")
