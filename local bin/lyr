@@ -158,9 +158,15 @@ def getlyr():
         print(lin[next].strip('\n'))
         o2 = lin[next].strip('\n').replace('"', '')
         if voice and not tvoice:
-            subprocess.run(['tts', mut, '-l', orlang, '-s' f"{o1} {o2}"])
+            if mut != '':
+                subprocess.run(['tts', mut, '-l', orlang, '-s' f"{o1} {o2}"])
+            else:
+                subprocess.run(['tts', '-l', orlang, '-s' f"{o1} {o2}"])
     elif voice and not tvoice and not totalrandom:
-            subprocess.run(['tts', mut, '-l', orlang, '-s', o1])
+            if mut != '':
+                subprocess.run(['tts', mut, '-l', orlang, '-s', o1])
+            else:
+                subprocess.run(['tts', '-l', orlang, '-s', o1])
     if next >= len(lin) and not totalrandom:
         try:
             del o2
@@ -170,9 +176,15 @@ def getlyr():
         print(susy.strip('\n'))
         o2 = susy.strip('\n').replace('"', '')
         if voice and not tvoice:
-            subprocess.run(['tts', mut, '-l', orlang, '-s', f"{o1} {o2}"])
+            if mut != '':
+                subprocess.run(['tts', mut, '-l', orlang, '-s', f"{o1} {o2}"])
+            else:
+                subprocess.run(['tts', '-l', orlang, '-s', f"{o1} {o2}"])
     elif voice and not tvoice and totalrandom:
-            subprocess.run(['tts' ,mut, '-l', orlang, '-s', o1])
+        if mut != '':
+            subprocess.run(['tts', mut, '-l', orlang, '-s', o1])
+        else:
+            subprocess.run(['tts', '-l', orlang, '-s', o1])
     tran = None
     if language != None:
         tran = language
@@ -193,34 +205,70 @@ def trans(langfunc: str):
             t2 = subprocess.check_output(['tpl', '-l', langfunc, '-s', o2]).decode("UTF-8").strip("\n")
             print(t2)
             if tvoice and not voice:
-                subprocess.run(['tts', mut, '-l', lang, '-s', f"{t1} {t2}"])
+                if mut != '':
+                    subprocess.run(['tts', mut, '-l', lang, '-s', f"{t1} {t2}"])
+                else:
+                    subprocess.run(['tts', '-l', lang, '-s', f"{t1} {t2}"])
         elif tvoice and not voice and not totalrandom:
-            subprocess.run(['tts', mut, '-l', lang, '-s', t1])
+            if mut != '':
+                subprocess.run(['tts', mut, '-l', lang, '-s', t1])
+            else:
+                subprocess.run(['tts', '-l', lang, '-s', t1])
         if totalrandom and next < len(lin2):
             t2 = subprocess.check_output(['tpl', '-l', langfunc, '-s', o2]).decode("UTF-8").strip("\n")
             print(t2)
             if tvoice and not voice:
-                subprocess.run(['tts', mut, '-l', lang, '-s', f"{t1} {t2}"])
+                if mut != '':
+                    subprocess.run(['tts', mut, '-l', lang, '-s', f"{t1} {t2}"])
+                else:
+                    subprocess.run(['tts', '-l', lang, '-s', f"{t1} {t2}"])
         elif tvoice and not voice and totalrandom:
-            subprocess.run(['tts', mut, '-l', lang, '-s', t1])
+            if mut != '':
+                subprocess.run(['tts', mut, '-l', lang, '-s', t1])
+            else:
+                subprocess.run(['tts', '-l', lang, '-s', t1])
     if voice and tvoice:
         if next < len(lin) and not totalrandom:
-            subprocess.run(['tts', mut, '-l', orlang, '-s', f"{o1} {o2}", "&&", "tts", mut, "-l", lang, "-s", f"{t1} {t2}"])
+            if mut != '':
+                subprocess.run(['tts', mut, '-l', orlang, '-s', f"{o1} {o2}", "&&", "tts", mut, "-l", lang, "-s", f"{t1} {t2}"])
+            else:
+                subprocess.run(['tts', '-l', orlang, '-s', f"{o1} {o2}", "&&", "tts", mut, "-l", lang, "-s", f"{t1} {t2}"])
         elif not totalrandom:
-            subprocess.run(['tts', mut, '-l', orlang, '-s', o1, "&&", "tts", mut, "-l", lang, "-s", t1])
+            if mut != '':
+                subprocess.run(['tts', mut, '-l', orlang, '-s', o1, "&&", "tts", mut, "-l", lang, "-s", t1])
+            else:
+                subprocess.run(['tts', '-l', orlang, '-s', o1, "&&", "tts", mut, "-l", lang, "-s", t1])
         if totalrandom and next < len(lin2):
-            subprocess.run(['tts', mut, '-l', orlang, '-s', f"{o1} {o2}", '&&', 'tts', mut, '-l', lang, '-s', f"{t1} {t2}"])
+            if mut != '':
+                subprocess.run(['tts', mut, '-l', orlang, '-s', f"{o1} {o2}", '&&', 'tts', mut, '-l', lang, '-s', f"{t1} {t2}"])
+            else:
+                subprocess.run(['tts', '-l', orlang, '-s', f"{o1} {o2}", '&&', 'tts', mut, '-l', lang, '-s', f"{t1} {t2}"])
         elif totalrandom:
-            subprocess.run(['tts', mut, '-l', orlang, '-s', o1, "&&", "tts", mut, "-l", lang, "-s", t1])
+            if mut != '':
+                subprocess.run(['tts', mut, '-l', orlang, '-s', o1, "&&", "tts", mut, "-l", lang, "-s", t1])
+            else:
+                subprocess.run(['tts', '-l', orlang, '-s', o1, "&&", "tts", mut, "-l", lang, "-s", t1])
     elif voice and tvoice:
         if next < len(lin) and not totalrandom:
-            subprocess.run([f'tts', mut, "-l", orlang, "-s", f"{o1} {o2}"])
+            if mut != '':
+                subprocess.run([f'tts', mut, "-l", orlang, "-s", f"{o1} {o2}"])
+            else:
+                subprocess.run([f'tts', "-l", orlang, "-s", f"{o1} {o2}"])
         elif not totalrandom:
-            subprocess.run(['tts', mut, '-l', orlang, '-s', o1])
+            if mut != '':
+                subprocess.run(['tts', mut, '-l', orlang, '-s', o1])
+            else:
+                subprocess.run(['tts', '-l', orlang, '-s', o1])
         if totalrandom and next < len(lin2):
-            subprocess.run(['tts', mut, '-l', orlang, '-s', f"{o1} {o2}"])
+            if mut != '':
+                subprocess.run(['tts', mut, '-l', orlang, '-s', f"{o1} {o2}"])
+            else:
+                subprocess.run(['tts', '-l', orlang, '-s', f"{o1} {o2}"])
         elif totalrandom:
-            subprocess.run(['tts', mut, '-l', orlang, '-s', o1])
+            if mut != '':
+                subprocess.run(['tts', mut, '-l', orlang, '-s', o1])
+            else:
+                subprocess.run(['tts', '-l', orlang, '-s', o1])
     if langfunc.lower() == "braill":
         print("")
         if decorator == True:
