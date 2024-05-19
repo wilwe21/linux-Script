@@ -799,6 +799,8 @@ while args.cont:
                 subprocess.run(["qrencode", f"{t1}", "-o", f"{t1}"])
             except:
                 print("something's wrong")
+    if any(i in ["h", "help", "-h", "--help"]for i in a):
+        parser.print_help()
     if any(i in ["c", "congif", "-c", "--config"]for i in a):
         stop = True
         print(f"Path: {pathf}\n\
