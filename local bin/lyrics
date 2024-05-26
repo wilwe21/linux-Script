@@ -28,8 +28,8 @@ def geni(arti=arti, song=song):
     artist.song(song).save_lyrics(extension="TXT", filename=song)
 try:
     geni()
-except:
-    print("something's wrong")
+except Exception as e:
+    print("something's wrong", e)
     exit()
 if args.formated:
     song = song.replace("'","").replace('"',"")
