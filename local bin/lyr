@@ -592,7 +592,7 @@ while args.cont:
             subprocess.run(['wl-copy', msgs])
     if any(i in ["tms", "transmessenger", "-tms", "--transmessenger"]for i in a):
         try:
-            msg = f'{t1}\n{t2}'
+            msg = f'{t1} {t2}'
             msgs = shorten(msg,60,True)
             subprocess.run(['wl-copy', msgs])
         except:

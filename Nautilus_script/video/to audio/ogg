@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+ffmpeg -i ./"$1" -vn -acodec libvorbis -y ./"$1.ogg"
