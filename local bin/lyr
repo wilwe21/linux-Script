@@ -23,6 +23,10 @@ try:
         conf = yaml.load(fas, Loader=yaml.FullLoader)
     defpath = conf["path"]
     try:
+        dclen = 128-len(conf["addition"])
+    except:
+        dclen = 128
+    try:
         cont = conf["alwayscontinue"] 
         if args.cont == None:
             if cont == True:
@@ -364,7 +368,14 @@ class Bio:
         with open(f"{Path.home()}/.config/lyr.yaml", encoding='utf-8', errors='ignore') as f:
             data = yaml.safe_load(f)
         self.data = data
-        self.token = self.data["token"]
+        try:
+            self.token = self.data["token"]
+        except:
+            print("token not found")
+        try:
+            self.add = self.data["addition"]
+        except:
+            pass
         self.endpoint = "https://discord.com/api/v10/users/@me/settings"
     def change(self, message: str) -> dict:
         headers = {
@@ -384,6 +395,10 @@ class Bio:
         except:
             print("Something's wrong")
     def changeInstance(self, mess):
+        try:
+            mess = f"{self.add}\n{mess}"
+        except:
+            pass
         self.change(mess)
 def shorten(msg: str,leng: int,tr: bool) -> str:
     try:
@@ -663,11 +678,11 @@ while args.cont:
     if any(i in ["dc", "discord", "-dc", "--discord"]for i in a):
         try:
             mess = f'{o1}\n{o2}'
-            messa = shorten(mess,128,False)
+            messa = shorten(mess,dclen,False)
         except:
             try:
                 mess = f'{o1}'
-                messa = shorten(mess,128,False)
+                messa = shorten(mess,dclen,False)
             except:
                 messa = None
                 print("Something's wrong")
@@ -677,7 +692,7 @@ while args.cont:
     if any(i in ["dc1", "discord1", "-dc1", "--discord1"]for i in a):
         try:
             mess = o1
-            messa = shorten(mess,128,False)
+            messa = shorten(mess,dclen,False)
         except:
             messa = None
             print("Something's wrong")
@@ -687,7 +702,7 @@ while args.cont:
     if any(i in ["dc2", "discord2", "-dc2", "--discord2"]for i in a):
         try:
             mess = o2
-            messa = shorten(mess,128,False)
+            messa = shorten(mess,dclen,False)
         except:
             messa = None
             print("Something's wrong")
@@ -697,11 +712,11 @@ while args.cont:
     if any(i in ["tdc", "transdiscord", "-tdc", "--tdiscord"]for i in a):
         try:
             messi = f'{t1}\n{t2}'
-            messia = shorten(messi,128,True)
+            messia = shorten(messi,dclen,True)
         except:
             try:
                 messi = t1
-                messia = shorten(messi,128,True)
+                messia = shorten(messi,dclen,True)
             except:
                 messia = None
                 print("Something's wrong")
@@ -711,7 +726,7 @@ while args.cont:
     if any(i in ["tdc1", "transdiscord1", "-tdc1", "--tdiscord1"]for i in a):
         try:
             messi = t1
-            messia = shorten(messi,128,True)
+            messia = shorten(messi,dclen,True)
         except:
             messia = None
             print("Something's wrong")
@@ -721,7 +736,7 @@ while args.cont:
     if any(i in ["tdc2", "transdiscord2", "-tdc2", "--tdiscord2"]for i in a):
         try:
             messi = t2
-            messia = shorten(messi,128,True)
+            messia = shorten(messi,dclen,True)
         except:
             messia = None
             print("Something's wrong")

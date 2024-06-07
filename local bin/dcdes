@@ -3,12 +3,25 @@ import random, sys, os, argparse, requests, yaml
 parser = argparse.ArgumentParser()
 parser.add_argument("-d", "--description", help="Set Description", nargs="*")
 args = parser.parse_args()
+try:
+    with open("/home/wilwe/.config/lyr.yaml", encoding='utf-8', errors='ignore') as f:
+        data = yaml.safe_load(f)
+except:
+    print("no token in file ~/.config/lyr.yaml")
+try:
+    dclen = 128-len(data["addition"])
+except:
+    dclen = 128
 class Bio:
     def __init__(self) -> None:
         with open("/home/wilwe/.config/lyr.yaml", encoding='utf-8', errors='ignore') as f:
             data = yaml.safe_load(f)
         self.data = data
         self.token = self.data["token"]
+        try:
+            self.add = self.data["addition"]
+        except:
+            pass
         self.endpoint = "https://discord.com/api/v10/users/@me/settings"
     def change(self, message: str) -> dict:
         headers = {
@@ -28,11 +41,15 @@ class Bio:
         except:
             print("Something's wrong")
     def changeInstance(self, mess):
+        try:
+            mess = f"{self.add}\n{mess}"
+        except:
+            pass
         self.change(mess)
 try:
     if args.description != None:
         mess = ' '.join(args.description)
-        if len(mess) > 128:
+        if len(mess) > dclen:
             mess = None
             raise ValueError()
     else:
@@ -42,7 +59,7 @@ except ValueError:
 except:
     try:
         mess = input("Enter Description: ")
-        if len(mess) > 128:
+        if len(mess) > dclen:
             mess = None
             raise ValueError()
     except ValueError:

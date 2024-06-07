@@ -1,6 +1,5 @@
 #!/bin/bash
-tgpt -q  "Zamień każdą osobę i zaimki słowem GRYZAK "$(cat "$(echo "$NAUTILUS_SCRIPT_SELECTED_FILE_PATHS")")"" &> $HOME/Dokumenty/aiout
-notify-send "koniec chuju" -a "Ai chuj"
+tgpt -q  "Zamień każdą osobę i zaimki słowem 'Gryzak' w tym tekście $(cat "$(echo "$NAUTILUS_SCRIPT_SELECTED_FILE_PATHS")")" &> $HOME/Dokumenty/aiout
 playerctl pause
-spd-say -w "$(cat '/home/wilwe/Dokumenty/aiout')"
+spd-say -l pl -w "$(cat '/home/wilwe/Dokumenty/aiout')"
 playerctl play
