@@ -51,7 +51,7 @@ try:
                 print(f"Był dzień {dni[key]['dzień']}")
         else:
             for key, value in dni.items():
-                print(f"{key}: Dzień {value['dzień']} Data {value['data']}")
+                print(f"{key}: Day {value['dzień']} Date {value['data']}")
     if args.add != None:
         dni.update({key: {"dzień": dni[key]["dzień"]+int(args.value), "data": td.strip()}})
         with open(path, "w") as f:
