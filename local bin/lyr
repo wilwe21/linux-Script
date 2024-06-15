@@ -597,7 +597,7 @@ while args.cont:
             stop = None
     if any(i in ["ms", "messenger", "-ms", "--messenger"]for i in a):
         try:
-            msg = f'{o1}\n{o2}'
+            msg = f'{o1} {o2}'
             msgs = shorten(msg,60,False)
             if msgs != None:
                 subprocess.run(['wl-copy', msgs])
