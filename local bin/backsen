@@ -21,24 +21,27 @@ def imgdown(koks:str, lim: int = 10, unsafe: bool = False) -> None:
         filter='',
         verbose=False
     )
-def imgcreate(koks: str = None,bg: str = None, width: int = 1920, height: int = 1080, blur: int = 10) -> None:
+def imgcreate(koks: str = None,bg: str = None, width: int = 1920, height: int = 1080, blur: int = 10, path: str = None) -> None:
     try:
         image = Image.open(bg).resize((width,height))
     except:
-        if args.red != None or args.green != None or args.blue != None:
-            try:
-                if args.red == None:
-                    args.red = 0
-                if args.green == None:
-                    args.green = 0
-                if args.blue == None:
-                    args.blue = 0
-                color = (args.red,args.green,args.blue)
-            except:
-                print(args.red,args.green,args.blue)
-                print("It's not a int")
-                return
-        else:
+        try:
+            if args.red != None or args.green != None or args.blue != None:
+                try:
+                    if args.red == None:
+                        args.red = 0
+                    if args.green == None:
+                        args.green = 0
+                    if args.blue == None:
+                        args.blue = 0
+                    color = (args.red,args.green,args.blue)
+                except:
+                    print(args.red,args.green,args.blue)
+                    print("It's not a int")
+                    return
+            else:
+                raise ValueError
+        except:
             color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
             while color == (255,255,255):
                 color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
@@ -52,7 +55,10 @@ def imgcreate(koks: str = None,bg: str = None, width: int = 1920, height: int = 
         w = draw.textlength(line,font=font)
         draw.text(((width - w)/2, offset), line, font=font, fill=(255,255,255,255),align="center",)
         offset += font.size
-    image.save(f'/home/wilwe/Obrazy/python/end/{koks}.png')
+    if path == None:
+        image.save(f'/home/wilwe/Obrazy/python/end/{koks}.png')
+    else:
+        image.save(path)
 def genbg(text: str = None, count: int = 5, blur: int = 20):
     imgdown(text, count)
     bglis = os.popen(f'ls "/home/wilwe/Obrazy/python/{text}"').readlines()
