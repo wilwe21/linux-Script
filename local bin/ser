@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+grep -rni ./ -e $1
