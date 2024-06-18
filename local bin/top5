@@ -70,4 +70,4 @@ file '{tempFolder}/vids/1.mp4'
 '''
 with open(f'{tempFolder}/list', "w") as f:
     f.write(lis)
-subprocess.Popen(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", f"{tempFolder}/list", "-c", "copy", f"{root}/top 5 {args.what}.mp4"])
+subprocess.Popen(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", f"{tempFolder}/list", "-c", "copy", "-bsf:a", "aac_adtstoasc", "-fflags", "+genpts", f"{root}/top 5 {args.what}.mp4"])
