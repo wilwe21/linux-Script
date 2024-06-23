@@ -1,0 +1,2 @@
+#!/bin/bash
+espeak -v en "$(cat "$(echo $1)")" -w "$1.wav"
