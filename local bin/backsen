@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from bing_image_downloader import downloader
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageFilter
-import random, sys, os, argparse, requests, yaml, textwrap, hashlib
+import random, sys, os, subprocess, argparse, requests, yaml, textwrap, hashlib
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-bg", "--background", help="Background", default=None)
@@ -10,6 +10,7 @@ if __name__ == "__main__":
     parser.add_argument("-b", "--blue", help="Background blue", type=int)
     parser.add_argument("-genbg", "--generatebackground", help="Generate Background", default=False, action=argparse.BooleanOptionalAction)
     parser.add_argument("-t", "--text", help="Text", default=None)
+    parser.add_argument("-v", "--voice", help="Voice", default=False, action=argparse.BooleanOptionalAction)
     args = parser.parse_args()
 def imgdown(koks:str, lim: int = 10, unsafe: bool = False) -> None:
     downloader.download(
@@ -73,11 +74,28 @@ if __name__ == "__main__":
         args.text: str = input("Give text: ") 
     if args.generatebackground:
         genbg(args.text, 5)    
+        if args.voice:
+            subprocess.Popen(["espeak", "-v", "pl", args.text, "-w", f"{args.text}.wav"])
+            process = subprocess.Popen(["ffmpeg", "-y", "-loop", "1", "-i", f"{args.text}.png", "-i", f"{args.text}.wav", "-shortest", "-c:v", "libx264", f"{args.text}.mp4"])
+            process.wait()
         exit()
     if args.background != None:
-        imgcreate(args.text, bg=args.background, blur=20)
+        imgcreate(args.text, bg=args.background, blur=20, path=f"{args.text}.png")
+        if args.voice:
+            subprocess.Popen(["espeak", "-v", "pl", args.text, "-w", f"{args.text}.wav"])
+            process = subprocess.Popen(["ffmpeg", "-y", "-loop", "1", "-i", f"{args.text}.png", "-i", f"{args.text}.wav", "-shortest", "-c:v", "libx264", f"{args.text}.mp4"])
+            process.wait()
     else:
         try:
-            imgcreate(args.text, bg=bg,blur=20)
+            imgcreate(args.text, bg=bg,blur=20, path=f"{args.text}.png")
+            if args.voice:
+                subprocess.Popen(["espeak", "-v", "pl", args.text, "-w", f"{args.text}.wav"])
+                process = subprocess.Popen(["ffmpeg", "-y", "-loop", "1", "-i", f"{args.text}.png", "-i", f"{args.text}.wav", "-shortest", "-c:v", "libx264", f"{args.text}.mp4"])
+                process.wait()
         except:
-            imgcreate(args.text)
+            imgcreate(args.text, path=f"{args.text}.png")
+            if args.voice:
+                subprocess.Popen(["espeak", "-v", "pl", args.text, "-w", f"{args.text}.wav"])
+                process = subprocess.Popen(["ffmpeg", "-y", "-loop", "1", "-i", f"{args.text}.png", "-i", f"{args.text}.wav", "-shortest", "-c:v", "libx264", f"{args.text}.mp4"])
+                process.wait()
+

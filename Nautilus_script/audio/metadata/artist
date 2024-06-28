@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+art=$(zenity --entry --text "Add Artist")
+ffmpeg -y -i "$1" -c copy -metadata artist="$art" ./"$1"

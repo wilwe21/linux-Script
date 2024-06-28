@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+cov=$(zenity --file-selection)
+kitty --hold ffmpeg -y -i "$1" -i "$cov" -map 0:0 -map 1:0 -c copy ./"$1"

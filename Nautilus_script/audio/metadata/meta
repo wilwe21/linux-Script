@@ -1,0 +1,5 @@
+#!/usr/bin/env python3
+import os, subprocess
+met = subprocess.check_output(['zenity', '--forms', '--add-entry=artist', '--add-entry=title', '--text=Metadata']).decode("utf-8")
+cover = subprocess.check_output(['zenity', '--file-selection']).decode("utf-8")
+print(met, cover)
