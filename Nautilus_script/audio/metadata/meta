@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-import os, subprocess
+from gi.repository import Nautilus, GObject
+import os, subprocess, sys
 met = subprocess.check_output(['zenity', '--forms', '--add-entry=artist', '--add-entry=title', '--text=Metadata']).decode("utf-8")
 cover = subprocess.check_output(['zenity', '--file-selection']).decode("utf-8")
 print(met, cover)
+proc = subprocess.Popen(["kitty", "--hold", "ffmpeg", "-y", "-i", sys.argv, "-i", cover, "-map", "0:0", "-map", "1:0", "-c", "copy", sys.argv])
+proc.wait()
