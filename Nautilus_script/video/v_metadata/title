@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+tit=$(zenity --entry --text "Add Title")
+ffmpeg -y -i "$1" -c copy -metadata title="$tit" ./"$1"

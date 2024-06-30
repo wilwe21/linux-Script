@@ -1,0 +1,2 @@
+#!/bin/bash
+yt-dlp -o "%(playlist_index)d%(title)s.%(ext)s" $1

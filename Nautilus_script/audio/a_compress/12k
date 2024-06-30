@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+ffmpeg -i ./"$1" -map 0:a:0 -b:a 12k ./"$1_12k.mp3"

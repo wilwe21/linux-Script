@@ -1,0 +1,8 @@
+#!/bin/bash
+radii=$(zenity --entry --text="Raound" --entry-text="20")
+convert "$1" \
+  \( +clone  -alpha extract \
+    -draw "fill black polygon 0,0 0,$radii $radii,0 fill white circle $radii,$radii $radii,0" \
+    \( +clone -flip \) -compose Multiply -composite \
+    \( +clone -flop \) -compose Multiply -composite \
+  \) -alpha off -compose CopyOpacity -composite "$1_round".png

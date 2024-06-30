@@ -1,0 +1,2 @@
+#!/bin/bash
+convert ./"$1" \( +clone -background none -fill black -edge 1 \) -flatten -matte 10 -process -negate \( +clone -flip \) -compose Multiply -composite  \( +clone -flop \) -compose Multiply -composite -background transparent "$1_smth.jpg"

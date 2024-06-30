@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+ffmpeg -i ./"$1" -b 96k -b:a 96k ./"$1_96k.mp4"

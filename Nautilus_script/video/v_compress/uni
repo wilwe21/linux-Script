@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+vid=$(zenity --entry --text="video compression")
+audio=$(zenity --entry --text="audio compression")
+ffmpeg -i ./"$1" -b $vid -b:a $audio ./"$1_compress.mp4"
