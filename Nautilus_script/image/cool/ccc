@@ -1,0 +1,2 @@
+#!/bin/bash
+convert -size 420x320 xc:black -tile 5x5 -duplicate 21x16 ./"$1" "$1_mozaic.jpg"
