@@ -1,0 +1,13 @@
+#!/usr/bin/env python3
+import sys, os, subprocess,json
+from pathvalidate import sanitize_filepath
+import time
+files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
+
+for file in files:
+    title = subprocess.check_output(["ffprobe", "-show_entries", "format_tags=title", "-of", "json", "-i", file]).decode("utf-8")
+    title = json.loads(title)["format"]["tags"]["title"]
+    nt = file[file.find(title):]
+    mv = subprocess.Popen(["mv", file, nt])
+    mv.wait()
+
