@@ -1,2 +1,8 @@
-#!/usr/bin/env bash
-ffmpeg -i ./"$1" -vn ./"$1.wav"
+#!/usr/bin/env python3
+import os, subprocess
+files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
+
+for file in files:
+    ffp = subprocess.Popen(["ffmpeg", "-i", file, "-vn", f"{file}.wav"])
+    ffp.wait()
+

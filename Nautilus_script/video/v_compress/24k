@@ -1,2 +1,7 @@
-#!/usr/bin/env bash
-ffmpeg -i ./"$1" -b 24k -b:a 24k ./"$1_24k.mp4"
+#!/usr/bin/env python3
+import os, subprocess
+files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
+
+for file in files:
+	ffp = subprocess.Popen(["ffmpeg", "-i", file, "-b", "24k", "-b:a", "24k", f"{file}_24k.mp4"])
+	ffp.wait()
