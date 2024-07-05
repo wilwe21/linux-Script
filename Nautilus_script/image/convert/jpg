@@ -1,2 +1,7 @@
-#!/usr/bin/env bash
-magick ./"$1" ./"$1.jpg"
+#!/usr/bin/env python3	
+import os, subprocess
+files = os.envior.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
+
+for file in files:
+	mag = subprocess.Popen(["magick", file, f"{file}.jpg"])
+	mag.wait()

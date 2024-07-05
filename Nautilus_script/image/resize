@@ -1,3 +1,7 @@
-#!/bin/bash
-scale=$(zenity --entry --text="Scale" --entry-text="1920x1080")
-magick ./"$1" -resize "$scale" ./"$1scaled"
+#!/usr/bin/env python3
+import os, subprocess
+files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
+
+for file in files:
+	scale = subprocess.check_output(zenity --entry --text="Scale" --entry-text="1920x1080").decode("UTF-8").replace('\n','')
+	mag = subprocess.Popen(["magick", file, "-resize", scale, f"$1scaled.png"])

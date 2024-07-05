@@ -3,5 +3,5 @@ import os, subprocess
 files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
 
 for file in files:
-	ffp = subprocess.Popen(["kitty","ffmpeg", "-i", file, f"{file}.mp4"])
+	ffp = subprocess.Popen(["kitty","ffmpeg", "-i", file, f"{file}.ogg"])
 	ffp.wait()

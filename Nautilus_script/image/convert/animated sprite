@@ -1,14 +1,7 @@
-#!/usr/bin/env bash
-convert ./"$1" +adjoin tmp_%04d.png
+#!/usr/bin/env python3
+import os, subprocess
+files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
 
-j=0
-for i in $(ls tmp_*.png); do
-  if [ $(identify -verbose $i | grep Colors: | awk '{ print $2; }') != "1" ]; then
-    cp $i select_$(printf %04d $j).png;
-    (( j++ ))
-  fi
-done
-
-montage $(ls select_*) -tile x1 -geometry '1x1+0+0<' -alpha On -background 'rgba(0, 0, 0, 0.0)' -quality 100 ./"$1.png"
-rm ./tmp_*
-rm ./select_*
+for file in files:
+	sss = subprocess.Popen(["sprite", file])
+	sss.wait()
