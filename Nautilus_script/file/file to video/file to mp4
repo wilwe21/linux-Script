@@ -6,5 +6,5 @@ u_size = subprocess.check_output(["zenity", "--entry", "--text=Upscale size (240
 a_rate = subprocess.check_output(["zenity", "--entry", "--text=Audio rate (44100)"]).decode("UTF-8").replace('\n', '')
 
 for file in files:
-    ffp = subprocess.Popen(["kitty", "--hold", "ffmpeg", "-f", "rawvideo", "-pixel_format", "rgb32", "-video_size", v_size, "-framerate", "10.766666", "-i", file, "-f", "u8", "-ar", a_rate, "-ac", "1", "-i", file, "-sws_flags", "neighbor", "-s", u_size, f"{file}.mp4"])
+    ffp = subprocess.Popen(["kitty", "ffmpeg", "-f", "rawvideo", "-pixel_format", "rgb32", "-video_size", v_size, "-framerate", "10.766666", "-i", file, "-f", "u8", "-ar", a_rate, "-ac", "1", "-i", file, "-sws_flags", "neighbor", "-s", u_size, f"{file}.mp4"])
     ffp.wait()
