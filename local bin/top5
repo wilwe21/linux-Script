@@ -4,6 +4,7 @@ from pathlib import Path
 import importlib.machinery
 import importlib.util
 from youtubesearchpython import Search
+from moviepy.editor import *
 
 loader = importlib.machinery.SourceFileLoader( "backsen", path='/home/wilwe/Dokumenty/localbin/backsen' )
 spec = importlib.util.spec_from_loader( 'backsen', loader )
@@ -14,60 +15,86 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-w", "--what", help="top 5 of what")
 args = parser.parse_args()
 pattern = [f"top 5 {args.what}", "numero 5", "numero 4", "numero 3", "numero 2", "numero 1"]
-root = os.getcwd()
-tempFolder = f"{root}/top5temp"
-print(tempFolder)
-if not os.path.exists(tempFolder):
-    subprocess.Popen(["mkdir", tempFolder])
+def combine(video_file_paths, output_filename):
+  clips = []
+  for path in video_file_paths:
+    clips.append(AudioFileClip(path))
+  final_clip = concatenate_audioclips(clips)
+  final_clip.write_audiofile(output_filename)
+def onlyv(files):
+    v = f"{tempFolder}/v"
+    if not os.path.exists(v):
+        subprocess.Popen(["mkdir", v])
+    lis = f'''file '{v}/top5{args.what.replace(' ','')}_v.mp4'
+    file '{v}/numero5_v.mp4'
+    file '{v}/5_v.mp4'
+    file '{v}/numero4_v.mp4'
+    file '{v}/4_v.mp4'
+    file '{v}/numero3_v.mp4'
+    file '{v}/3_v.mp4'
+    file '{v}/numero2_v.mp4'
+    file '{v}/2_v.mp4'
+    file '{v}/numero1_v.mp4'
+    file '{v}/1_v.mp4'
+    '''
+    with open(f'{tempFolder}/list', "w") as f:
+        f.write(lis)
+    for file in files:
+        f, ext = os.path.splitext(os.path.basename(file))
+        subprocess.Popen(["ffmpeg", "-i", file, "-safe", "0", "-map", "0:v", "-c", "copy", f"{v}/{f}_v.mp4"]).wait()
+    subprocess.Popen(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", f"{tempFolder}/list", "-c", "copy", "-bsf:a", "aac_adtstoasc", "-fflags", "+genpts", f"{os.getcwd()}/top5vid.mp4"]).wait()
 
-for i in pattern:
-    subprocess.Popen(["espeak", "-v", "es", i, "-w", f"{tempFolder}/{i}.wav"])
-    backsen.imgcreate(koks=i, path=f"{tempFolder}/{i}.png")
-    process = subprocess.Popen(["ffmpeg", "-y", "-loop", "1", "-i", f"{tempFolder}/{i}.png", "-i", f"{tempFolder}/{i}.wav", "-shortest", "-c:v", "libx264", "-crf", "23", "-vf", "setpts=1.25*PTS", "-r", "15", f"{tempFolder}/{i.replace(' ','')}.mp4"])
-    process.wait()
-    subprocess.Popen(["rm", f"{tempFolder}/{i}.wav", f"{tempFolder}/{i}.png"])
-vids = Search(f"{random.randint(0,2137)}{args.what}", limit=5)
-subprocess.Popen(["mkdir", f"{tempFolder}/vids"])
-for i in vids.result()['result']:
-    down = subprocess.Popen(['yt-dlp', "--downloader", "ffmpeg", "--downloader-args", "ffmpeg:-y -t 10", i["id"], "-o", f"{tempFolder}/vids/{i['title']}"])
-    down.wait()
-    if os.path.isdir(f"{tempFolder}/vids/{i['title']}"):
-        os.popen(f"mv {tempFolder}/vids/{i['title']}/* {tempFolder}/vids")
-        os.popen(f"rmdir {tempFolder}/vids/{i['title']}")
-with os.scandir(f'{tempFolder}/vids') as ls:
-    dirs = [entry.name for entry in ls]
-while len(dirs) < 5:
-    vids = Search(f"{random.randint(0,2137)}{args.what}", limit=5-len(dirs))
+def setup():
+    global tempFolder
+    root = os.getcwd()
+    tempFolder = f"{root}/top5temp"
+    print(tempFolder)
+    if not os.path.exists(tempFolder):
+        subprocess.Popen(["mkdir", tempFolder])
+
+def pat():
+    for i in pattern:
+        subprocess.Popen(["espeak", "-v", "es", i, "-w", f"{tempFolder}/{i}.wav"]).wait()
+        backsen.imgcreate(koks=i, path=f"{tempFolder}/{i}.png")
+        subprocess.Popen(["ffmpeg", "-y", "-loop", "1", "-i", f"{tempFolder}/{i}.png", "-i", f"{tempFolder}/{i}.wav", "-shortest", "-c:v", "libx264", f"{tempFolder}/{i.replace(' ','')}.mp4"]).wait()
+        subprocess.Popen(["rm", f"{tempFolder}/{i}.wav", f"{tempFolder}/{i}.png"]).wait()
+    s = [f"{tempFolder}/{i.replace(' ','')}.mp4" for i in pattern]
+    #split(s, f"{tempFolder}")
+def vidser():
+    vids = Search(f"{random.randint(0,2137)}{args.what}", limit=5)
+    subprocess.Popen(["mkdir", f"{tempFolder}/vids"]).wait()
     for i in vids.result()['result']:
-        down = subprocess.Popen(['yt-dlp', "--downloader", "ffmpeg", "--downloader-args", "ffmpeg:-y -t 10", i["id"], "-o", f"{tempFolder}/vids/{i['title']}"])
-        down.wait()
+        subprocess.Popen(['yt-dlp', "--downloader", "ffmpeg", "--downloader-args", "ffmpeg:-y -t 10", i["id"], "-o", f"{tempFolder}/vids/{i['title']}"]).wait()
         if os.path.isdir(f"{tempFolder}/vids/{i['title']}"):
-            os.popen(f"mv {tempFolder}/vids/{i['title']}/* {tempFolder}/vids")
-            os.popen(f"rmdir {tempFolder}/vids/{i['title']}")
+            subprocess.Popen(["mv", f"{tempFolder}/vids/{i['title']}/*", f"{tempFolder}/vids"]).wait()
+            subprocess.Popen(["rmdir", f"{tempFolder}/vids/{i['title']}"]).wait()
+    with os.scandir(f'{tempFolder}/vids') as ls:
+        dirs = [entry.name for entry in ls]
+    while len(dirs) < 5:
+        vids = Search(f"{random.randint(0,2137)}{args.what}", limit=5-len(dirs))
+        for i in vids.result()['result']:
+            subprocess.Popen(['yt-dlp', "--downloader", "ffmpeg", "--downloader-args", "ffmpeg:-y -t 10", i["id"], "-o", f"{tempFolder}/vids/{i['title']}"]).wait()
+            if os.path.isdir(f"{tempFolder}/vids/{i['title']}"):
+                subprocess.Popen(["mv", f"{tempFolder}/vids/{i['title']}/*", f"{tempFolder}/vids"]).wait()
+                subprocess.Popen(["rmdir", f"{tempFolder}/vids/{i['title']}"]).wait()
 
     with os.scandir(f'{tempFolder}/vids') as ls:
         dirs = [entry.name for entry in ls]
-num = 1
-for i in dirs:
-    if os.path.isdir(f"{tempFolder}/vids/{i}"):
-        os.popen(f"mv {tempFolder}/vids/{i}/* {tempFolder}/vids")
-        os.popen(f"rmdir {tempFolder}/vids/{i}")
-    name = subprocess.Popen(["ffmpeg", "-y", "-i", f"{tempFolder}/vids/{i}", "-c:v", "libx264", "-crf", "23", "-vf", "setpts=1.25*PTS", "-r", "15", f"{tempFolder}/vids/{num}.mp4"])
-    name.wait()
-    subprocess.Popen(["rm", f"{tempFolder}/vids/{i}"])
-    num += 1
-lis = f'''file '{tempFolder}/top5{args.what.replace(' ','')}.mp4'
-file '{tempFolder}/numero5.mp4'
-file '{tempFolder}/vids/5.mp4'
-file '{tempFolder}/numero4.mp4'
-file '{tempFolder}/vids/4.mp4'
-file '{tempFolder}/numero3.mp4'
-file '{tempFolder}/vids/3.mp4'
-file '{tempFolder}/numero2.mp4'
-file '{tempFolder}/vids/2.mp4'
-file '{tempFolder}/numero1.mp4'
-file '{tempFolder}/vids/1.mp4'
-'''
-with open(f'{tempFolder}/list', "w") as f:
-    f.write(lis)
-subprocess.Popen(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", f"{tempFolder}/list", "-c", "copy", "-bsf:a", "aac_adtstoasc", "-fflags", "+genpts", f"{root}/top 5 {args.what}.mp4"])
+    num = 1
+    for i in dirs:
+        subprocess.Popen(["ffmpeg", "-y", "-i", f"{tempFolder}/vids/{i}", "-c:v", "libx264", f"{tempFolder}/vids/{num}.mp4"]).wait()
+        subprocess.Popen(["rm", f"{tempFolder}/vids/{i}"]).wait()
+        num += 1
+def com():
+    lis = [f'{tempFolder}/top5{args.what.replace(' ','')}.mp4', f'{tempFolder}/numero5.mp4', f'{tempFolder}/vids/5.mp4', f'{tempFolder}/numero4.mp4', f'{tempFolder}/vids/4.mp4', f'{tempFolder}/numero3.mp4', f'{tempFolder}/vids/3.mp4', f'{tempFolder}/numero2.mp4', f'{tempFolder}/vids/2.mp4', f'{tempFolder}/numero1.mp4', f'{tempFolder}/vids/1.mp4']
+    out = f"{os.getcwd()}/top5.mp3"
+    combine(lis, out)
+    onlyv(lis)
+    
+    #split([f"{tempFolder}/vids/{i}.mp4" for i in range(1,6)], f"{tempFolder}/vids")
+#subprocess.Popen(["ffmpeg", "-y", "-f", "concat", "-i", f"{tempFolder}/list", "-c", "copy", "-bsf:a", "aac_adtstoasc", "-fflags", "+genpts", f"{root}/top 5 {args.what}.mp4"])
+if __name__ == "__main__":
+    setup()
+    pat()
+    vidser()
+    com()

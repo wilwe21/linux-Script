@@ -1,3 +1,5 @@
-#!/bin/bash
-chuj=$(echo $NAUTILUS_SCRIPT_SELECTED_FILE_PATHS)
-swww img "$chuj"
+#!/usr/bin/env python3
+import os, subprocess
+wal = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
+
+subprocess.Popen(["swww", "img", wal[-1]]).wait()
