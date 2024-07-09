@@ -1,0 +1,20 @@
+#!/usr/bin/env python3
+import yaml, os, subprocess
+import pylast
+from pathlib import Path
+def api():
+    global conf
+    try:
+        with open(f"{Path.home()}/.config/gener.yaml", "r") as f:
+            conf = yaml.load(f, Loader=yaml.FullLoader)
+    except:
+        key = subprocess.check_output(["zenity", "--entry", "--text", "Api Key"]).decode("UTF-8").replace('\n','')
+        secret = subprocess.check_output(["zenity", "--entry", "--text", "Api secret"]).decode("UTF-8").replace('\n','')
+        username = subprocess.check_output(["zenity", "--entry", "--text", "Username"]).decode("UTF-8").replace('\n','')
+        password = subprocess.check_output(["zenity", "--password", "--text", "Password"]).decode("UTF-8").replace('\n','')
+        conf = {"key": key, "secret": secret, "username": username, "password": pylast.md5(password)}
+api()
+files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
+
+for file in files:
+    f, ext = os.path.splitext(os.path.basename(file))
