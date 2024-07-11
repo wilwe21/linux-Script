@@ -1,20 +1,44 @@
 #!/usr/bin/env python3
-import yaml, os, subprocess
-import pylast
+import sys, yaml, os, subprocess, pylast, lyricsgenius, music_tag
 from pathlib import Path
-def api():
-    global conf
+def getLastApi():
+    global confLast
     try:
         with open(f"{Path.home()}/.config/gener.yaml", "r") as f:
-            conf = yaml.load(f, Loader=yaml.FullLoader)
+            confLast = yaml.load(f, Loader=yaml.FullLoader)
     except:
-        key = subprocess.check_output(["zenity", "--entry", "--text", "Api Key"]).decode("UTF-8").replace('\n','')
-        secret = subprocess.check_output(["zenity", "--entry", "--text", "Api secret"]).decode("UTF-8").replace('\n','')
-        username = subprocess.check_output(["zenity", "--entry", "--text", "Username"]).decode("UTF-8").replace('\n','')
-        password = subprocess.check_output(["zenity", "--password", "--text", "Password"]).decode("UTF-8").replace('\n','')
-        conf = {"key": key, "secret": secret, "username": username, "password": pylast.md5(password)}
-api()
-files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
+        key = subprocess.check_output(["zenity", "--entry", "--text", "last.fm Api Key"]).decode("UTF-8").replace('\n','')
+        secret = subprocess.check_output(["zenity", "--entry", "--text", "last.fm Api secret"]).decode("UTF-8").replace('\n','')
+        username = subprocess.check_output(["zenity", "--entry", "--text", "last.fm Username"]).decode("UTF-8").replace('\n','')
+        password = subprocess.check_output(["zenity", "--password", "--text", "last.fm Password"]).decode("UTF-8").replace('\n','')
+        confLast = {"key": key, "secret": secret, "username": username, "password": pylast.md5(password)}
+        with open(f"{Path.home()}/.conf/gener.yaml", "w+") as f:
+            yaml.dump(confLast, f)
+def getGeniusApi():
+    global confGen
+    try:
+        with open(f"{Path.home()}/.config/lyrics.yaml", "r") as f:
+            confGen = yaml.load(f, Loader=yaml.FullLoader)
+    except:
+        token = subprocess.check_output(["zenity", "--entry", "--text", "genius Api Token"]).decode("Utf-8").replace("\n", '')
+        confGen = {"token": token, "formated": True}
+        with open(f"{Path.home()}/.conf/lyrics.yaml", "w+") as f:
+            yaml.dump(confGen, f)
+getLastApi()
+getGeniusApi()
+#files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
+files = [sys.argv[1]]
+genius = lyricsgenius.Genius(confGen["token"], verbose=False)
+
 
 for file in files:
     f, ext = os.path.splitext(os.path.basename(file))
+    sss = music_tag.load_file(file)
+    title = str(sss["title"])
+    artist = str(sss["artist"])
+    try:
+        art = genius.search_artist(artist, get_full_info=False, per_page=0, max_songs=0)
+        song = art.song(title)
+        print(song["tags"])
+    except Exception as E:
+        print(E)
