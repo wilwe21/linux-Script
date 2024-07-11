@@ -1,11 +1,12 @@
 #!/usr/bin/env python
-import os, subprocess
+import os, subprocess, music_tag
 files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
-alb = subprocess.check_output(['zenity', '--entry', f'--text=Album name']).decode("utf-8")
+alb = subprocess.check_output(['zenity', '--entry', f'--text=Album name']).decode("utf-8").replace('\n', '')
 
 for file in files:
     track = subprocess.check_output(['zenity', '--entry', f"--text=Number {os.path.basename(file)}"]).decode("utf-8").replace('\n', '')
-    ffm = subprocess.Popen(["ffmpeg", "-y", "-i", file, "-c", "copy", "-metadata", f"album={alb.replace('\n', '')}", "-metadata", f"track={track}", "-metadata", f"TRACKTOTAL={len(files)}", "tmp.mp3"])
-    ffm.wait()
-    mvs = subprocess.Popen(["mv", "-f", "tmp.mp3", file])
-    mvs.wait()
+    sss = music_tag.load_file(file)
+    sss.append_tag('album', alb)
+    sss.append_tag('track', track)
+    sss.append_tag('totaltracks', len(files))
+    sss.save()

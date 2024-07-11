@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 import os, subprocess, music_tag
 files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
-aut = subprocess.check_output(['zenity', '--entry', f'--text=Artist']).decode("utf-8").replace("\n", '')
-aut = aut.split("|")
+gens = subprocess.check_output(["zenity", "--entry", "--text=Input geners"]).decode("utf-8").replace('\n', '')
+gens = gens.split("|")
 
 for file in files:
     sss = music_tag.load_file(file)
-    for a in aut:
-        sss.append_tag("artist", a)
+    for gen in gens:
+       sss.append_tag("genre", gen)
     sss.save()
-
