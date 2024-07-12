@@ -10,8 +10,8 @@ for file in files:
     sss.append_tag("album", alb)
     for alar in albart:
         sss.append_tag("albumartist", alar)
-    sss.append_tag("track", files.index(file)+1)
-    sss.append_tag("totaltrack", len(files))
+    sss["tracknumber"] = files.index(file)+1
+    sss["totaltracks"] = len(files)
     sss.save()
     ind = str(files.index(file)+1)
     nam = os.path.basename(file)[len(ind):]

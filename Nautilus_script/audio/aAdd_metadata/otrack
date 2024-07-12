@@ -5,6 +5,6 @@ files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
 for file in files:
     track = subprocess.check_output(['zenity', '--entry', f"--text=Number {os.path.basename(file)} (X/Y)"]).decode("utf-8").replace('\n', '').split("/")
     sss = music_tag.load_file(file)
-    sss.append_tag('track', track[0])
-    sss.append_tag('totaltrack', track[1])
+    sss['tracknumber'] = track[0]
+    sss['totaltrack'] = track[1]
     sss.save()

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import sys, yaml, os, subprocess, pylast, lyricsgenius, music_tag
+import sys, yaml, os, subprocess, pylast, music_tag
 from pathlib import Path
 def getLastApi():
     global confLast
@@ -14,31 +14,18 @@ def getLastApi():
         confLast = {"key": key, "secret": secret, "username": username, "password": pylast.md5(password)}
         with open(f"{Path.home()}/.conf/gener.yaml", "w+") as f:
             yaml.dump(confLast, f)
-def getGeniusApi():
-    global confGen
-    try:
-        with open(f"{Path.home()}/.config/lyrics.yaml", "r") as f:
-            confGen = yaml.load(f, Loader=yaml.FullLoader)
-    except:
-        token = subprocess.check_output(["zenity", "--entry", "--text", "genius Api Token"]).decode("Utf-8").replace("\n", '')
-        confGen = {"token": token, "formated": True}
-        with open(f"{Path.home()}/.conf/lyrics.yaml", "w+") as f:
-            yaml.dump(confGen, f)
 getLastApi()
-getGeniusApi()
 #files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
 files = [sys.argv[1]]
-genius = lyricsgenius.Genius(confGen["token"], verbose=False)
-
+network = pylast.LastFMNetwork(
+        api_key=confLast["key"],
+        api_secret=confLast["secret"],
+        username=confLast["username"],
+        password_hash=confLast["password"]
+        )
 
 for file in files:
     f, ext = os.path.splitext(os.path.basename(file))
     sss = music_tag.load_file(file)
     title = str(sss["title"])
     artist = str(sss["artist"])
-    try:
-        art = genius.search_artist(artist, get_full_info=False, per_page=0, max_songs=0)
-        song = art.song(title)
-        print(song["tags"])
-    except Exception as E:
-        print(E)
