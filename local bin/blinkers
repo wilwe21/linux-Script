@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageFilter
+import subprocess, textwrap
+
+bgcol = subprocess.check_output(["zenity", "--color-selection"]).decode("UTF-8").replace('\n', '').replace("rgb(","").replace(")", '').split(",")
+print(bgcol)
+
+def imgcreate(koks: str = None,bg: list = None, width: int = 100, height: int = 40) -> None:
+    color = (int(bg[0]),int(bg[1]),int(bg[2]))
+    image = Image.new("RGB",(width,height),color)
+    draw = ImageDraw.Draw(image)
+    font = ImageFont.truetype("mononoki-Regular.ttf", 35)
+    draw.text((0,5), koks, font=font, fill=(255,255,255,255),align="center")
+    image.save(f'{koks}.png')
+
+kok = subprocess.check_output(["zenity", "--entry", "--text=What?"]).decode("UTF-8").replace("\n", '')
+imgcreate(kok, bgcol)
