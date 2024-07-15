@@ -3,5 +3,4 @@ import os, subprocess
 files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
 
 for file in files:
-	sss = subprocess.Popen(["sprite", file])
-	sss.wait()
+	sss = subprocess.Popen(["sprite", file]).wait()

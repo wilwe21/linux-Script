@@ -4,5 +4,6 @@ files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
 radii = subprocess.check_output(["zenity", "--entry", "--text=Raounding", "--entry-text=20"]).decode("UTF-8").replace("\n", '')
 
 for file in files:
-	mag = subprocess.Popen(["convert", file, "(", "+clone",  "-alpha", "extract", "-draw", f"fill black polygon 0,0 0,{radii} {radii},0 fill white circle {radii},{radii} {radii},0", "(", "+clone", "-flip", ")", "-compose", "Multiply", "-composite", "(", "+clone", "-flop", ")", "-compose", "Multiply", "-composite", ")", "-alpha", "off", "-compose", "CopyOpacity", "-composite", f"{file}_round.png"])
+    f, ext = os.path.splitext(os.path.basename(file))
+	mag = subprocess.Popen(["convert", file, "(", "+clone",  "-alpha", "extract", "-draw", f"fill black polygon 0,0 0,{radii} {radii},0 fill white circle {radii},{radii} {radii},0", "(", "+clone", "-flip", ")", "-compose", "Multiply", "-composite", "(", "+clone", "-flop", ")", "-compose", "Multiply", "-composite", ")", "-alpha", "off", "-compose", "CopyOpacity", "-composite", f"{f}_round.png"])
 	mag.wait()

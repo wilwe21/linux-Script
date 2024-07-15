@@ -5,4 +5,4 @@ scale = subprocess.check_output(["zenity", "--entry", "--text=Scale", "--entry-t
 
 for file in files:
     f, ext = os.path.splitext(os.path.basename(file))
-    subprocess.Popen(["magick", file, "-resize", scale, f"{f}_scaled.{ext}"]).wait()
+    subprocess.Popen(["magick", file, "-resize", scale, f"{f}_scaled{ext}"]).wait()

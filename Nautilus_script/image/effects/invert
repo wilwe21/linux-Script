@@ -3,5 +3,6 @@ import os, subprocess
 files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
 
 for file in files:
-	mag = subprocess.Popen(["convert", file, "-channel", "RGB", "-negate", f"{file}_inverted.jpg"])
+    f, ext = os.path.splitext(os.path.basename(file))
+	mag = subprocess.Popen(["convert", file, "-channel", "RGB", "-negate", f"{f}_inverted{ext}"])
 	mag.wait()

@@ -3,5 +3,5 @@ import os, subprocess
 files = os.envior.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
 
 for file in files:
-	mag = subprocess.Popen(["magick", file, f"{file}.jpg"])
-	mag.wait()
+    f, ext = os.path.splitext(os.path.basename(file))
+	subprocess.Popen(["magick", file, f"{f}.jpg"]).wait()
