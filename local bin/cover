@@ -1,0 +1,5 @@
+#!/usr/bin/env python3
+import sys, os, subprocess
+from pathvalidate import sanitize_filepath
+
+subprocess.Popen(["yt-dlp", "--convert-thumbnails", "jpg", "--skip-download", "--write-thumbnail", sys.argv[1]]).wait()
