@@ -3,6 +3,6 @@ import os, subprocess
 files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
 
 for file in files:
-    ffp = subprocess.Popen(["ffmpeg", "-i", file, "-vn", "-acodec", "libvorbis", "-y", f"{file}.ogg"])
-    ffp.wait()
+    f, ext = os.path.splitext(os.path.basename(file))
+    subprocess.Popen(["ffmpeg", "-i", file, "-vn", "-acodec", "libvorbis", "-y", f"{f}.ogg"]).wait()
 
