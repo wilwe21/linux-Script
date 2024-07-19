@@ -7,6 +7,6 @@ for file in files:
     track = subprocess.check_output(['zenity', '--entry', f"--text=Number {os.path.basename(file)}"]).decode("utf-8").replace('\n', '')
     sss = music_tag.load_file(file)
     sss.append_tag('album', alb)
-    sss.append_tag('track', track)
+    sss.append_tag('tracknumber', track)
     sss.append_tag('totaltracks', len(files))
     sss.save()

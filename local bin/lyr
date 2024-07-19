@@ -677,7 +677,7 @@ while args.cont:
             print("something's wrong")
     if any(i in ["dc", "discord", "-dc", "--discord"]for i in a):
         try:
-            mess = f'{o1}\n{o2}'
+            mess = f'{o1} {o2}'
             messa = shorten(mess,dclen,False)
         except:
             try:
@@ -711,7 +711,7 @@ while args.cont:
             c.changeInstance(messa)
     if any(i in ["tdc", "transdiscord", "-tdc", "--tdiscord"]for i in a):
         try:
-            messi = f'{t1}\n{t2}'
+            messi = f'{t1} {t2}'
             messia = shorten(messi,dclen,True)
         except:
             try:
