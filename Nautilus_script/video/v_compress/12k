@@ -3,5 +3,6 @@ import os, subprocess
 files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
 
 for file in files:
-	ffp = subprocess.Popen(["ffmpeg", "-i", file, "-b", "12k", "-b:a", "12k", f"{file}_12k.mp4"])
+    f, ext = os.path.splitext(os.path.basename(file))
+	ffp = subprocess.Popen(["kitty","ffmpeg", "-i", file, "-b", "12k", "-b:a", "12k", f"{f}_12k.mp4"])
 	ffp.wait()

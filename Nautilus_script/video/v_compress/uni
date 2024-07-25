@@ -5,5 +5,6 @@ files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
 vid = subprocess.check_output(["zenity", "--entry", "--text=video compression"]).decode("UTF-8").replace("\n", '')
 audio = subprocess.check_output(["zenity", "--entry", "--text=audio compression"]).decode("UTF-8").replace("\n", '')
 for file in files:
-	ffp = subprocess.Popen(["ffmpeg", "-i", file, "-b", vid, "-b:a", audio, f"{file}_compress.mp4"])
+    f, ext = os.path.splitext(os.path.basename(file))
+	ffp = subprocess.Popen(["kitty","ffmpeg", "-i", file, "-b", vid, "-b:a", audio, f"{f}_compress.mp4"])
 	ffp.wait()
