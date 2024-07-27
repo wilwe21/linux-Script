@@ -5,4 +5,4 @@ files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
 for file in files:
     f, ext = os.path.splitext(os.path.basename(file))
     ffp = subprocess.Popen(["kitty","ffmpeg", "-i", file, "-b", "24k", "-b:a", "24k", f"{f}_24k.mp4"])
-	ffp.wait()
+    ffp.wait()

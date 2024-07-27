@@ -1,0 +1,11 @@
+#!/usr/bin/env python
+import os, subprocess, music_tag
+files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
+
+for file in files:
+    track = subprocess.check_output(['zenity', '--entry', f"--text=Number {os.path.basename(file)}"]).decode("utf-8").replace('\n', '')
+    sss = music_tag.load_file(file)
+    sss.append_tag('album', file.split("/")[-2])
+    sss.append_tag('tracknumber', track)
+    sss.append_tag('totaltracks', len(files))
+    sss.save()
