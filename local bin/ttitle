@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+tpl -s $(playerctl metadata title)
