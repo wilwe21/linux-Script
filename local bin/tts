@@ -4,6 +4,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-s", "--say", help="What to say")
 parser.add_argument("-l", "--lang", help="Language", default="en")
 parser.add_argument("-m", "--mute", help="Mute player", action=argparse.BooleanOptionalAction)
+parser.add_argument("-w", "--save", help="save to file", action=argparse.BooleanOptionalAction)
 args = parser.parse_args()
 if args.say == None:
     args.say = input("What to say: ")
@@ -13,3 +14,5 @@ if args.mute:
     subprocess.run(['playerctl', 'play'])
 else:
     subprocess.run(['spd-say', '-l', args.lang, '-w', args.say])
+if args.save:
+    subprocess.run(["espeak", "-v", args.lang, args.say, "-w", f"{args.say}.wav"])
