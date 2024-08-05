@@ -1,2 +1,9 @@
-#!/bin/bash
-espeak -v cs "$(cat "$(echo $1)")" -w "$1.wav"
+#!/usr/bin/env python3
+import os, subprocess
+files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
+
+subprocess.Popen(["playerctl", "pause"])
+for file in files:
+    f, ext = os.path.splitext(os.path.basename(file))
+    subprocess.Popen(["espeak", '-v', 'cs', f"{subprocess.check_output(['cat', file])}", "-w", $"{f}.wav"]).wait()
+subprocess.Popen(["playerctl", "play"])

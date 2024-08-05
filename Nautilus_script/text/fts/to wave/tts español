@@ -4,5 +4,6 @@ files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
 
 subprocess.Popen(["playerctl", "pause"])
 for file in files:
-    subprocess.Popen(["spd-say", '-l', 'pl', "-w", f"{subprocess.check_output(['cat', file])}"]).wait()
+    f, ext = os.path.splitext(os.path.basename(file))
+    subprocess.Popen(["espeak", '-v', 'es', f"{subprocess.check_output(['cat', file])}", "-w", $"{f}.wav"]).wait()
 subprocess.Popen(["playerctl", "play"])

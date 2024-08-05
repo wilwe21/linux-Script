@@ -1,2 +1,0 @@
-#!/bin/bash
-espeak -v fr "$(cat "$(echo $1)")" -w "$1.wav"

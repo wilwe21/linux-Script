@@ -1,4 +1,8 @@
-#!/bin/bash
-playerctl pause
-spd-say -l CS -w "$(cat "$(echo $NAUTILUS_SCRIPT_SELECTED_FILE_PATHS)")"
-playerctl play
+#!/usr/bin/env python3
+import os, subprocess
+files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
+
+subprocess.Popen(["playerctl", "pause"])
+for file in files:
+    subprocess.Popen(["spd-say", '-l' , "CS", "-w", f"{subprocess.check_output(['cat', file])}"]).wait()
+subprocess.Popen(["playerctl", "play"])
