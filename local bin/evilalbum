@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+case "$1" in
+	-a ) tgpt -q "Make this album name evil '$(playerctl metadata album)'" ;;
+	* ) tgpt -q "Make this album name evil '$*'" ;;
+esac
+
