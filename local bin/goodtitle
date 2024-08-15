@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+case "$1" in
+	-a ) tgpt -q "Make this title good '$(playerctl metadata title)'" ;;
+	* ) tgpt -q "Make this title good '$*'" ;;
+esac
+

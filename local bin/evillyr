@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+ret () {
+	cat "$(echo ~/Dokumenty/oryginał/Lyrics/$*)"
+}
+check () {
+	if cat ~/Dokumenty/oryginał/Lyrics/"$1" &> /dev/null
+	then
+			tgpt -q "Make this lyrics evil '$(ret $1)'"
+	else
+			echo "No such a file ~/Dokumenty/oryginał/Lyrics/$*"
+			exit
+	fi
+}
+case "$1" in
+				-a ) check "$(playerctl metadata title | tr '[:upper:]' '[:lower:]')" ;;
+				* ) check "$*" ;;
+esac
+
