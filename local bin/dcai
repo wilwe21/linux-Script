@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-import random, sys, os, argparse, requests, yaml, subprocess
+import random, sys, os, argparse, requests, yaml, subprocess, json
 parser = argparse.ArgumentParser()
 parser.add_argument("-m", "--message", help="Set message", nargs="*")
 parser.add_argument("-c", "--channel", help="Set channel")
+parser.add_argument("-a", "--responselast", help="Response to last message", action=argparse.BooleanOptionalAction)
 args = parser.parse_args()
 with open("/home/wilwe/.config/lyr.yaml", encoding='utf-8', errors='ignore') as f:
     data = yaml.safe_load(f)
@@ -20,9 +21,40 @@ def sendMessage(message):
         "Authorization": token
     }
     res = requests.post(url, payload, headers=headers)
+def resPons(message, resid):
+    url = f'https://discord.com/api/v9/channels/{channel}/messages'
+    payload = {
+        "content": message,
+        "message_reference": {
+            "message_id": resid,
+            "ignore_target_channel": False
+        }
+    }
+    headers = {
+        "Authorization": token
+    }
+    res = requests.post(url, json=payload, headers=headers)
+    if res.status_code == 200:
+        print("Succes")
+    else:
+        print(res.status_code)
+ 
+def getMessage():
+    url = f'https://discord.com/api/v9/channels/{channel}/messages'
+    headers = {
+        "Authorization": token
+    }
+    return requests.get(url, headers=headers)
+
 if __name__ == '__main__':
-    message = subprocess.check_output(["tgpt", "-q", ' '.join(args.message)]).decode("utf-8").replace('\n', '')
-    message = f"*Wygenerowane przez AI*\n*Prompt {''.join(args.message)}*\n{message}"
+    if args.responselast:
+        s = json.loads(getMessage().content.decode('utf-8'))
+        print(s[0]['content'])
+        message = subprocess.check_output(["tgpt", "-q", s[0]['content']]).decode("utf-8").replace('\n', '')
+        message = f"*Wygenerowane przez AI*\n{message}"
+    else:
+        message = subprocess.check_output(["tgpt", "-q", ' '.join(args.message)]).decode("utf-8").replace('\n', '')
+        message = f"*Wygenerowane przez AI*\n*Prompt {''.join(args.message)}*\n{message}"
     if len(message) > 2000:
         chunks = []
         start = 0
@@ -34,7 +66,17 @@ if __name__ == '__main__':
             print(f"start: {start}")
             end += 2000
             print(f"end: {end}")
-        for chunk in chunks:
-            sendMessage(chunk)
+        if args.responselast:
+            for chunk in chunks:
+                if chunk == chunks[0]:
+                    resPons(chunk, s[0]['id'])
+                else:
+                    sendMessage(chunk)            
+        else:
+            for chunk in chunks:
+                sendMessage(chunk)
     else:
-        sendMessage(message)
+        if args.responselast:
+            resPons(message, s[0]['id'])
+        else:
+            sendMessage(message)
