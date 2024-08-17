@@ -1,0 +1,110 @@
+#!/usr/bin/env python3
+import random, sys, os, argparse, requests, yaml, subprocess, json, time
+parser = argparse.ArgumentParser()
+parser.add_argument("-c", "--channel", help="Set channel")
+args = parser.parse_args()
+with open("/home/wilwe/.config/lyr.yaml", encoding='utf-8', errors='ignore') as f:
+    data = yaml.safe_load(f)
+try:
+    token = data['token']
+except:
+    print("no token")
+    exit
+channel = data['channel']
+try:
+    banned = data['banned']
+except:
+    banned = []
+print(banned)
+if args.channel != None:
+    channel = args.channel
+if channel == None:
+    print("No channel")
+    exit
+def sendMessage(message):
+    url = f'https://discord.com/api/v9/channels/{channel}/messages'
+    payload = {
+        "content": message
+    }
+
+    headers = {
+        "Authorization": token
+    }
+    res = requests.post(url, payload, headers=headers)
+def resPons(message, resid):
+    url = f'https://discord.com/api/v9/channels/{channel}/messages'
+    payload = {
+        "content": message,
+        "message_reference": {
+            "message_id": resid,
+            "ignore_target_channel": False
+        }
+    }
+    headers = {
+        "Authorization": token
+    }
+    res = requests.post(url, json=payload, headers=headers)
+    if res.status_code == 200:
+        print("Succes")
+    else:
+        print(res.status_code)
+ 
+def getMessage():
+    url = f'https://discord.com/api/v9/channels/{channel}/messages'
+    headers = {
+        "Authorization": token
+    }
+    return requests.get(url, headers=headers)
+
+if __name__ == '__main__':
+    last = json.loads(getMessage().content.decode('utf-8'))[0]['content']
+    print('ready')
+    while True:
+        time.sleep(5)
+        s = json.loads(getMessage().content.decode('utf-8'))
+        if s[0]['content'] != last:
+            try:
+                command = s[0]['content'].split(' ')
+                if any(word.lower() in banned for word in s[0]['content'].split()):
+                    message = '*Terminal*\n```Command Contain banned word```'
+                    resPons(message, s[0]['id'])
+                    last = json.loads(getMessage().content.decode('utf-8'))[0]['content']
+                    continue
+                if command[0] == 'cd':
+                    os.chdir(' '.join(command[1:]))
+                    message = 'changed directory'
+                elif command[0] == 'exit':
+                    message = '*Terminal*\n```Goodbye```'
+                    resPons(message, s[0]['id'])
+                    break
+                elif command[0] == 'banned':
+                    message = banned
+                else:
+                    message = subprocess.check_output(' '.join(command), shell=True, text=True)
+            except Exception as e:
+                resPons(f'*Terminal*```{e}```',s[0]['id'])
+                last = f'*Terminal*```{e}```'
+                continue
+            mes = message
+            message = f"*Terminal*\n```{message}"
+            if len(message) > 1997:
+                chunks = []
+                start = 0
+                end = 1994
+                while start < len(message):
+                    chunk = message[start:end]
+                    chunks.append(chunk)
+                    start = end
+                    print(f"start: {start}")
+                    end += 1994
+                    print(f"end: {end}")
+                for chunk in chunks:
+                    if chunk == chunks[0]:
+                        resPons(f"{chunk}```", s[0]['id'])
+                    else:
+                        sendMessage(f"```{chunk}```")            
+                last = json.loads(getMessage().content.decode('utf-8'))[0]['content']
+            else:
+                message = f"*Terminal*\n```{mes}```"
+                resPons(message, s[0]['id'])
+                last = json.loads(getMessage().content.decode('utf-8'))[0]['content']

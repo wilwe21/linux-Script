@@ -1,0 +1,144 @@
+#!/usr/bin/env python3
+import random, sys, os, argparse, requests, yaml, subprocess, json, time
+parser = argparse.ArgumentParser()
+parser.add_argument("-c", "--channel", help="Set channel")
+parser.add_argument("-s", "--server", help="Set server")
+args = parser.parse_args()
+with open("/home/wilwe/.config/lyr.yaml", encoding='utf-8', errors='ignore') as f:
+    data = yaml.safe_load(f)
+try:
+    token = data['token']
+except:
+    print("no token")
+    exit
+channel = data['channel']
+try:
+    banned = data['banned']
+except:
+    banned = []
+print(banned)
+if args.channel != None:
+    channel = args.channel
+if channel == None:
+    print("No channel")
+    exit
+def sendMessage(message):
+    url = f'https://discord.com/api/v9/channels/{channel}/messages'
+    payload = {
+        "content": message
+    }
+
+    headers = {
+        "Authorization": token
+    }
+    res = requests.post(url, payload, headers=headers)
+def resPons(message, resid):
+    url = f'https://discord.com/api/v9/channels/{channel}/messages'
+    payload = {
+        "content": message,
+        "message_reference": {
+            "message_id": resid,
+            "ignore_target_channel": False
+        }
+    }
+    headers = {
+        "Authorization": token
+    }
+    res = requests.post(url, json=payload, headers=headers)
+    if res.status_code == 200:
+        print("Succes")
+    else:
+        print(res.status_code)
+ 
+def getMessage(cid):
+    url = f'https://discord.com/api/v9/channels/{cid}/messages'
+    headers = {
+        "Authorization": token
+    }
+    return requests.get(url, headers=headers)
+def send(message):
+    message = f"*Bot*\n```{message}"
+    if len(message) > 1997:
+        chunks = []
+        start = 0
+        end = 1994
+        while start < len(message):
+            chunk = message[start:end]
+            chunks.append(chunk)
+            start = end
+            print(f"start: {start}")
+            end += 1994
+            print(f"end: {end}")
+        for chunk in chunks:
+            if chunk == chunks[0]:
+                resPons(f"{chunk}```", s[0]['id'])
+            else:
+                sendMessage(f"```{chunk}```")            
+    else:
+        message = f"{message}```"
+        resPons(message, s[0]['id'])
+
+def getChannels(guild_id):
+    url = f'https://discord.com/api/v10/guilds/{guild_id}/channels'
+    headers = {
+        "Authorization": token
+    }
+    return requests.get(url, headers=headers)
+
+def printChannels(channels):
+    lis = []
+    for channel in channels:
+        if channel["type"] == 0:
+            lis.append(f"{channel['id']}: {channel['name']}\n")
+    send(f"channels:\n{lis}")
+
+def getServer(guild_id):
+    url = f'https://discord.com/api/v10/guilds/{guild_id}'
+    headers = {
+        "Authorization": token
+    }
+    return requests.get(url, headers=headers)
+
+def printRoles(roles):
+    ros = []
+    for role in roles:
+        ros.append(role["name"])
+    send(f"roles:\n{ros}")
+
+
+if __name__ == '__main__':
+    commands = ['','.help', '.roulette', '.ego', '.fm', ".channels", ".getMessage", ".server", ".roles"]
+    last = json.loads(getMessage(channel).content.decode('utf-8'))[0]['id']
+    print('ready')
+    while True:
+        time.sleep(5)
+        s = json.loads(getMessage(channel).content.decode('utf-8'))
+        if s[0]['id'] != last:
+            mess = s[0]['content'].split(' ')
+            if mess[0] == '.help':
+                send('\n'.join(commands))
+            elif mess[0] == '.fm':
+                tit = subprocess.check_output(["playerctl", "metadata", "title"]).decode('utf-8')
+                art = subprocess.check_output(["playerctl", "metadata", "artist"]).decode('utf-8')
+                send(f'Playing {tit} by {art}')
+            elif mess[0] == ".channels":
+                channels = json.loads(getChannels(args.server).content.decode("utf-8"))
+                printChannels(channels)
+            elif mess[0] == ".getMessage":
+                loaded = json.loads(getMessage(mess[1]).content.decode('utf-8'))
+                aut = loaded[0]["author"]["username"]
+                mestime = loaded[0]["timestamp"]
+                send(f'{aut} {mestime}:\n{loaded[0]["content"]}')
+            elif mess[0] == ".exit":
+                send("Goodbye")
+                break
+            elif mess[0] == ".server":
+                args.server = mess[1]
+                ser = json.loads(getServer(mess[1]).content.decode('utf-8'))["name"]
+                send(f"server set to:\n{ser}")
+            elif mess[0] == ".roles":
+                ser = json.loads(getServer(f"{args.server}/roles").content.decode('utf-8'))
+                printRoles(ser)
+            else:
+                print("Not command")
+            last = json.loads(getMessage(channel).content.decode('utf-8'))[0]['id']
