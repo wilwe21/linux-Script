@@ -4,6 +4,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-c", "--channel", help="Set channel")
 parser.add_argument("-u", "--user", help="Set user")
 parser.add_argument("-s", "--sleep", help="Set sleep time", default=5)
+parser.add_argument("-p", "--pipe", help="Set pipeing", action=argparse.BooleanOptionalAction)
 args = parser.parse_args()
 with open("/home/wilwe/.config/lyr.yaml", encoding='utf-8', errors='ignore') as f:
     data = yaml.safe_load(f)
@@ -65,7 +66,7 @@ def getMessage():
 def send(message):
     global last
     mes = message
-    message = f"*Terminal*\n```\n{message}"
+    message = f"*Terminal*\n```ansi\n{message}"
     if len(message) > 1997:
         chunks = []
         start = 0
@@ -81,10 +82,10 @@ def send(message):
             if chunk == chunks[0]:
                 resPons(f"{chunk}```", s[0]['id'])
             else:
-                sendMessage(f"```{chunk}```")            
+                sendMessage(f"```ansi{chunk}```")            
         last = json.loads(getMessage().content.decode('utf-8'))[0]['id']
     else:
-        message = f"*Terminal*\n```\n{mes}```"
+        message = f"*Terminal*\n```ansi\n{mes}```"
         resPons(message, s[0]['id'])
         last = json.loads(getMessage().content.decode('utf-8'))[0]['id']
 
@@ -164,12 +165,12 @@ def openfile(command):
             else:
                 ids.append(sf[0]["id"])
             
-def imgSend(path):
+def fileSend(path):
     global last
     url = f'https://discord.com/api/v10/channels/{channel}/messages'
     try:
         with open(path, 'rb') as f:
-            imgd = f.read()
+            fff = f.read()
         f, ext = os.path.splitext(os.path.basename(path))
     except:
         return
@@ -177,12 +178,15 @@ def imgSend(path):
         "Authorization": token,
     }
     data = {
-        'file': (f'image{ext}', imgd, f'image/{ext[1:]}'),
+        'file': (f"{f}{ext}", fff),
     }
     res = requests.post(url, headers=headers, files=data)
     last = json.loads(getMessage().content.decode('utf-8'))[0]['id']
     if res.status_code == 200:
         print("Succes")
+    elif res.status_code == 413:
+        send("File is Too large")
+        last = json.loads(getMessage().content.decode('utf-8'))[0]['id']
     else:
         print(res.status_code)
         print(res.content)
@@ -199,6 +203,16 @@ if __name__ == '__main__':
                 print(s[0]["author"]["global_name"])
                 continue
         if s[0]['id'] != last:
+            if args.pipe != False:
+                try:
+                    rfid = s[0]['message_reference']["message_id"]
+                    for mmm in s:
+                        if mmm["id"] == rfid:
+                            pipe = mmm['content']
+                except:
+                    pipe = None
+            else:
+                pipe = None
             try:
                 command = s[0]['content'].split(' ')
                 if any(word.lower() in banned for word in s[0]['content'].split()):
@@ -213,14 +227,22 @@ if __name__ == '__main__':
                     break
                 elif command[0] == 'vim':
                     openfile(command)
-                elif command[0] == 'img':
+                elif command[0] == 'open':
                     path = command[1:]
-                    send(f"Sending image {command[1:]}")
-                    imgSend(' '.join(path))
+                    send(f"Sending file {' '.join(command[1:])}")
+                    fileSend(' '.join(path))
                 elif command[0] == 'banned':
                     send(banned)
                 else:
-                    send(subprocess.check_output(' '.join(command), shell=True, text=True))
+                    if pipe != None:
+                        if ' '.join(command)[-1] == "'":
+                            send(subprocess.check_output(f"{' '.join(command)} {pipe}'", shell=True, text=True))
+                        elif ' '.join(command)[-1] == '"':
+                            send(subprocess.check_output(f'{" ".join(command)} {pipe}"', shell=True, text=True))
+                        else:
+                            send(subprocess.check_output(f"{' '.join(command)} {pipe}", shell=True, text=True))
+                    else:
+                        send(subprocess.check_output(' '.join(command), shell=True, text=True))
             except Exception as e:
                 resPons(f'*Terminal*```{e}```',s[0]['id'])
                 last = json.loads(getMessage().content.decode('utf-8'))[0]['id']
