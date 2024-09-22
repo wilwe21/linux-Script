@@ -1,0 +1,5 @@
+#!/usr/bin/env python3
+import os, subprocess
+files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
+
+subprocess.Popen(["kitty", "--hold", "kdeconnect-cli", "-d", "50e528bc_144f_4d18_bd69_446afadbb24b", "--share"," ".join(files)])
