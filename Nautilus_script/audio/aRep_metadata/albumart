@@ -1,0 +1,9 @@
+#!/usr/bin/env python
+import os, subprocess, music_tag
+files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
+
+for file in files:
+    sss = music_tag.load_file(file)
+    albartag = str(sss.get('albumartist')).split(", ")
+    sss.set('albumartist', albartag[0])
+    sss.save()
