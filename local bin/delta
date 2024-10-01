@@ -1,0 +1,50 @@
+#!/usr/bin/env python3
+import math
+print("daj funkcje chuju: ")
+a = input()
+end = []
+st = ""
+for i in a:
+    if a[0] == i:
+        st += i
+    elif i == "+":
+        end.append(st)
+        st = ""
+    elif i == "-":
+        end.append(st)
+        st = i
+    else:
+        st += i
+if end[-1] != st:
+    end.append(st)
+nonx = []
+x = []
+x2 = []
+for i in end:
+    cur = ""
+    for j in i:
+        if j == "x":
+            cur += j
+        elif cur == "x":
+            cur += j
+    if cur == "":
+        nonx.append(i)
+    elif cur == "x":
+        x.append(i)
+    else:
+        x2.append(i)
+ennonx = [int(i) for i in nonx]
+c = sum(ennonx)
+enx= [int(i.replace("x", "")) for i in x]
+enx2 = [int(i.replace("x2", "")) for i in x2]
+b = sum(enx)
+a = sum(enx2)
+delta = b**2-4*a*c
+pierdel = math.sqrt(delta)
+print(f"policz se delte: {b}^2-4*{a}*{c}")
+print(f"Delta: {delta}")
+print(f"Pierwiastek z delty: {pierdel}")
+xy = []
+xy.append((2*b+pierdel)/(2*a))
+xy.append((2*b-pierdel)/(2*a))
+print(f"Miejsca zerowe: {xy}")
