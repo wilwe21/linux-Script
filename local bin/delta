@@ -45,6 +45,6 @@ print(f"policz se delte: {b}^2-4*{a}*{c}")
 print(f"Delta: {delta}")
 print(f"Pierwiastek z delty: {pierdel}")
 xy = []
-xy.append((2*b+pierdel)/(2*a))
-xy.append((2*b-pierdel)/(2*a))
+xy.append((-1*b+pierdel)/(2*a))
+xy.append((-1*b-pierdel)/(2*a))
 print(f"Miejsca zerowe: {xy}")
