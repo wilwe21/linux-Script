@@ -1,50 +1,83 @@
 #!/usr/bin/env python3
 import math
-print("daj funkcje chuju: ")
-a = input()
-end = []
-st = ""
-for i in a:
-    if a[0] == i:
-        st += i
-    elif i == "+":
-        end.append(st)
+class funkcja():
+    def __init__(self,nonx,x):
+        self.x = x
+        self.a = nonx
+    def print(self):
+        end = ""
+        ar = {}
+        for num, i in enumerate(self.x):
+            if i != 0:
+                ar[num] = i
+        for key, value in ar.items():
+            end += f"+{value}x{key+1 if key+1 > 1 else ''}"
+        if self.a != "":
+            end+= f"+{self.a}"
+        return end
+    def delta(self):
+        calc = self.x[0]**2-4*self.x[1]*self.a
+        if calc >= 0:
+            return calc
+        else:
+            raise ValueError("Delta ujemna")
+    def pierwiastek(self):
+        try:
+            pierdel = math.sqrt(self.delta())
+        except:
+            pierdel = "ujemna wyszła"
+        return pierdel
+    def miejsca0(self):
+        delta = self.delta()
+        if delta < 0:
+            return []
+        else:
+            xy = []
+            xy.append((-1*self.x[0]+delta)/(2*self.x[1]))
+            xy.append((-1*self.x[0]-delta)/(2*self.x[1]))
+        return xy
+    def new(liczba):
+        end = []
         st = ""
-    elif i == "-":
-        end.append(st)
-        st = i
-    else:
-        st += i
-if end[-1] != st:
-    end.append(st)
-nonx = []
-x = []
-x2 = []
-for i in end:
-    cur = ""
-    for j in i:
-        if j == "x":
-            cur += j
-        elif cur == "x":
-            cur += j
-    if cur == "":
-        nonx.append(i)
-    elif cur == "x":
-        x.append(i)
-    else:
-        x2.append(i)
-ennonx = [int(i) for i in nonx]
-c = sum(ennonx)
-enx= [int(i.replace("x", "")) for i in x]
-enx2 = [int(i.replace("x2", "")) for i in x2]
-b = sum(enx)
-a = sum(enx2)
-delta = b**2-4*a*c
-pierdel = math.sqrt(delta)
-print(f"policz se delte: {b}^2-4*{a}*{c}")
-print(f"Delta: {delta}")
-print(f"Pierwiastek z delty: {pierdel}")
-xy = []
-xy.append((-1*b+pierdel)/(2*a))
-xy.append((-1*b-pierdel)/(2*a))
-print(f"Miejsca zerowe: {xy}")
+        for i in liczba:
+            if liczba[0] == i:
+                st += i
+            elif i == "+":
+                end.append(st)
+                st = ""
+            elif i == "-":
+                end.append(st)
+                st = i
+            else:
+                st += i
+        if end[-1] != st:
+            end.append(st)
+        nonx = []
+        x = [[] for _ in range(10000)]
+        for i in end:
+            cur = ""
+            sas = ""
+            for j in i:
+                if j == "x":
+                    cur += j
+                elif cur == "x":
+                    sas += j
+            if cur == "":
+                nonx.append(i)
+            else:
+                try:
+                    x[int(sas)-1].append(i)
+                except:
+                    x[0].append(i)
+        ennonx = [int(i) for i in nonx]
+        a = sum(ennonx)
+        enx = [sum([int(j.replace(f"x{en+1 if en+1 > 1 else ''}", "")) for j in i]) for en, i in enumerate(x)]
+        return funkcja(a, enx)
+
+if __name__ == "__main__":
+    print("Daj funkcje chuju: ")
+    a = input()
+    fun = funkcja.new(a)
+    print(fun.print())
+    print(fun.pierwiastek())
+
