@@ -5,6 +5,7 @@ class funkcja():
         self.x = x
         self.a = nonx
         self.sol = set()
+        self.miejsca0()
     def print(self):
         end = ""
         ar = {}
@@ -20,11 +21,14 @@ class funkcja():
         if sum(self.x[2:]) > 0:
             if sum(self.x[3:]) > 0:
                 raise ValueError("4")
-            self.p = (3*self.x[2]*self.x[0] - self.x[1]**2) / (9 * self.x[2]**2)
-            self.q = (9*self.x[0]*self.x[1]*self.x[2] - 27*self.x[2]**2*self.a) / (54*self.a**3)
-            self.delt = self.p**3 + self.q**2
+            # General cubic formula https://en.wikipedia.org/wiki/Cubic_equation#General_cubic_formula
+            self.delt = set()
+            self.delt.add((self.x[1]**2)+(-3*self.x[2]*self.x[0]))
+            self.delt.add((2*(self.x[1]**3))+(-9*self.x[2]*self.x[1]*self.x[0])+(27*(self.x[2]**2)*self.a))
+        elif self.x[1] > 0:
+            self.delt = (self.x[0]**2)+(-4*self.x[1]*self.a)
         else:
-            self.delt = self.x[0]**2-4*self.x[1]*self.a
+            self.delt = None
     def pierwiastek(self):
         self.delta()
         try:
@@ -37,13 +41,14 @@ class funkcja():
         if sum(self.x[2:]) > 0:
             if sum(self.x[3:]) > 0:
                 raise ValueError("4")
-            for n in range(3):
-                self.sol.add((2 * numpy.sqrt(-self.p / 3) * numpy.cos(numpy.acos((-3 * self.q) * numpy.sqrt(-3 * self.p) / (2 * self.p ** 2)) / 3 + 2 * numpy.pi * n / 3)) - (self.x[1] / (3 * self.x[2])))
-        if self.delt > 0 and self.x[1] != 0:
-            self.sol.add((-1*self.x[0]+self.delt)/(2*self.x[1]))
-            self.sol.add((-1*self.x[0]-self.delt)/(2*self.x[1]))
-        else:
-            self.sol.add(-self.a/self.x[0])
+        try:
+            if self.delt > 0 and self.x[1] != 0:
+                self.sol.add((-1*self.x[0]+self.delt)/(2*self.x[1]))
+                self.sol.add((-1*self.x[0]-self.delt)/(2*self.x[1]))
+            elif self.delt > 0:
+                self.sol.add(-self.a/self.x[0])
+        except:
+            pass
     def new(liczba):
         end = []
         st = ""
@@ -87,9 +92,8 @@ if __name__ == "__main__":
     a = input()
     fun = funkcja.new(a)
     print(fun.print())
-    fun.miejsca0()
     print(fun.sol)
-    #print(fun.delt)
+    print(fun.delt)
     try:
         print(fun.p)
         print(fun.q)
