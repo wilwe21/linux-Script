@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-import math
+import math, numpy
 class funkcja():
     def __init__(self,nonx,x):
         self.x = x
         self.a = nonx
+        self.sol = set()
     def print(self):
         end = ""
         ar = {}
@@ -16,28 +17,33 @@ class funkcja():
             end+= f"+{self.a}"
         return end
     def delta(self):
-        if sum(self.x[1::-1]) == 0:
-            raise ValueError("Brak delty debilu")
-        calc = self.x[0]**2-4*self.x[1]*self.a
-        if calc >= 0:
-            return calc
+        if sum(self.x[2:]) > 0:
+            if sum(self.x[3:]) > 0:
+                raise ValueError("4")
+            self.p = (3*self.x[2]*self.x[0] - self.x[1]**2) / (9 * self.x[2]**2)
+            self.q = (9*self.x[0]*self.x[1]*self.x[2] - 27*self.x[2]**2*self.a) / (54*self.a**3)
+            self.delt = self.p**3 + self.q**2
         else:
-            raise ValueError("Delta ujemna")
+            self.delt = self.x[0]**2-4*self.x[1]*self.a
     def pierwiastek(self):
+        self.delta()
         try:
-            pierdel = math.sqrt(self.delta())
+            pierdel = math.sqrt(self.delt)
         except:
             pierdel = "ujemna wyszła"
         return pierdel
     def miejsca0(self):
-        delta = self.delta()
-        if delta < 0:
-            return []
+        self.delta()
+        if sum(self.x[2:]) > 0:
+            if sum(self.x[3:]) > 0:
+                raise ValueError("4")
+            for n in range(3):
+                self.sol.add((2 * numpy.sqrt(-self.p / 3) * numpy.cos(numpy.acos((-3 * self.q) * numpy.sqrt(-3 * self.p) / (2 * self.p ** 2)) / 3 + 2 * numpy.pi * n / 3)) - (self.x[1] / (3 * self.x[2])))
+        if self.delt > 0 and self.x[1] != 0:
+            self.sol.add((-1*self.x[0]+self.delt)/(2*self.x[1]))
+            self.sol.add((-1*self.x[0]-self.delt)/(2*self.x[1]))
         else:
-            xy = []
-            xy.append((-1*self.x[0]+delta)/(2*self.x[1]))
-            xy.append((-1*self.x[0]-delta)/(2*self.x[1]))
-        return xy
+            self.sol.add(-self.a/self.x[0])
     def new(liczba):
         end = []
         st = ""
@@ -73,7 +79,7 @@ class funkcja():
                     x[0].append(i)
         ennonx = [int(i) for i in nonx]
         a = sum(ennonx)
-        enx = [sum([int(j.replace(f"x{en+1 if en+1 > 1 else ''}", "")) for j in i]) for en, i in enumerate(x)]
+        enx = [sum([int(j.replace(f"x{en+1 if en+1 > 1 else ''}", "") if j[0] != "x" else 1) for j in i]) for en, i in enumerate(x)]
         return funkcja(a, enx)
 
 if __name__ == "__main__":
@@ -81,5 +87,11 @@ if __name__ == "__main__":
     a = input()
     fun = funkcja.new(a)
     print(fun.print())
-    print(fun.pierwiastek())
-
+    fun.miejsca0()
+    print(fun.sol)
+    #print(fun.delt)
+    try:
+        print(fun.p)
+        print(fun.q)
+    except:
+        pass
