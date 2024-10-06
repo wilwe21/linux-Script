@@ -42,11 +42,12 @@ class funkcja():
             if sum(self.x[3:]) > 0:
                 raise ValueError("4")
         try:
+            if self.delt == None:
+                self.sol.add(-self.a/self.x[0])
+                pass
             if self.delt > 0 and self.x[1] != 0:
                 self.sol.add((-1*self.x[0]+self.delt)/(2*self.x[1]))
                 self.sol.add((-1*self.x[0]-self.delt)/(2*self.x[1]))
-            elif self.delt > 0:
-                self.sol.add(-self.a/self.x[0])
         except:
             pass
     def new(liczba):
