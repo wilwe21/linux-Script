@@ -1,0 +1,2 @@
+#!/usr/bin/env python3
+print(''.join([''.join([''.join([''.join([f"{f+s}" if o == "+" else f"{f-s}" if o == "-" else f"{f/s}" if o == "/" else f"{f*s}" if o == "*" else "Unknown operator" for s in [int(input("Second: "))]]) for o in [input("Operator: ")]]) for f in [int(input("First: "))]])]))

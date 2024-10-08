@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+while [ 0 == 0 ]
+do
+	dcsend -c 759303904688341012 -m "aha"
+	dcsend -c 759303904688341012 -m "lol"
+	dcsend -c 759303904688341012 -m "kys"
+	dcsend -c 759303904688341012 -m "czy"
+	dcsend -c 759303904688341012 -m "coś"
+	sleep 5
+done
