@@ -1,0 +1,68 @@
+#!/usr/bin/env python3
+from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageFilter
+import argparse, textwrap, requests, yaml, os
+def create(mes):
+    wrap = textwrap.wrap(mes, width=10)
+    width = 1500
+    height = 116*(len(wrap))
+    color = (0,0,0)
+    image = Image.new("RGB",(width,height),color)
+    draw = ImageDraw.Draw(image)
+    font = ImageFont.truetype(font="ParkcourLanguage.otf", size=114)
+    margin = offset = 1
+    for line in wrap:
+        w = draw.textlength(line,font=font)
+        if wrap[0] == line:
+            draw.text(((width - w)/2, offset), f".{line}", font=font, fill=(255,255,255,255),align="center")
+        else:
+            draw.text(((width - w)/2, offset), f" {line}", font=font, fill=(255,255,255,255),align="center")
+        offset += font.size
+    image.save(path)
+def send(chan):
+    if token == None:
+        print("Can't sand to discord no token in .config/lyr.yaml")
+        exit()
+    url = f'https://discord.com/api/v10/channels/{chan}/messages'
+    try:
+        with open(path, 'rb') as f:
+            fff = f.read()
+        f, ext = os.path.splitext(os.path.basename(path))
+    except:
+        print("no file. what?")
+        return
+    headers = {
+        "Authorization": token,
+    }
+    data = {
+        'file': (f"{f}{ext}", fff),
+    }
+    res = requests.post(url, headers=headers, files=data)
+    if res.status_code == 200:
+        print("Succes")
+    elif res.status_code == 413:
+        send("File is Too large")
+        last = json.loads(getMessage().content.decode('utf-8'))[0]['id']
+    else:
+        print(res.status_code)
+        print(res.content)
+if __name__ == "__main__":
+    global path
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-c", "--channel", help="Set channel")
+    parser.add_argument("-m", "--message", help="message", nargs="*")
+    args = parser.parse_args()
+    with open("/home/wilwe/.config/lyr.yaml", encoding="utf-8", errors="ignore") as f:
+        data = yaml.safe_load(f)
+    token = data['token']
+    path = '/home/wilwe/Obrazy/python/end/parkour.png'
+    if args.message != None:
+        args.message = ' '.join(args.message)
+        create(args.message)
+        send()
+    else:
+        while 0 == 0:
+            mess = input()
+            if mess in ["exit", ":q"]:
+                break
+            create(mess)
+            send(args.channel)

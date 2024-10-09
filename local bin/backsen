@@ -54,7 +54,7 @@ def imgcreate(koks: str = None,bg: str = None, width: int = 1920, height: int = 
     margin = offset = 270
     for line in textwrap.wrap(koks, width=22):
         w = draw.textlength(line,font=font)
-        draw.text(((width - w)/2, offset), line, font=font, fill=(255,255,255,255),align="center",)
+        draw.text(((width - w)/2, offset), line, font=font, fill=(255,255,255,255),align="center")
         offset += font.size
     if path == None:
         image.save(f'/home/wilwe/Obrazy/python/end/{koks}.png')
