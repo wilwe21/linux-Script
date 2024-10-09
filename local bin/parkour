@@ -58,11 +58,17 @@ if __name__ == "__main__":
     if args.message != None:
         args.message = ' '.join(args.message)
         create(args.message)
-        send()
+        if args.channel != None:
+            send(args.channel)
+        else:
+            print("not sending no channel")
     else:
         while 0 == 0:
             mess = input()
             if mess in ["exit", ":q"]:
                 break
             create(mess)
-            send(args.channel)
+            if args.channel != None:
+                send(args.channel)
+            else:
+                print("not sending no channel")
