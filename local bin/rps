@@ -11,7 +11,7 @@ p = 0
 l = 0
 si = 0
 while 0 == 0:
-    print("\033c")
+    print("\x1bc")
     b = int(random.randrange(0,3))
     if si == 0:
         print("Rock Paper Scissors " + str(l) + "/" + str(p))
@@ -29,30 +29,30 @@ while 0 == 0:
             case yt if yt in ext:
                 break
             case _:
-                print("\033c")
+                print("\x1bc")
                 continue
-    print("\033[1A\033[2K\033[1A")
+    print("\x1b[1A\x1b[2K\x1b[1A")
     print(out)
     print(al[b])
     if out == "rock" and al[b] == "scissors":
         print("Win")
         l = l+1
-        print("\033[4ARock Paper Scissors " + str(l) + "/" + str(p) + "\033[4B")
+        print("\x1b[4ARock Paper Scissors " + str(l) + "/" + str(p) + "\x1b[4B")
     elif out == "paper" and al[b] == "rock":
         print("Win")
         l = l+1
-        print("\033[4ARock Paper Scissors " + str(l) + "/" + str(p) + "\033[4B")
+        print("\x1b[4ARock Paper Scissors " + str(l) + "/" + str(p) + "\x1b[4B")
     elif out == "scissors" and al[b] == "paper":
         print("Win")
         l = l+1
-        print("\033[4ARock Paper Scissors " + str(l) + "/" + str(p) + "\033[4B")
+        print("\x1b[4ARock Paper Scissors " + str(l) + "/" + str(p) + "\x1b[4B")
     elif out == al[b]:
         print("draw")
-        print("\033[4ARock Paper Scissors " + str(l) + "/" + str(p) + "\033[4B")
+        print("\x1b[4ARock Paper Scissors " + str(l) + "/" + str(p) + "\x1b[4B")
     else:
         print("L noobie")
         p = p +1
-        print("\033[4ARock Paper Scissors " + str(l) + "/" + str(p) + "\033[4B")
+        print("\x1b[4ARock Paper Scissors " + str(l) + "/" + str(p) + "\x1b[4B")
     print("Continue?")
     try:
         o = input("")
@@ -71,5 +71,5 @@ while 0 == 0:
         break
     else:
         si = 0
-        print("\033c")
+        print("\x1bc")
         continue

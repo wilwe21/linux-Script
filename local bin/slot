@@ -8,18 +8,18 @@ try:
 except:
     exit()
 if balance < 0:
-    print("\033cBalance must be higher than " + str(cost))
+    print("\x1bcBalance must be higher than " + str(cost))
     while balance < cost:
-        print("\033cBalance must be higher than " + str(cost))
+        print("\x1bcBalance must be higher than " + str(cost))
         try:
             balance = int(input("")) - cost
         except:
             exit()
-symbols = ["\033[91m🐕️\033[0m", "\033[95m🐈️\033[0m", "\033[93m🐦️\033[0m", "\033[94m🕷️\033[0m", "\033[92m☘️\033[0m"]
+symbols = ["\x1b[91m🐕️\x1b[0m", "\x1b[95m🐈️\x1b[0m", "\x1b[93m🐦️\x1b[0m", "\x1b[94m🕷️\x1b[0m", "\x1b[92m☘️\x1b[0m"]
 value = [5, 10, 20, 50, 100] 
 multi = 1
 while 0 == 0:
-    print("\033c")
+    print("\x1bc")
     top = symbols[random.randrange(0,5)], symbols[random.randrange(0,5)], symbols[random.randrange(0,5)]
     middle = symbols[random.randrange(0,5)], symbols[random.randrange(0,5)], symbols[random.randrange(0,5)]
     bottom = symbols[random.randrange(0,5)], symbols[random.randrange(0,5)], symbols[random.randrange(0,5)]

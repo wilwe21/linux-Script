@@ -110,8 +110,8 @@ def getlyr():
     if forcef != None:
         file = forcef.lower()
     if decorator == True:
-        print(f'\033[38;2;203;166;247m\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37m{file.title()}\033[0m\033[38;2;203;166;247m\033[0m')
-    namel = "\033["+ str(len(file)+2) + "C"
+        print(f'\x1b[38;2;203;166;247m\x1b[0m\x1b[48;2;203;166;247m\x1b[38;2;24;24;37m{file.title()}\x1b[0m\x1b[38;2;203;166;247m\x1b[0m')
+    namel = "\x1b["+ str(len(file)+2) + "C"
     try:
         if open(f"{path}/{file}").readline() == '':
             if not totalrandom:
@@ -149,7 +149,7 @@ def getlyr():
             file = file.strip('\n')
         lin2 = open(f"{path}/{file}").readlines()
         if decorator == True:
-            print(f'\033[2A{namel}\033[1D\033[48;2;203;166;247m\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mAnd\033[0m\033[48;2;137;180;250m\033[38;2;166;227;161m\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37m{file.title()}\033[0m\033[38;2;203;166;247m\033[0m\033[1B')
+            print(f'\x1b[2A{namel}\x1b[1D\x1b[48;2;203;166;247m\x1b[38;2;166;227;161m\x1b[0m\x1b[48;2;166;227;161m\x1b[38;2;24;24;37mAnd\x1b[0m\x1b[48;2;137;180;250m\x1b[38;2;166;227;161m\x1b[0m\x1b[48;2;203;166;247m\x1b[38;2;24;24;37m{file.title()}\x1b[0m\x1b[38;2;203;166;247m\x1b[0m\x1b[1B')
         if open(f"{path}/{file}").readline() == '':
             susy=''
         else:
@@ -198,7 +198,7 @@ def trans(langfunc: str):
     if langfunc.lower() != "braill" and langfunc.lower() != "enchant" and langfunc.lower() != "illuminati" and langfunc.lower() != "morse"  and langfunc.lower() != "spc" and langfunc.lower() != "alien":
         print("")
         if decorator == True:
-            print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37m{langfunc.title()}\033[0m\033[38;2;166;227;161m\033[0m')
+            print(f'\x1b[38;2;166;227;161m\x1b[0m\x1b[48;2;166;227;161m\x1b[38;2;24;24;37m{langfunc.title()}\x1b[0m\x1b[38;2;166;227;161m\x1b[0m')
         t1 = subprocess.check_output(['tpl', '-l', langfunc, '-s', o1]).decode("UTF-8").strip("\n")
         print(t1)
         if args.fallbacklang != None:
@@ -276,93 +276,93 @@ def trans(langfunc: str):
     if langfunc.lower() == "braill":
         print("")
         if decorator == True:
-            print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mBraill\033[0m\033[38;2;166;227;161m\033[0m')
+            print(f'\x1b[38;2;166;227;161m\x1b[0m\x1b[48;2;166;227;161m\x1b[38;2;24;24;37mBraill\x1b[0m\x1b[38;2;166;227;161m\x1b[0m')
         t1 = o1.replace("'","")
         t1 = subprocess.check_output(["braill", '-s', t1]).decode("UTF-8")
         print(t1)
         if next < len(lin) and not totalrandom:
             t2 = o2.replace("'","")
             t2 = subprocess.check_output(["braill", "-s", t2]).decode("UTF-8")
-            print(f"\033[1A{t2}")
+            print(f"\x1b[1A{t2}")
         if totalrandom and next < len(lin2):
             t2 = o2.replace("'","")
             t2 = subprocess.check_output(["braill", '-s', t2]).decode("UTF-8")
-            print(f"\033[1A{t2}")
+            print(f"\x1b[1A{t2}")
     if langfunc.lower() == "enchant":
         print("")
         if decorator == True:
-            print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mEnchanting Table\033[0m\033[38;2;166;227;161m\033[0m')
+            print(f'\x1b[38;2;166;227;161m\x1b[0m\x1b[48;2;166;227;161m\x1b[38;2;24;24;37mEnchanting Table\x1b[0m\x1b[38;2;166;227;161m\x1b[0m')
         t1 = o1.replace("'","¾")
         t1 = subprocess.check_output(["enchant", '-s', t1]).decode("UTF-8").replace("¾","'")
         print(t1)
         if next < len(lin) and not totalrandom:
             t2 = o2.replace("'","")
             t2 = subprocess.check_output(["enchant", '-s', t2]).decode("UTF-8").replace("¾","'")
-            print(f"\033[1A{t2}")
+            print(f"\x1b[1A{t2}")
         if totalrandom and next < len(lin2):
             t2 = o2.replace("'","")
             t2 = subprocess.check_output(["enchant", '-s', t2]).decode("UTF-8").replace("¾","'")
-            print(f"\033[1A{t2}")
+            print(f"\x1b[1A{t2}")
     if langfunc.lower() == "illuminati":
         print("")
         if decorator == True:
-            print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mIlluminaci\033[0m\033[38;2;166;227;161m\033[0m')
+            print(f'\x1b[38;2;166;227;161m\x1b[0m\x1b[48;2;166;227;161m\x1b[38;2;24;24;37mIlluminaci\x1b[0m\x1b[38;2;166;227;161m\x1b[0m')
         t1 = o1.replace("'","¾")
         t1 = subprocess.check_output(["illuminati", '-s', t1]).decode("UTF-8").replace("¾","'")
         print(t1)
         if next < len(lin) and not totalrandom:
             t2 = o2.replace("'","¾")
             t2 = subprocess.check_output(["illuminati", '-s', t2]).decode("UTF-8").replace("¾","'")
-            print(f"\033[1A{t2}")
+            print(f"\x1b[1A{t2}")
         if totalrandom and next < len(lin2):
             t2 = o2.replace("'","¾")
             t2 = subprocess.check_output(["illuminati", '-s', t2]).decode("UTF-8").replace("¾","'")
-            print(f"\033[1A{t2}")
+            print(f"\x1b[1A{t2}")
     if langfunc.lower() == "morse":
         print("")
         if decorator == True:
-            print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mMorsy\033[0m\033[38;2;166;227;161m\033[0m')
+            print(f'\x1b[38;2;166;227;161m\x1b[0m\x1b[48;2;166;227;161m\x1b[38;2;24;24;37mMorsy\x1b[0m\x1b[38;2;166;227;161m\x1b[0m')
         t1 = o1.replace("'","")
         t1 = subprocess.check_output(["morse", '-s', t1]).decode("UTF-8")
         print(t1)
         if next < len(lin) and not totalrandom:
             t2 = o2.replace("'","¾")
             t2 = subprocess.check_output(["morse", '-s', t2]).decode("UTF-8").replace("¾","'")
-            print(f"\033[1A{t2}")
+            print(f"\x1b[1A{t2}")
         if totalrandom and next < len(lin2):
             t2 = o2.replace("'","¾")
             t2 = subprocess.check_output(["morse", '-s', t2]).decode("UTF-8").replace("¾","'")
-            print(f"\033[1A{t2}")
+            print(f"\x1b[1A{t2}")
     if langfunc.lower() == "spc":
         print("")
         if decorator == True:
-            print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mSpc\033[0m\033[38;2;166;227;161m\033[0m')
+            print(f'\x1b[38;2;166;227;161m\x1b[0m\x1b[48;2;166;227;161m\x1b[38;2;24;24;37mSpc\x1b[0m\x1b[38;2;166;227;161m\x1b[0m')
         t1 = o1.replace("'","¾")
         t1 = subprocess.check_output(["spc", '-s', t1]).decode("UTF-8").replace("¾","'0")
         print(t1)
         if next < len(lin) and not totalrandom:
             t2 = o2.replace("'","")
             t2 = subprocess.check_output(["spc", '-s', t2]).decode("UTF-8").replace("¾","'0")
-            print(f"\033[1A{t2}")
+            print(f"\x1b[1A{t2}")
         if totalrandom and next < len(lin2):
             t2 = o2.replace("'","")
             t2 = subprocess.check_output(["spc", '-s', t2]).decode("UTF-8").replace("¾","'0")
-            print(f"\033[1A{t2}")
+            print(f"\x1b[1A{t2}")
     if langfunc.lower() == "alien":
         print("")
         if decorator == True:
-            print(f'\033[38;2;166;227;161m\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37mAliens\033[0m\033[38;2;166;227;161m\033[0m')
+            print(f'\x1b[38;2;166;227;161m\x1b[0m\x1b[48;2;166;227;161m\x1b[38;2;24;24;37mAliens\x1b[0m\x1b[38;2;166;227;161m\x1b[0m')
         t1 = o1.replace("'","¼")
         t1 = subprocess.check_output(["alien", '-s', t1]).decode("UTF-8").replace("¼","'")
         print(t1)
         if next < len(lin) and not totalrandom:
             t2 = o2.replace("'","")
             t2 = subprocess.check_output(["alien", '-s', t2]).decode("UTF-8").replace("¾","'0")
-            print(f"\033[1A{t2}")
+            print(f"\x1b[1A{t2}")
         if totalrandom and next < len(lin2):
             t2 = o2.replace("'","")
             t2 = subprocess.check_output(["alien", '-s', t2]).decode("UTF-8").replace("¾","'0")
-            print(f"\033[1A{t2}")
+            print(f"\x1b[1A{t2}")
 class Bio:
     def __init__(self) -> None:
         with open(f"{Path.home()}/.config/lyr.yaml", encoding='utf-8', errors='ignore') as f:
@@ -405,12 +405,12 @@ def shorten(msg: str,leng: int,tr: bool) -> str:
         if msg != None and len(msg) > leng:
             raise ValueError()
         if msg != None:
-            print("\033[92mMessage is good\033[0m")
+            print("\x1b[92mMessage is good\x1b[0m")
             return msg
     except ValueError:
         msg = msg.title().replace(" ","").replace("\n","")
         if len(msg) < leng:
-            print("\033[93mShorted String\033[0m")
+            print("\x1b[93mShorted String\x1b[0m")
             print(msg)
             return msg
         else:
@@ -418,11 +418,11 @@ def shorten(msg: str,leng: int,tr: bool) -> str:
                 msg = msg.replace(".","")
             msg = msg.replace(",","").replace("'","")
             if len(msg) < leng:
-                print("\033[93mShored String\033[0m")
+                print("\x1b[93mShored String\x1b[0m")
                 print(msg)
                 return(msg)
             else:
-                print("\033[91mMessage is to long\033[0m")
+                print("\x1b[91mMessage is to long\x1b[0m")
 def imgdown(koks:str, lim: int = 10) -> None:
     downloader.download(
         koks,

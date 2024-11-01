@@ -4,7 +4,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-f", "--file", help="Define file")
 parser.add_argument("-t", "--tiers", help="Define Tiers", nargs="*")
 args = parser.parse_args()
-colors = ["\033[48;2;243;139;168;30m","\033[48;2;250;179;135;30m","\033[48;2;249;226;175;30m","\033[48;2;166;227;161;30m","\033[48;2;148;226;213;30m","\033[48;2;137;180;250;30m"]
+colors = ["\x1b[48;2;243;139;168;30m","\x1b[48;2;250;179;135;30m","\x1b[48;2;249;226;175;30m","\x1b[48;2;166;227;161;30m","\x1b[48;2;148;226;213;30m","\x1b[48;2;137;180;250;30m"]
 def read_items(file_path):
     with open(file_path, 'r') as file:
         items = [line.strip() for line in file]
@@ -37,7 +37,7 @@ def save(data: dict, susd: str = "yaml"):
             f.write(f"| F | {' | '.join(yam['F'])}\n")
             f.write("—————————————————————————————————————————————\n")
 def askforsave(data):
-    print("\033[2K\033[999999DSave to file?")
+    print("\x1b[2K\x1b[999999DSave to file?")
     try:
         sas = input("")
     except:
@@ -62,22 +62,22 @@ def askforsave(data):
     if sav:
         save(data, mode)
 if args.tiers != None:
-    tiers = [f"{colors[random.randrange(len(colors))] if args.tiers.index(i) >= len(colors) else colors[args.tiers.index(i)]}| {i} |\033[0m" for i in args.tiers]
+    tiers = [f"{colors[random.randrange(len(colors))] if args.tiers.index(i) >= len(colors) else colors[args.tiers.index(i)]}| {i} |\x1b[0m" for i in args.tiers]
     yam = {f"{tier}": [] for tier in args.tiers}
 else:
-    tiers = ["\033[48;2;243;139;168;30m| S |\033[0m","\033[48;2;250;179;135;30m| A |\033[0m","\033[48;2;249;226;175;30m| B |\033[0m","\033[48;2;166;227;161;30m| C |\033[0m","\033[48;2;148;226;213;30m| D |\033[0m","\033[48;2;137;180;250;30m| F |\033[0m"]
+    tiers = ["\x1b[48;2;243;139;168;30m| S |\x1b[0m","\x1b[48;2;250;179;135;30m| A |\x1b[0m","\x1b[48;2;249;226;175;30m| B |\x1b[0m","\x1b[48;2;166;227;161;30m| C |\x1b[0m","\x1b[48;2;148;226;213;30m| D |\x1b[0m","\x1b[48;2;137;180;250;30m| F |\x1b[0m"]
     yam = {"S": [], "A": [], "B": [], "C": [], "D": [], "F": []}
 if args.file == None:
     file = str(subprocess.check_output(["zenity", "--file-selection"]))
     file = file.strip("b'").strip("\\n'")
 else:
     file = args.file
-print("\033c")
+print("\x1bc")
 items = read_items(file)
 for tier in range(len(tiers)):
-    print ("\033[31m—————————————————————————————————————————————\033[0m")
+    print ("\x1b[31m—————————————————————————————————————————————\x1b[0m")
     print(tiers[tier])
-print ("\033[31m—————————————————————————————————————————————\033[0m")
+print ("\x1b[31m—————————————————————————————————————————————\x1b[0m")
 for i in items:
     print (i)
     if i == items[-1]:
@@ -89,15 +89,15 @@ for i in items:
         exit()
     if x in ['exit',':q']:
         break
-    print("\033c")
+    print("\x1bc")
     if args.tiers != None:
         for tier in range(len(args.tiers)):
             if x.lower() == args.tiers[tier].lower():
                 tiers[tier] += f" {i} |"
                 yam[args.tiers[tier]].append(i)
-            print ("\033[31m—————————————————————————————————————————————\033[0m")
+            print ("\x1b[31m—————————————————————————————————————————————\x1b[0m")
             print(tiers[tier])
-        print ("\033[31m—————————————————————————————————————————————\033[0m")
+        print ("\x1b[31m—————————————————————————————————————————————\x1b[0m")
     else:
         if x.lower() == 's':
             tiers[0] += f" {i} |"
@@ -117,17 +117,17 @@ for i in items:
         if x.lower() == 'f':
             tiers[5] += f" {i} |"
             yam["F"].append(i)
-        print ("\033[31m—————————————————————————————————————————————\033[0m")
+        print ("\x1b[31m—————————————————————————————————————————————\x1b[0m")
         print (tiers[0])
-        print ("\033[31m—————————————————————————————————————————————\033[0m")
+        print ("\x1b[31m—————————————————————————————————————————————\x1b[0m")
         print (tiers[1])
-        print ("\033[31m—————————————————————————————————————————————\033[0m")
+        print ("\x1b[31m—————————————————————————————————————————————\x1b[0m")
         print (tiers[2])
-        print ("\033[31m—————————————————————————————————————————————\033[0m")
+        print ("\x1b[31m—————————————————————————————————————————————\x1b[0m")
         print (tiers[3])
-        print ("\033[31m—————————————————————————————————————————————\033[0m")
+        print ("\x1b[31m—————————————————————————————————————————————\x1b[0m")
         print (tiers[4])
-        print ("\033[31m—————————————————————————————————————————————\033[0m")
+        print ("\x1b[31m—————————————————————————————————————————————\x1b[0m")
         print (tiers[5])
-        print ("\033[31m—————————————————————————————————————————————\033[0m")
+        print ("\x1b[31m—————————————————————————————————————————————\x1b[0m")
 asktosave(yam)

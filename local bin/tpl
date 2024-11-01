@@ -8,7 +8,7 @@ parser.add_argument("-p", "--noprint", help="print output", action=argparse.Bool
 parser.add_argument("-m", "--stopmusic", help="stop music output", action=argparse.BooleanOptionalAction)
 args = parser.parse_args()
 while args.single == None:
-    print('\033[38;2;203;166;247m🭃\033[0m\033[48;2;203;166;247m\033[38;2;24;24;37mYou\033[0m\033[38;2;203;166;247m🭟\033[0m')
+    print('\x1b[38;2;203;166;247m🭃\x1b[0m\x1b[48;2;203;166;247m\x1b[38;2;24;24;37mYou\x1b[0m\x1b[38;2;203;166;247m🭟\x1b[0m')
     try:
         a = str(input())
     except:
@@ -18,9 +18,9 @@ while args.single == None:
     print("")
     b = os.popen("trans -t " + args.language + " -no-autocorrect -j -brief -show-original n -show-translation Y -show-original-phonetics n -show-translation-phonetics n -show-languages n -show-dictionary n -show-alternatives n -no-ansi " + '"' + a + '"').read()
     if args.noprint == None:
-        print(f'\033[38;2;166;227;161m🭃\033[0m\033[48;2;166;227;161m\033[38;2;24;24;37m{args.language}\033[0m\033[38;2;166;227;161m🭟\033[0m')
+        print(f'\x1b[38;2;166;227;161m🭃\x1b[0m\x1b[48;2;166;227;161m\x1b[38;2;24;24;37m{args.language}\x1b[0m\x1b[38;2;166;227;161m🭟\x1b[0m')
         print(b)
-        print("\033[91;1m———————————————————————\033[0m")
+        print("\x1b[91;1m———————————————————————\x1b[0m")
     b = b.replace('"','')
     if args.voice:
         if args.stopmusic:

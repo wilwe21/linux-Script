@@ -1,0 +1,97 @@
+#!/usr/bin/env python3
+import websocket, threading
+import random, sys, os, argparse, requests, yaml, subprocess, json, time
+parser = argparse.ArgumentParser()
+parser.add_argument("-c", "--channel", help="Set channel")
+parser.add_argument("-u", "--user", help="Set user")
+parser.add_argument("-s", "--sleep", help="Set sleep time", default=5)
+parser.add_argument("-p", "--pipe", help="Set pipeing", action=argparse.BooleanOptionalAction)
+args = parser.parse_args()
+with open(f"{os.path.expanduser("~")}/.config/lyr.yaml", encoding='utf-8', errors='ignore') as f:
+    data = yaml.safe_load(f)
+try:
+    token = data['token']
+except:
+    print("no token")
+    exit
+try:
+    channel = data['channel']
+except:
+    channel = None
+try:
+    banned = data['banned']
+except:
+    banned = []
+try:
+    user = args.user
+except:
+    user = None
+print(banned)
+if args.channel != None:
+    channel = args.channel
+if channel == None:
+    print("No channel")
+    exit
+def send_js(ws, request):
+    ws.send(json.dumps(request))
+
+def recive_json_response(ws):
+    response = ws.recv()
+    if response:
+        return json.loads(response)
+
+def send_mes(ws, channel, message):
+    pay = {
+        "op": 0,
+        "d": {
+            "content": message,
+            "channel_id": channel
+        }
+    }
+    ws.send(json.dumps(pay), 0)
+
+
+def heartbeat(interval, ws):
+    print('Heartbeat begin')
+    while True:
+        time.sleep(interval)
+        heartbeatJSON = {
+            "op": 1,
+            "d": None
+        }
+        send_js(ws, heartbeatJSON)
+        print("Heartbeat sent")
+
+if __name__ == '__main__':
+    ws = websocket.WebSocket()
+    ws.connect("wss://gateway.discord.gg/?v=10&encoding=json")
+    event = recive_json_response(ws)
+
+    heartbeat_interval = event['d']['heartbeat_interval'] / 1000
+    threading._start_new_thread(heartbeat, (heartbeat_interval, ws))
+
+    payload = {
+        "op": 2,
+        "d": {
+            "token": token,
+            "properties": {
+                "$os": "linux",
+                "$browser": "ogniolis",
+                "$device": "pc"
+            }
+        }
+    }
+    send_js(ws, payload)
+
+    while True:
+        event = recive_json_response(ws)
+        try:
+            match event['op']:
+                case 11:
+                    print("heartbeat recived")
+            match event['t']:
+                case "MESSAGE_CREATE":
+                    print(f"{event['d']['author']['username']}: {event['d']['content']}")
+                    threading._start_new_thread(send_mes, (ws, channel, "test"))
+        except Exception as e:
+            print(f"Erorr: {e}")
