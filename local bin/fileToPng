@@ -1,0 +1,85 @@
+#!/usr/bin/env python3
+from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageFilter
+from math import ceil
+import argparse, textwrap, requests, yaml, os
+def create(mes):
+    wi = 70
+    width = wi*70
+    wrap = textwrap.wrap(mes, width=wi)
+    pn = 20
+    pngs = ceil(len(wrap)/pn)
+    for z in range(pngs):
+        sas = wrap[z*pn:(z+1)*pn]
+        s = []
+        for i in sas:
+            if "\n" in i:
+                c = i.split("\n")
+                for j in c:
+                    s.append(j)
+            else:
+                s.append(i)
+        height = 120*(len(s))
+        color = (0,0,0)
+        image = Image.new("RGB",(width,height),color)
+        draw = ImageDraw.Draw(image)
+        font = ImageFont.truetype(font="NotoSansNerdFont-Regular.ttf", size=114)
+        margin = offset = 1
+        for line in s:
+            w = draw.textlength(line,font=font)
+            draw.text(((width - w)/2, offset), line, font=font, fill=(255,255,255,255),align="center")
+            offset += font.size
+        image.save(f"{path}{z}.png")
+        if args.channel != None:
+            send(args.channel, f"{path}{z}.png")
+        else:
+            print("not sending no channel")
+def send(chan, img):
+    if token == None:
+        print("Can't sand to discord no token in .config/lyr.yaml")
+        exit()
+    url = f'https://discord.com/api/v10/channels/{chan}/messages'
+    try:
+        with open(img, 'rb') as f:
+            fff = f.read()
+        f, ext = os.path.splitext(os.path.basename(img))
+    except:
+        print("no file. what?")
+        return
+    headers = {
+        "Authorization": token,
+    }
+    data = {
+        'file': (f"{f}{ext}", fff),
+    }
+    res = requests.post(url, headers=headers, files=data)
+    if res.status_code == 200:
+        print("Succes")
+    elif res.status_code == 413:
+        send("File is Too large")
+        last = json.loads(getMessage().content.decode('utf-8'))[0]['id']
+    else:
+        print(res.status_code)
+        print(res.content)
+if __name__ == "__main__":
+    global path
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-c", "--channel", help="Set channel")
+    parser.add_argument("-f", "--file", help="File")
+    args = parser.parse_args()
+    with open("/home/wilwe/.config/lyr.yaml", encoding="utf-8", errors="ignore") as f:
+        data = yaml.safe_load(f)
+    token = data['token']
+    path = '/home/wilwe/Obrazy/python/end/test'
+    if args.file != None:
+        s = open(args.file, "r").read()
+        create(s)
+    else:
+        while 0 == 0:
+            mess = input()
+            if mess in ["exit", ":q"]:
+                break
+            create(mess)
+            if args.channel != None:
+                send(args.channel)
+            else:
+                print("not sending no channel")
