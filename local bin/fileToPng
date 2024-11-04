@@ -2,7 +2,7 @@
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageFilter
 from math import ceil
 import argparse, textwrap, requests, yaml, os
-def create(mes):
+def create(mes,ft="NotoSansNerdFont-Regular.ttf"):
     wi = 70
     width = wi*70
     wrap = textwrap.wrap(mes, width=wi)
@@ -22,7 +22,7 @@ def create(mes):
         color = (0,0,0)
         image = Image.new("RGB",(width,height),color)
         draw = ImageDraw.Draw(image)
-        font = ImageFont.truetype(font="NotoSansNerdFont-Regular.ttf", size=114)
+        font = ImageFont.truetype(font=ft, size=114)
         margin = offset = 1
         for line in s:
             w = draw.textlength(line,font=font)
@@ -65,6 +65,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--channel", help="Set channel")
     parser.add_argument("-f", "--file", help="File")
+    parser.add_argument("-ft", "--font", help="Font")
     args = parser.parse_args()
     with open("/home/wilwe/.config/lyr.yaml", encoding="utf-8", errors="ignore") as f:
         data = yaml.safe_load(f)
@@ -72,14 +73,9 @@ if __name__ == "__main__":
     path = '/home/wilwe/Obrazy/python/end/test'
     if args.file != None:
         s = open(args.file, "r").read()
-        create(s)
-    else:
-        while 0 == 0:
-            mess = input()
-            if mess in ["exit", ":q"]:
-                break
-            create(mess)
-            if args.channel != None:
-                send(args.channel)
-            else:
-                print("not sending no channel")
+        if args.font == None:
+            create(s)
+        else:
+            create(s, args.font)
+    else: 
+        print("No file")
