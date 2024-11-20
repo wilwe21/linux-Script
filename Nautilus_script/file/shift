@@ -1,0 +1,13 @@
+#!/usr/bin/env python3
+import sys, os, subprocess,json
+from pathvalidate import sanitize_filepath
+import time
+files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
+shift = subprocess.check_output(['zenity', '--entry', '--text=shift by']).decode("utf-8").replace("\n","")
+
+for file in files:
+    f, ext = os.path.splitext(os.path.basename(file))
+    nt = f"{f[int(shift):]}{ext}"
+    mv = subprocess.Popen(["mv", file, nt])
+    mv.wait()
+
