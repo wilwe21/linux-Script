@@ -5,6 +5,6 @@ files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
 cov = subprocess.check_output(['zenity', '--file-selection']).decode("utf-8")
 
 for file in files:
-    subprocess.Popen(["ffmpeg", "-y", "-i", file, '-i', sanitize_filepath(cov), "-map", "0:0", "-map", "1:0", "-c", "copy", "tmp.mp3"]).wait()
+    subprocess.Popen(["ffmpeg", "-y", "-i", file, '-i', sanitize_filepath(cov), "-map", "0", "-map", "1", "-c", "copy", "-disposition:v", "attached_pic", "tmp."+ext]).wait()
     subprocess.Popen(["mv", "-f", "tmp.mp3", file]).wait()
 

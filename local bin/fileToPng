@@ -2,7 +2,7 @@
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageFilter
 from math import ceil
 import argparse, textwrap, requests, yaml, os
-def create(mes,ft="NotoSansNerdFont-Regular.ttf", cl=(255,255,255,255),wi=70,hi=120):
+def create(mes,ft="NotoSansNerdFont-Regular.ttf", cl=(255,255,255,255),wi=70,hi=120, fts=114):
     width = wi*70
     wrap = textwrap.wrap(mes, width=wi)
     pn = 20
@@ -21,7 +21,7 @@ def create(mes,ft="NotoSansNerdFont-Regular.ttf", cl=(255,255,255,255),wi=70,hi=
         color = (0,0,0)
         image = Image.new("RGB",(width,height),color)
         draw = ImageDraw.Draw(image)
-        font = ImageFont.truetype(font=ft, size=114)
+        font = ImageFont.truetype(font=ft, size=fts)
         margin = offset = 1
         for line in s:
             if upper == True:
@@ -72,6 +72,7 @@ if __name__ == "__main__":
     parser.add_argument("-f", "--file", help="File")
     parser.add_argument("-m", "--message", help="Message")
     parser.add_argument("-ft", "--font", help="Font")
+    parser.add_argument("-fts", "--fontsize", help="Fontsize")
     parser.add_argument("-hi", "--height", help="height of line", default=120)
     parser.add_argument("-wi", "--width", help="width of line", default=70)
     parser.add_argument("-u", "--upper", help="Uppercase", action=argparse.BooleanOptionalAction)
@@ -86,26 +87,42 @@ if __name__ == "__main__":
     path = '/home/wilwe/Obrazy/python/end/test'
     if args.file != None:
         s = open(args.file, "r").read()
-        if args.font == None and args.color == None:
+        if args.font == None and args.color == None and args.fontsize == None:
             create(s, wi=int(args.width), hi=int(args.height))
-        elif args.color == None:
+        elif args.color == None and args.fontsize == None:
             create(s, ft=args.font, wi=int(args.width), hi=int(args.height))
-        elif args.font == None:
+        elif args.font == None and args.fontisze == None:
             color = tuple([int(x) for x in args.color.split(",")])
             create(s, cl=color, wi=int(args.width), hi=int(args.height))
-        else:
-            color = tuple([int(x) for x in args.color.split(",")])
-            create(s, ft=args.font, cl=color, wi=int(args.width), hi=int(args.height))
-    elif args.message != None: 
-        if args.font == None and args.color == None:
-            create(args.message, wi=int(args.width), hi=int(args.height))
         elif args.color == None:
-            create(args.message, ft=args.font, wi=int(args.width), hi=int(args.height))
+            create(s, ft=args.font, wi=int(args.width), hi=int(args.height), fts=int(args.fontsize))
         elif args.font == None:
             color = tuple([int(x) for x in args.color.split(",")])
-            create(args.message, cl=color, wi=int(args.width), hi=int(args.height))
+            create(s, cl=color, wi=int(args.width), hi=int(args.height), fts=int(args.fontsize))
+        elif args.fontsize = None:
+            color = tuple([int(x) for x in args.color.split(",")])
+            create(s, ft=args.font, cl=color, wi=int(args.width), hi=int(args.height))
         else:
             color = tuple([int(x) for x in args.color.split(",")])
-            create(args.message, ft=args.font, cl=color, wi=int(args.width), hi=int(args.height))
+            create(s, ft=args.font, cl=color, wi=int(args.width), hi=int(args.height), fts=int(args.fontsize))
+    elif args.message != None: 
+        if args.font == None and args.color == None and args.fontsize == None:
+            create(args.message, wi=int(args.width), hi=int(args.height))
+        elif args.color == None and args.fontsize == None:
+            create(args.message, ft=args.font, wi=int(args.width), hi=int(args.height))
+        elif args.font == None and args.fontsize == None:
+            color = tuple([int(x) for x in args.color.split(",")])
+            create(args.message, cl=color, wi=int(args.width), hi=int(args.height))
+        elif args.color == None:
+            create(args.messaage, ft=args.font, wi=int(args.width), hi=int(args.height), fts=int(args.fontsize))
+        elif args.font == None:
+            color = tuple([int(x) for x in args.color.split(",")])
+            create(args.messaage, cl=color, wi=int(args.width), hi=int(args.height), fts=int(args.fontsize))
+        elif args.fontsize = None:
+            color = tuple([int(x) for x in args.color.split(",")])
+            create(args.messaage, ft=args.font, cl=color, wi=int(args.width), hi=int(args.height))
+        else:
+            color = tuple([int(x) for x in args.color.split(",")])
+            create(args.message, ft=args.font, cl=color, wi=int(args.width), hi=int(args.height), fts= int(args.fontsize))
     else:
         print("No file")

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+sqlite3 $(echo "$NAUTILUS_SCRIPT_SELECTED_FILE_PATHS") << 'END_SQL'
+.once playlist_raw.txt
+select pl.name, path||filename from playlist pl inner join playlistmediarelation plr on playlist_id=id_playlist inner join media on id_media=media_id join folder on folder_id=id_folder order by id_playlist, position;
+END_SQL
