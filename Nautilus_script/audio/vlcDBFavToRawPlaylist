@@ -1,0 +1,6 @@
+#!/bin/bash
+
+sqlite3 $(echo "$NAUTILUS_SCRIPT_SELECTED_FILE_PATHS") << 'END_SQL'
+.once fav_playlist.m3u
+SELECT scheme||'/storage/'||uuid||'/'||path||filename FROM media INNER JOIN folder ON folder_id=id_folder INNER JOIN device ON media.device_id = device.id_device WHERE media.is_favorite = 1;
+END_SQL

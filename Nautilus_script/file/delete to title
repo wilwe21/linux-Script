@@ -2,7 +2,6 @@
 import sys, os, subprocess, music_tag
 import time
 files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
-#files = sys.argv[0]
 
 for file in files:
     sss = music_tag.load_file(file)
