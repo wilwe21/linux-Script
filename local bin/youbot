@@ -77,6 +77,27 @@ def send(message):
     else:
         message = f"{message}```"
         resPons(message, s[0]['id'])
+def sendnotformated(message):
+    message = f"```{message}"
+    if len(message) > 1997:
+        chunks = []
+        start = 0
+        end = 1994
+        while start < len(message):
+            chunk = message[start:end]
+            chunks.append(chunk)
+            start = end
+            print(f"start: {start}")
+            end += 1994
+            print(f"end: {end}")
+        for chunk in chunks:
+            if chunk == chunks[0]:
+                resPons(f"{chunk}```", s[0]['id'])
+            else:
+                sendMessage(f"```{chunk}```")            
+    else:
+        message = f"{message}```"
+        resPons(message, s[0]['id'])
 
 def getChannels(guild_id):
     url = f'https://discord.com/api/v10/guilds/{guild_id}/channels'
@@ -141,4 +162,24 @@ if __name__ == '__main__':
                 printRoles(ser)
             else:
                 print("Not command")
+            pipe = ""
+            try:
+                rfid = s[0]['message_reference']["message_id"]
+                for mmm in s:
+                    if mmm["id"] == rfid:
+                        pipe = mmm['content']
+            except:
+                pipe = None
+            if s[0]['content'].startswith("@grok"):
+                mess.remove(mess[0])
+                prompt = "\'"
+                for m in mess:
+                    prompt += m + " "
+                if pipe != None:
+                    prompt += pipe
+                prompt += "\'"
+                print(prompt)
+                m = subprocess.check_output(["tgpt", "-w" ,prompt]).decode()
+                print(m)
+                sendnotformated(m)
             last = json.loads(getMessage(channel).content.decode('utf-8'))[0]['id']

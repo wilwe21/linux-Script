@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-import sys, os, subprocess, music_tag
-import time
+import sys, os, subprocess, json
 files = os.environ.get('NAUTILUS_SCRIPT_SELECTED_FILE_PATHS').splitlines()
 
 for file in files:
-    sss = music_tag.load_file(file)
-    title = str(sss.get_tag("title"))
+    title = subprocess.check_output(["ffprobe", "-show_entries", "format_tags=title", "-of", "json", "-i", file]).decode("utf-8")
+    title = json.loads(title)["format"]["tags"]["TITLE"]
     nt = file[file.find(title):]
-    mv = subprocess.Popen(["mv", file, nt])
+    mv = subprocess.Popen(["mv", file, "./"+nt])
     mv.wait()
 

@@ -69,7 +69,7 @@ def getMessage():
 def send(message):
     global last
     mes = message
-    message = f"*Terminal*\n```\n{message}"
+    message = f"```\n{message}"
     if len(message) > 1997:
         chunks = []
         start = 0
@@ -88,7 +88,7 @@ def send(message):
                 sendMessage(f"```{chunk}```")            
         last = json.loads(getMessage().content.decode('utf-8'))[0]['id']
     else:
-        message = f"*Terminal*\n```\n{mes}```"
+        message = f"```\n{mes}```"
         resPons(message, s[0]['id'])
         last = json.loads(getMessage().content.decode('utf-8'))[0]['id']
 
@@ -203,7 +203,8 @@ if __name__ == '__main__':
         s = json.loads(getMessage().content.decode('utf-8'))
         if user != None:
             if s[0]["author"]['global_name'] != user:
-                print(s[0]["author"]["global_name"])
+                #print(s[0]["author"]["global_name"])
+                print(f"not {user}")
                 continue
         if s[0]['id'] != last:
             if args.pipe != False:
@@ -253,6 +254,6 @@ if __name__ == '__main__':
                     else:
                         send(subprocess.check_output(' '.join(command), shell=True, text=True))
             except Exception as e:
-                resPons(f'*Terminal*```{e}```',s[0]['id'])
+                resPons(f'```{e}```',s[0]['id'])
                 last = json.loads(getMessage().content.decode('utf-8'))[0]['id']
                 continue

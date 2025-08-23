@@ -1,0 +1,2 @@
+#!/bin/bash
+yt-dlp -x --audio-format flac -o "%(title)s.%(ext)s" $1
