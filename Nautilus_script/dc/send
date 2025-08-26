@@ -22,7 +22,8 @@ def sendAttachment(file):
         with open(file, 'rb') as f:
             fff = f.read()
         f, ext = os.path.splitext(os.path.basename(file))
-    except:
+    except Exception as e:
+        os.popen(f"zenity --error --text='{e}'")
         return
     url = f'https://discord.com/api/v9/channels/{channel}/messages'
     data = {
@@ -32,13 +33,18 @@ def sendAttachment(file):
     headers = {
         "Authorization": token
     }
-    res = requests.post(url, files=data, headers=headers)
+    try:
+        res = requests.post(url, files=data, headers=headers)
+        res.raise_for_status()
+    except Exception as e:
+        os.popen(f"zenity -error --text='{e}'")
+    
 for file in files:
-    message = "".join(open(file, "r").readlines())
     format = magic.from_file(file, mime=True)
     if (format != "text/plain"):
         sendAttachment(file)
     else:
+        message = "".join(open(file, "r").readlines())
         if len(message) > 2000:
             chunks = []
             start = 0
